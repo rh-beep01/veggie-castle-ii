@@ -546,6 +546,8 @@ export default function App() {
           <img
             src="/images/korean-heritage-hero-bg.jpg"
             alt="Tofu Chon Authentic Korean Dining Ambiance"
+            fetchPriority="high"
+            decoding="async"
             className="w-full h-full object-cover object-left lg:object-center brightness-[0.92] contrast-[1.05] scale-100 transition-all duration-700"
           />
           {/* Reduced vintage effect: Gentle warm tint that lets the Hanok woodwork, lanterns, and brassware shine through */}
@@ -691,6 +693,8 @@ export default function App() {
                       src={currentSlide.image}
                       alt={currentSlide.title}
                       className="w-full h-full object-cover animate-fadeIn duration-500 scale-100 hover:scale-105 transition-transform duration-700"
+                      fetchPriority="high"
+                      decoding="async"
                     />
                     {/* Very subtle, minimal bottom gradient so the image is fully bright and vivid */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10 pointer-events-none" />
