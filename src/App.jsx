@@ -1,154 +1,2764 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import CombosSpotlight from './components/CombosSpotlight';
-import MenuSection from './components/MenuSection';
-import StorySection from './components/StorySection';
-import LocationHoursSection from './components/LocationHoursSection';
-import Footer from './components/Footer';
-import ProductModal from './components/ProductModal';
-import CartDrawer from './components/CartDrawer';
-import CheckoutModal from './components/CheckoutModal';
-import ReservationModal from './components/ReservationModal';
-import './App.css';
+import { 
+  ShoppingBag, 
+  Phone, 
+  Calendar, 
+  Clock, 
+  MapPin, 
+  Search, 
+  X, 
+  Plus, 
+  Minus, 
+  Check, 
+  CheckCircle2, 
+  ChevronLeft, 
+  ChevronRight, 
+  Award, 
+  Sparkles, 
+  ArrowRight, 
+  Menu as MenuIcon, 
+  Star, 
+  Heart, 
+  Trash2, 
+  CreditCard, 
+  ShieldCheck, 
+  Printer, 
+  ExternalLink,
+  Utensils,
+  Flame,
+  Info,
+  ChevronDown,
+  Navigation,
+  Truck,
+  Home,
+  Banknote
+} from 'lucide-react';
+import confetti from 'canvas-confetti';
+import Button from './components/ui/Button';
+import { RESTAURANT_INFO, SPICE_LEVELS, CATEGORIES, MENU_ITEMS } from './data/menuData';
+
+// Dynamic Hero Food Slideshow Dataset
+const HERO_SLIDES = [
+  {
+    image: '/images/korean-banchan-feast.jpg',
+    badge: 'Royal Korean Feast (궁중 한상차림)',
+    title: 'Grand Banchan & Soon Tofu Banquet',
+    korean: '두부촌 정성 특선 한상차림',
+    desc: 'Bubbling Soon Tofu stew in black earthenware ttukbaegi with charred prime LA Galbi and golden brass banchan.',
+    targetId: 'combo-galbi'
+  },
+  {
+    image: '/images/hero-feast.jpg',
+    badge: 'Koreatown #1 Signature',
+    title: 'Galbi + Soon Tofu Combo',
+    korean: '갈비 + 순두부 콤보 ($32.99)',
+    desc: 'Sweet-savory soy garlic marinated short ribs charred over high flame, paired with your personal bubbling soft tofu stew.',
+    targetId: 'combo-galbi'
+  },
+  {
+    image: '/images/galbi-sizzling.jpg',
+    badge: 'Flame-Seared Cast Iron',
+    title: 'Sizzling LA Galbi Short Ribs',
+    korean: '지글지글 직화 LA 갈비 ($32.99)',
+    desc: 'Generous platter of premium beef short ribs charred to caramelized perfection with sweet onions and roasted sesame.',
+    targetId: 'special-galbi'
+  },
+  {
+    image: '/images/galbi-jjim.jpg',
+    badge: 'Grand Feast for 2–3 Guests',
+    title: 'Spicy Braised Galbi Jjim',
+    korean: '특선 매운갈비찜 ($79.99)',
+    desc: 'Fall-off-the-bone prime beef short ribs slow-braised in a rich, glossy spicy red chili reduction with tender radish & shiitake.',
+    targetId: 'special-galbi-jjim'
+  },
+  {
+    image: '/images/mix-soon-tofu.jpg',
+    badge: '24-Hour Bone Broth',
+    title: 'Mix Soon Tofu (Beef + Seafood)',
+    korean: '섞어 순두부 ($17.49)',
+    desc: 'Handmade organic silken tofu bubbling vigorously with prime beef, ocean prawns, and whole clams in red pepper broth.',
+    targetId: 'tofu-mix'
+  },
+  {
+    image: '/images/seafood-pancake.jpg',
+    badge: 'Golden Shatteringly Crispy',
+    title: 'Haemul Pajeon Seafood Pancake',
+    korean: '바삭바삭 해물파전 ($26.99)',
+    desc: 'Oversized crispy scallion pancake loaded with ocean calamari and tender sweet prawns, served with seasoned soy-chili dip.',
+    targetId: 'special-seafood-pancake'
+  }
+];
 
 export default function App() {
+  // Navigation & UI States
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Hero Slideshow State
+  const [heroSlide, setHeroSlide] = useState(0);
+  const [isSlidePaused, setIsSlidePaused] = useState(false);
+
+  // Auto-advance hero slideshow every 4.2 seconds unless hovered
+  useEffect(() => {
+    if (isSlidePaused) return;
+    const timer = setInterval(() => {
+      setHeroSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 4200);
+    return () => clearInterval(timer);
+  }, [isSlidePaused]);
+
+  // Cart State with localStorage
   const [cart, setCart] = useState(() => {
     try {
-      const saved = localStorage.getItem('tofuchon_cart');
+      const saved = localStorage.getItem('tofu_chon_cart');
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
     }
   });
 
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-  const [isReservationOpen, setIsReservationOpen] = useState(false);
-
   useEffect(() => {
     try {
-      localStorage.setItem('tofuchon_cart', JSON.stringify(cart));
-    } catch (e) {
-      console.error(e);
+      localStorage.setItem('tofu_chon_cart', JSON.stringify(cart));
+    } catch {
+      // ignore
     }
   }, [cart]);
 
-  const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
-  const cartTotal = cart.reduce((acc, item) => acc + (item.itemTotalPrice * item.quantity), 0);
+  // Modals
+  const [cartOpen, setCartOpen] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [reserveOpen, setReserveOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const handleAddToCart = (customizedItem) => {
-    setCart((prevCart) => {
-      // Check if item with same ID and same options already exists
-      const existingIdx = prevCart.findIndex(
-        (ci) => ci.id === customizedItem.id && 
-                JSON.stringify(ci.customOptions) === JSON.stringify(customizedItem.customOptions)
-      );
+  // Product Customization Modal State
+  const [modalSpice, setModalSpice] = useState('medium');
+  const [modalRice, setModalRice] = useState('Stone Pot Purple Rice (돌솥 흑미밥)');
+  const [modalAddOns, setModalAddOns] = useState([]);
+  const [modalInstructions, setModalInstructions] = useState('');
+  const [modalQuantity, setModalQuantity] = useState(1);
 
-      if (existingIdx > -1) {
-        const updated = [...prevCart];
-        updated[existingIdx].quantity += customizedItem.quantity;
-        return updated;
-      }
-      return [...prevCart, customizedItem];
-    });
-    setIsCartOpen(true);
+  // Cart & Order Settings
+  const [orderType, setOrderType] = useState('pickup');
+  const [discountPercent, setDiscountPercent] = useState(0);
+  const [discountCode, setDiscountCode] = useState('');
+  const [promoInput, setPromoInput] = useState('');
+  const [promoMsg, setPromoMsg] = useState({ text: '', type: '' });
+
+  // Driver Tip Options: Chip buttons + Custom support
+  const [driverTip, setDriverTip] = useState(4.00);
+  const [isCustomTip, setIsCustomTip] = useState(false);
+  const [customTipInput, setCustomTipInput] = useState('');
+
+  // Checkout Form State
+  const [checkoutStep, setCheckoutStep] = useState('details'); // details, payment, confirmed
+  const [customerName, setCustomerName] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
+  const [customerEmail, setCustomerEmail] = useState('');
+  const [pickupTime, setPickupTime] = useState('ASAP (Ready in 20–25 mins)');
+  const [deliveryTime, setDeliveryTime] = useState('ASAP (Estimated 35–45 mins)');
+  const [deliveryAddress, setDeliveryAddress] = useState('');
+  const [deliveryApt, setDeliveryApt] = useState('');
+  const [deliveryZip, setDeliveryZip] = useState('Koreatown (90005)');
+  const [deliveryNotes, setDeliveryNotes] = useState('');
+  const [orderNotes, setOrderNotes] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('card');
+  const [confirmedOrder, setConfirmedOrder] = useState(null);
+
+  // Table Reservation Form State
+  const [reserveDate, setReserveDate] = useState(() => {
+    const today = new Date();
+    return today.toISOString().split('T')[0];
+  });
+  const [reserveTime, setReserveTime] = useState('6:30 PM');
+  const [reserveGuests, setReserveGuests] = useState('2 Guests');
+  const [reserveSeating, setReserveSeating] = useState('Main Dining Room');
+  const [reserveOccasion, setReserveOccasion] = useState('Casual Dinner');
+  const [reserveName, setReserveName] = useState('');
+  const [reservePhone, setReservePhone] = useState('');
+  const [reserveNotes, setReserveNotes] = useState('');
+  const [reserveConfirmed, setReserveConfirmed] = useState(false);
+  const [confirmedResCode, setConfirmedResCode] = useState('');
+
+  // Toast message
+  const [toastMessage, setToastMessage] = useState(null);
+
+  useEffect(() => {
+    if (!toastMessage) return;
+    const t = setTimeout(() => setToastMessage(null), 3000);
+    return () => clearTimeout(t);
+  }, [toastMessage]);
+
+  // Financial Calculations
+  const cartItemCount = cart.reduce((sum, i) => sum + i.quantity, 0);
+  const subtotal = cart.reduce((sum, i) => sum + i.unitPrice * i.quantity, 0);
+  const discountAmount = (subtotal * discountPercent) / 100;
+  const taxableAmount = Math.max(0, subtotal - discountAmount);
+  const salesTax = taxableAmount * 0.095; // LA County sales tax 9.5%
+  const deliveryFee = orderType === 'delivery' ? 4.99 : 0;
+  const tipAmount = orderType === 'delivery' ? driverTip : 0;
+  const grandTotal = taxableAmount + salesTax + deliveryFee + tipAmount;
+
+  // Featured signature items
+  const featuredItems = MENU_ITEMS.filter((i) => i.isPopular || i.isCombo).slice(0, 6);
+
+  // Filtered menu items
+  const filteredMenu = MENU_ITEMS.filter((item) => {
+    const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
+    const q = searchQuery.toLowerCase().trim();
+    const matchesSearch = 
+      !q || 
+      item.name.toLowerCase().includes(q) || 
+      (item.koreanName && item.koreanName.includes(q)) || 
+      (item.description && item.description.toLowerCase().includes(q));
+    return matchesCategory && matchesSearch;
+  });
+
+  // Open Product Customization Modal
+  const openProductModal = (product) => {
+    setSelectedProduct(product);
+    setModalSpice(product.hasSpiceLevel ? 'medium' : null);
+    setModalRice('Stone Pot Purple Rice (돌솥 흑미밥)');
+    setModalAddOns([]);
+    setModalInstructions('');
+    setModalQuantity(1);
   };
 
-  const handleUpdateQuantity = (index, newQuantity) => {
-    setCart((prevCart) => {
-      const updated = [...prevCart];
-      if (newQuantity <= 0) {
-        updated.splice(index, 1);
-      } else {
-        updated[index].quantity = newQuantity;
-      }
-      return updated;
-    });
+  // Add Item to Cart
+  const handleAddToCart = () => {
+    if (!selectedProduct) return;
+
+    let unitPrice = selectedProduct.price;
+    const addOnTotal = modalAddOns.reduce((sum, a) => sum + a.price, 0);
+    unitPrice += addOnTotal;
+
+    const cartItemId = `${selectedProduct.id}-${modalSpice || 'none'}-${modalRice}-${modalAddOns.map(a => a.name).join('_')}-${Date.now()}`;
+
+    const newItem = {
+      cartItemId,
+      product: selectedProduct,
+      name: selectedProduct.name,
+      koreanName: selectedProduct.koreanName,
+      unitPrice,
+      basePrice: selectedProduct.price,
+      quantity: modalQuantity,
+      image: selectedProduct.image,
+      spiceLevel: modalSpice,
+      riceOption: modalRice,
+      addOns: modalAddOns,
+      specialInstructions: modalInstructions
+    };
+
+    setCart((prev) => [...prev, newItem]);
+    setSelectedProduct(null);
+    setToastMessage(`Added ${modalQuantity}x ${selectedProduct.name} to order!`);
   };
 
-  const handleRemoveItem = (index) => {
-    setCart((prevCart) => {
-      const updated = [...prevCart];
-      updated.splice(index, 1);
-      return updated;
-    });
+  const updateCartQuantity = (cartItemId, delta) => {
+    setCart((prev) =>
+      prev
+        .map((item) => {
+          if (item.cartItemId === cartItemId) {
+            const newQty = item.quantity + delta;
+            return newQty > 0 ? { ...item, quantity: newQty } : null;
+          }
+          return item;
+        })
+        .filter(Boolean)
+    );
   };
 
-  const handleClearCart = () => {
-    setCart([]);
+  const removeFromCart = (cartItemId) => {
+    setCart((prev) => prev.filter((i) => i.cartItemId !== cartItemId));
   };
 
-  const handleExploreMenu = () => {
-    const el = document.getElementById('menu');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+  // Apply Promo Code
+  const applyPromo = (e) => {
+    e.preventDefault();
+    const code = promoInput.trim().toUpperCase();
+    if (code === 'KOREA10' || code === 'TOFULA10' || code === 'MASSONI10') {
+      setDiscountPercent(10);
+      setDiscountCode(code);
+      setPromoMsg({ text: '10% Koreatown Community discount applied!', type: 'success' });
+    } else if (code === 'WELCOME') {
+      setDiscountPercent(15);
+      setDiscountCode(code);
+      setPromoMsg({ text: '15% Welcome discount applied!', type: 'success' });
+    } else {
+      setPromoMsg({ text: 'Invalid promo code. Try "KOREA10"', type: 'error' });
     }
   };
 
-  const handleProceedCheckout = () => {
-    setIsCartOpen(false);
-    setIsCheckoutOpen(true);
+  // Handle Tip Chip Selection
+  const handleSelectTip = (amount) => {
+    setIsCustomTip(false);
+    setDriverTip(amount);
   };
 
+  const handleCustomTipChange = (val) => {
+    setCustomTipInput(val);
+    const parsed = parseFloat(val);
+    if (!isNaN(parsed) && parsed >= 0) {
+      setDriverTip(parsed);
+    } else {
+      setDriverTip(0);
+    }
+  };
+
+  // Complete Order
+  const handleCompleteOrder = (e) => {
+    e.preventDefault();
+    if (cart.length === 0) return;
+
+    const orderNumber = `TC-${Math.floor(1000 + Math.random() * 9000)}`;
+    const confirmed = {
+      orderNumber,
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+      items: [...cart],
+      orderType,
+      subtotal,
+      discountAmount,
+      salesTax,
+      deliveryFee,
+      tipAmount,
+      grandTotal,
+      customerName,
+      customerPhone,
+      customerEmail,
+      fulfillmentTime: orderType === 'pickup' ? pickupTime : deliveryTime,
+      deliveryAddress,
+      deliveryApt,
+      deliveryZip,
+      deliveryNotes,
+      paymentMethod
+    };
+
+    setConfirmedOrder(confirmed);
+    setCheckoutStep('confirmed');
+    setCart([]);
+
+    try {
+      confetti({
+        particleCount: 130,
+        spread: 90,
+        origin: { y: 0.6 },
+        colors: ['#8C1D24', '#C88A2C', '#1E3A8A', '#F5EDE2']
+      });
+    } catch {
+      // ignore
+    }
+  };
+
+  // Handle Reservation submission
+  const handleBookReservation = (e) => {
+    e.preventDefault();
+    const code = `TC-RES-${Math.floor(1000 + Math.random() * 9000)}`;
+    setConfirmedResCode(code);
+    setReserveConfirmed(true);
+  };
+
+  const currentSlide = HERO_SLIDES[heroSlide];
+
   return (
-    <div className="app-wrapper">
-      <Navbar 
-        cartCount={cartCount}
-        cartTotal={cartTotal}
-        onOpenCart={() => setIsCartOpen(true)}
-        onOpenReservation={() => setIsReservationOpen(true)}
-      />
+    <main className="min-h-screen w-full overflow-x-hidden bg-background text-foreground selection:bg-accent/30">
+      
+      {/* 1. TOP ANNOUNCEMENT BAR (Korean Cultural Detailing with Phone & Address) */}
+      <div className="bg-[#1C1716] text-[#EADFD3] px-4 py-2 text-xs font-medium border-b border-[#2C2422] relative z-20">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
+          <a
+            href={RESTAURANT_INFO.mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-accent hover:text-white transition-colors group shrink-0"
+            title="Open Tofu Chon in Google Maps / Get Directions"
+          >
+            <MapPin className="size-3.5 text-accent group-hover:scale-110 transition-transform shrink-0" />
+            <span className="font-semibold underline decoration-accent/50 underline-offset-2 group-hover:decoration-white">
+              {RESTAURANT_INFO.address}
+            </span>
+            <span className="hidden sm:inline-flex items-center gap-0.5 text-[10px] bg-accent/20 text-accent group-hover:bg-accent group-hover:text-white px-2 py-0.5 rounded-full font-bold transition-all ml-1">
+              Directions <ExternalLink className="size-2.5 ml-0.5" />
+            </span>
+          </a>
 
-      <main>
-        <Hero 
-          onExploreMenu={handleExploreMenu}
-          onOpenReservation={() => setIsReservationOpen(true)}
-        />
+          <p className="hidden md:block text-center text-xs text-[#EADFD3]/90 truncate mx-2">
+            <span className="text-amber-300 font-bold mr-1.5">두부촌 (Tofu Chon)</span>
+            <strong className="text-white">Authentic Korean Soon Tofu &amp; Sizzling Galbi</strong>
+          </p>
 
-        <CombosSpotlight 
-          onSelectItem={(item) => setSelectedItem(item)}
-        />
+          <div className="flex items-center gap-3 text-xs shrink-0 ml-auto sm:ml-0">
+            <span className="flex items-center gap-1.5 text-emerald-400 font-semibold">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+              <span className="hidden sm:inline">Open Today:</span> 10:30 AM – 10:00 PM
+            </span>
+            <a
+              href={`tel:${RESTAURANT_INFO.phoneRaw}`}
+              className="flex items-center gap-1 text-[#EADFD3] hover:text-white font-mono font-semibold transition-colors"
+              title="Direct Call Tofu Chon"
+            >
+              <Phone className="size-3 text-accent shrink-0" />
+              <span>{RESTAURANT_INFO.phone}</span>
+            </a>
+          </div>
+        </div>
+      </div>
 
-        <MenuSection 
-          onSelectItem={(item) => setSelectedItem(item)}
-        />
+      {/* Korean Dancheong Heritage Ribbon */}
+      <div className="korean-ribbon"></div>
 
-        <StorySection />
+      {/* 2. STICKY LUXURY HEADER */}
+      <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-md shadow-xs">
+        <div className="mx-auto flex h-18 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+          
+          <a href="#top" className="flex items-center gap-2.5 shrink-0 py-1 group text-decoration-none">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary text-primary-foreground flex flex-col items-center justify-center shadow-xs group-hover:scale-105 transition-transform border border-primary/20">
+              <span className="font-display text-base sm:text-lg font-black leading-none text-amber-200">두</span>
+              <span className="text-[8px] tracking-tighter uppercase font-bold text-white/80">CHON</span>
+            </div>
+            <div className="flex flex-col">
+              <div className="flex items-baseline gap-1.5">
+                <span className="font-display text-lg sm:text-xl lg:text-2xl font-bold tracking-tight text-primary leading-tight">
+                  Tofu Chon
+                </span>
+                <span className="text-xs font-semibold text-accent tracking-normal">
+                  두부촌
+                </span>
+              </div>
+              <span className="text-[9px] tracking-widest uppercase font-semibold text-muted-foreground">
+                Soon Tofu &amp; KBBQ • Koreatown LA
+              </span>
+            </div>
+          </a>
 
-        <LocationHoursSection />
-      </main>
+          <nav className="hidden lg:flex items-center justify-center flex-1 mx-4 gap-6 xl:gap-7 whitespace-nowrap">
+            <a href="#featured" className="nav-link text-[13px] font-semibold text-foreground/80 hover:text-primary transition-colors py-1">
+              Combos
+            </a>
+            <a href="#menu" className="nav-link text-[13px] font-semibold text-foreground/80 hover:text-primary transition-colors py-1">
+              Full Menu
+            </a>
+            <a href="#banchan-guide" className="nav-link text-[13px] font-semibold text-foreground/80 hover:text-primary transition-colors py-1">
+              Banchan &amp; Spice
+            </a>
+            <a href="#heritage" className="nav-link text-[13px] font-semibold text-foreground/80 hover:text-primary transition-colors py-1">
+              Our Story
+            </a>
+            <a href="#reviews" className="nav-link text-[13px] font-semibold text-foreground/80 hover:text-primary transition-colors py-1">
+              Reviews
+            </a>
+            <a href="#location" className="nav-link text-[13px] font-semibold text-foreground/80 hover:text-primary transition-colors py-1">
+              Hours &amp; Map
+            </a>
+          </nav>
 
-      <Footer />
+          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setReserveOpen(true)}
+              className="hidden sm:inline-flex rounded-full text-xs font-semibold h-9 px-3.5"
+            >
+              <Calendar className="size-3.5 text-accent mr-1" />
+              <span>Book Table</span>
+            </Button>
 
-      {/* Modals & Drawers */}
-      <ProductModal 
-        item={selectedItem}
-        onClose={() => setSelectedItem(null)}
-        onAddToCart={handleAddToCart}
-      />
+            <button
+              type="button"
+              onClick={() => setCartOpen(true)}
+              className="relative flex items-center justify-center gap-2 h-9 sm:h-10 px-3.5 sm:px-4 rounded-full bg-primary text-white border border-primary hover:bg-[#73161c] shadow-xs hover:shadow-md transition-all duration-200 active:scale-95 shrink-0 cursor-pointer"
+              title="View Cart / Order Tray"
+            >
+              <div className="relative flex items-center">
+                <ShoppingBag className="size-4 text-white" />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-2.5 -right-2.5 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-white text-[10px] font-black shadow-xs ring-1 ring-white/40">
+                    {cartItemCount}
+                  </span>
+                )}
+              </div>
+              <span className="font-bold text-white text-xs">Cart</span>
+              {cartItemCount > 0 && (
+                <span className="font-mono font-bold text-xs pl-1.5 border-l border-white/30 text-amber-200 hidden sm:inline">
+                  ${subtotal.toFixed(2)}
+                </span>
+              )}
+            </button>
 
-      <CartDrawer 
-        isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
-        cart={cart}
-        onUpdateQuantity={handleUpdateQuantity}
-        onRemoveItem={handleRemoveItem}
-        onProceedCheckout={handleProceedCheckout}
-      />
+            <button
+              type="button"
+              onClick={() => setMobileNavOpen(!mobileNavOpen)}
+              className="lg:hidden flex items-center justify-center p-2 rounded-xl border border-border bg-card text-foreground hover:bg-muted transition-colors cursor-pointer"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileNavOpen ? <X className="size-5" /> : <MenuIcon className="size-5" />}
+            </button>
+          </div>
+        </div>
 
-      <CheckoutModal 
-        isOpen={isCheckoutOpen}
-        onClose={() => setIsCheckoutOpen(false)}
-        cart={cart}
-        onClearCart={handleClearCart}
-      />
+        {mobileNavOpen && (
+          <div className="lg:hidden border-t border-border bg-card px-4 py-5 shadow-lg animate-fadeIn">
+            <div className="flex flex-col gap-2.5 font-medium text-xs sm:text-sm">
+              <a href="#featured" onClick={() => setMobileNavOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted text-foreground transition-colors">
+                Signature Combos
+              </a>
+              <a href="#menu" onClick={() => setMobileNavOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted text-foreground transition-colors">
+                Full Menu &amp; Ordering
+              </a>
+              <a href="#banchan-guide" onClick={() => setMobileNavOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted text-foreground transition-colors">
+                Banchan &amp; Spice Guide
+              </a>
+              <a href="#heritage" onClick={() => setMobileNavOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted text-foreground transition-colors">
+                Our Heritage &amp; Ttukbaegi
+              </a>
+              <a href="#reviews" onClick={() => setMobileNavOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted text-foreground transition-colors">
+                Koreatown Reviews
+              </a>
+              <a href="#location" onClick={() => setMobileNavOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted text-foreground transition-colors">
+                Hours &amp; Location Map
+              </a>
 
-      <ReservationModal 
-        isOpen={isReservationOpen}
-        onClose={() => setIsReservationOpen(false)}
-      />
-    </div>
+              <div className="pt-3 border-t border-border flex flex-col gap-2">
+                <Button
+                  variant="default"
+                  onClick={() => { setMobileNavOpen(false); setReserveOpen(true); }}
+                  className="w-full justify-center text-xs"
+                >
+                  <Calendar className="size-4 mr-1.5" /> Book a Table
+                </Button>
+                <a
+                  href={`tel:${RESTAURANT_INFO.phoneRaw}`}
+                  className="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-border bg-muted/50 font-mono font-semibold text-xs text-foreground"
+                >
+                  <Phone className="size-4 text-accent" /> Call {RESTAURANT_INFO.phone}
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* 3. HERO SECTION WITH DARK VINTAGE KOREAN RESTAURANT HERITAGE & DYNAMIC FOOD SLIDESHOW */}
+      <section id="top" className="relative overflow-hidden pt-10 pb-16 lg:pt-16 lg:pb-24 border-b border-[#2C2220] bg-[#120D0B] text-white">
+        
+        {/* Korean Restaurant Interior Background - Bright & Clearly Visible with Subtle Vintage Ambiance */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+          <img
+            src="/images/korean-heritage-hero-bg.jpg"
+            alt="Tofu Chon Authentic Korean Dining Ambiance"
+            className="w-full h-full object-cover object-left lg:object-center brightness-[0.92] contrast-[1.05] scale-100 transition-all duration-700"
+          />
+          {/* Reduced vintage effect: Gentle warm tint that lets the Hanok woodwork, lanterns, and brassware shine through */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#120D0B]/75 via-[#120D0B]/40 to-transparent lg:w-[65%] w-full" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#120D0B]/50 via-transparent to-[#120D0B]/75" />
+        </div>
+
+        {/* Traditional Korean warm paper lantern ambient light glows */}
+        <div className="absolute top-10 left-12 w-80 h-80 rounded-full bg-amber-500/20 blur-[100px] pointer-events-none"></div>
+        <div className="absolute top-1/3 right-1/4 w-[450px] h-[450px] rounded-full bg-amber-600/15 blur-[120px] pointer-events-none"></div>
+        <div className="absolute bottom-0 left-10 w-96 h-96 rounded-full bg-red-900/15 blur-3xl pointer-events-none"></div>
+
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            
+            {/* Left Content - NO GIANT WINDOW, open background with small discrete chips */}
+            <div className="lg:col-span-7 flex flex-col items-start text-left">
+              
+              {/* Small discrete rating badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/50 backdrop-blur-md text-white border border-amber-500/40 text-xs font-semibold mb-6 shadow-md">
+                <div className="flex items-center text-amber-400">
+                  <Star className="size-3.5 fill-current" />
+                  <Star className="size-3.5 fill-current" />
+                  <Star className="size-3.5 fill-current" />
+                  <Star className="size-3.5 fill-current" />
+                  <Star className="size-3.5 fill-current" />
+                </div>
+                <span className="font-bold text-white">4.8 / 5.0</span>
+                <span className="text-[#EADFD3]/80">• 1,240+ Koreatown Diners</span>
+                <span className="hidden sm:inline-block w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                <span className="hidden sm:inline-block text-amber-300 font-bold">3526 W 8th St, LA</span>
+              </div>
+
+              {/* Headline with Korean Calligraphic Elegance */}
+              <h1 className="section-title text-white tracking-wide mb-3 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] text-3xl sm:text-4xl lg:text-5xl font-black">
+                Authentic <span className="text-amber-400 italic">Silken Soon Tofu</span> &amp; Sizzling LA Galbi
+              </h1>
+
+              {/* Korean Sub-Headline */}
+              <p className="text-sm sm:text-base font-semibold text-amber-300 tracking-wider mb-4 drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
+                30년 전통 비법 육수와 가마솥 손두부 • 로스앤젤레스 코리아타운 8가 맛집
+              </p>
+
+              {/* Subtitle */}
+              <p className="text-base sm:text-lg text-[#EADFD3] leading-relaxed mb-8 max-w-2xl font-normal drop-shadow-[0_1px_6px_rgba(0,0,0,0.8)]">
+                Served bubbling hot in earthenware ttukbaegi with daily handmade organic silken tofu, 24-hour slow-simmered beef bone broth, flame-kissed prime short ribs, and generous complimentary house banchan.
+              </p>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3.5 w-full sm:w-auto mb-10">
+                <Button
+                  variant="default"
+                  size="lg"
+                  onClick={() => {
+                    const el = document.getElementById('menu');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="rounded-full shadow-lg hover:shadow-xl w-full sm:w-auto text-sm font-bold bg-[#8C1D24] hover:bg-[#A3232C] text-white border border-amber-500/30"
+                >
+                  <ShoppingBag className="size-4.5 mr-1.5 text-white" />
+                  <span>Order Online</span>
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => setReserveOpen(true)}
+                  className="rounded-full w-full sm:w-auto text-sm font-bold bg-black/40 backdrop-blur-md border border-amber-400/50 text-amber-200 hover:bg-black/60 hover:text-white"
+                >
+                  <Calendar className="size-4 mr-1.5 text-amber-400" />
+                  <span>Book a Table</span>
+                </Button>
+
+                <a
+                  href={`tel:${RESTAURANT_INFO.phoneRaw}`}
+                  className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-full border border-white/20 bg-black/40 backdrop-blur-md hover:bg-black/60 font-semibold text-sm text-white transition-colors w-full sm:w-auto"
+                >
+                  <Phone className="size-4 text-amber-400" />
+                  <span>Call Direct</span>
+                </a>
+              </div>
+
+              {/* Trust Badges Bar in discrete small frosted chips */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-white/15 w-full">
+                <div className="flex items-center gap-2.5 p-2 rounded-xl bg-black/35 backdrop-blur-sm border border-white/10">
+                  <div className="w-8 h-8 rounded-full bg-red-900/60 text-amber-300 flex items-center justify-center shrink-0 border border-amber-500/20">
+                    <ShieldCheck className="size-4" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-white">0% Extra Fees</p>
+                    <p className="text-[11px] text-[#EADFD3]/70">Direct pricing</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2.5 p-2 rounded-xl bg-black/35 backdrop-blur-sm border border-white/10">
+                  <div className="w-8 h-8 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center shrink-0 border border-amber-500/30">
+                    <Clock className="size-4" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-white">20-25 Min</p>
+                    <p className="text-[11px] text-[#EADFD3]/70">Fast pickup</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2.5 p-2 rounded-xl bg-black/35 backdrop-blur-sm border border-white/10">
+                  <div className="w-8 h-8 rounded-full bg-red-900/60 text-amber-300 flex items-center justify-center shrink-0 border border-amber-500/20">
+                    <Flame className="size-4" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-white">Fresh Daily</p>
+                    <p className="text-[11px] text-[#EADFD3]/70">Handmade tofu</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2.5 p-2 rounded-xl bg-black/35 backdrop-blur-sm border border-white/10">
+                  <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/30">
+                    <Utensils className="size-4" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-white">Free Banchan</p>
+                    <p className="text-[11px] text-[#EADFD3]/70">Full side dishes</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Right Hero Visual Card: DYNAMIC INTERACTIVE SLIDESHOW */}
+            <div className="lg:col-span-5 relative" 
+              onMouseEnter={() => setIsSlidePaused(true)}
+              onMouseLeave={() => setIsSlidePaused(false)}
+            >
+              <div className="relative mx-auto max-w-md lg:max-w-none">
+                <div className="absolute -inset-2 rounded-3xl bg-linear-to-tr from-primary/25 via-accent/25 to-primary/15 blur-md pointer-events-none"></div>
+
+                {/* Main Slideshow Container */}
+                <div className="relative rounded-2xl overflow-hidden bg-card border-2 border-border shadow-2xl">
+                  
+                  {/* Image with smooth fade effect - bright, crystal clear, minimal shadow */}
+                  <div className="relative h-96 sm:h-[420px] w-full overflow-hidden bg-muted">
+                    <img
+                      key={currentSlide.image}
+                      src={currentSlide.image}
+                      alt={currentSlide.title}
+                      className="w-full h-full object-cover animate-fadeIn duration-500 scale-100 hover:scale-105 transition-transform duration-700"
+                    />
+                    {/* Very subtle, minimal bottom gradient so the image is fully bright and vivid */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10 pointer-events-none" />
+
+                    {/* Left & Right Slideshow Arrow Controls (Translucent Liquid Glass Buttons) */}
+                    <button
+                      type="button"
+                      onClick={() => setHeroSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length)}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/40 hover:bg-white/75 text-stone-950 flex items-center justify-center backdrop-blur-md shadow-md border border-white/60 transition-all active:scale-90 cursor-pointer z-10"
+                      aria-label="Previous dish slide"
+                    >
+                      <ChevronLeft className="size-5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setHeroSlide((prev) => (prev + 1) % HERO_SLIDES.length)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/40 hover:bg-white/75 text-stone-950 flex items-center justify-center backdrop-blur-md shadow-md border border-white/60 transition-all active:scale-90 cursor-pointer z-10"
+                      aria-label="Next dish slide"
+                    >
+                      <ChevronRight className="size-5" />
+                    </button>
+
+                    {/* Floating Korean Heritage Tag top-left (Liquid Glass) */}
+                    <div className="absolute top-3.5 left-3.5 z-10">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FDFBF7]/90 text-primary backdrop-blur-md border border-white/80 text-[11px] font-bold tracking-wide shadow-md">
+                        <Flame className="size-3 text-primary" /> {currentSlide.badge}
+                      </span>
+                    </div>
+
+                    {/* TRUE TRANSLUCENT LIQUID GLASS DESCRIPTION WINDOW (Noticeably transparent, full title room, zero truncation) */}
+                    <div className="absolute bottom-3 left-3 right-3 z-10 rounded-2xl bg-white/35 hover:bg-white/45 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.18)] p-3 text-foreground transition-all duration-300">
+                      <div className="flex items-center justify-between gap-3">
+                        
+                        {/* Food info: Full title and Korean name with total breathing room - NEVER truncated or cut */}
+                        <div className="min-w-0 flex-1">
+                          <h3 className="font-display text-sm sm:text-base font-black text-stone-950 leading-tight drop-shadow-2xs">
+                            {currentSlide.title}
+                          </h3>
+                          <p className="text-xs font-bold text-[#8C1D24] mt-0.5 drop-shadow-2xs">
+                            {currentSlide.korean}
+                          </p>
+                        </div>
+
+                        {/* Right side: Progress Bar Dots + Direct Order Button (No duplicate number badge) */}
+                        <div className="flex items-center gap-2.5 shrink-0">
+                          {/* Progress Dots */}
+                          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-black/20 backdrop-blur-sm border border-white/30">
+                            {HERO_SLIDES.map((_, idx) => (
+                              <button
+                                key={idx}
+                                type="button"
+                                onClick={() => setHeroSlide(idx)}
+                                className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                                  heroSlide === idx ? 'w-4.5 bg-amber-300' : 'w-1.5 bg-white/60 hover:bg-white'
+                                }`}
+                                aria-label={`Go to slide ${idx + 1}`}
+                              />
+                            ))}
+                          </div>
+
+                          {/* Direct Order Button */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const found = MENU_ITEMS.find(m => m.id === currentSlide.targetId) || MENU_ITEMS[0];
+                              openProductModal(found);
+                            }}
+                            className="h-8.5 px-3.5 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-md hover:shadow-lg active:scale-95 shrink-0"
+                          >
+                            <span>Order</span>
+                            <ArrowRight className="size-3" />
+                          </button>
+                        </div>
+
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+                {/* Clean, Non-Intrusive Floating Heritage Badge (Top Right only, bottom-left overlap completely eliminated) */}
+                <div className="absolute -top-3.5 -right-2 sm:-right-3 bg-white/90 backdrop-blur-md border border-white/80 text-foreground px-3.5 py-1.5 rounded-full shadow-md flex items-center gap-2 z-20">
+                  <Award className="size-4 text-accent shrink-0" />
+                  <span className="text-[11px] font-bold text-foreground">
+                    <span className="text-primary font-black">#1</span> K-Town Heritage
+                  </span>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 4. SIGNATURE COMBOS & SPECIALTIES SPOTLIGHT */}
+      <section id="featured" className="py-16 sm:py-20 bg-secondary/40 border-b border-border relative">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+            <div>
+              <p className="eyebrow">Signature Combos &amp; House Favorites</p>
+              <h2 className="section-title text-foreground">
+                The Authentic <span className="text-primary italic">K-Town Experience</span>
+              </h2>
+              <p className="text-sm sm:text-base text-muted-foreground mt-2 max-w-2xl">
+                Every combo is served with your choice of hot Soon Tofu stew, fresh rice, and an abundant table of seasonal Korean banchan side dishes.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const el = document.getElementById('menu');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="rounded-full text-xs font-bold"
+              >
+                View Full Menu ({MENU_ITEMS.length} items) <ArrowRight className="size-3.5 ml-1" />
+              </Button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {featuredItems.map((item) => (
+              <div 
+                key={item.id}
+                className="group bg-card rounded-2xl border border-border overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+              >
+                <div>
+                  <div className="relative h-52 sm:h-56 overflow-hidden bg-muted">
+                    <img 
+                      src={item.image} 
+                      alt={item.name}
+                      className="w-full h-full object-cover group-hover:scale-106 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent"></div>
+                    
+                    {item.badge && (
+                      <span className="absolute top-3 left-3 bg-primary text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-xs">
+                        {item.badge}
+                      </span>
+                    )}
+
+                    <span className="absolute bottom-3 right-3 bg-white/95 backdrop-blur-xs text-primary font-mono font-bold text-sm px-3 py-1 rounded-full shadow-xs">
+                      ${item.price.toFixed(2)}
+                    </span>
+                  </div>
+
+                  <div className="p-5 sm:p-6">
+                    <div className="flex items-baseline justify-between gap-2 mb-1.5">
+                      <h3 className="font-display font-bold text-lg text-foreground group-hover:text-primary transition-colors">
+                        {item.name}
+                      </h3>
+                    </div>
+                    <p className="text-xs font-semibold text-accent mb-2">
+                      {item.koreanName}
+                    </p>
+                    <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-5 sm:p-6 pt-0 border-t border-border/50 mt-auto">
+                  <div className="flex items-center justify-between gap-2 pt-4">
+                    {item.hasSpiceLevel && (
+                      <span className="text-[11px] text-muted-foreground flex items-center gap-1 font-medium">
+                        <Flame className="size-3.5 text-primary" /> Customizable spice
+                      </span>
+                    )}
+                    <Button
+                      variant="default"
+                      size="sm"
+                      onClick={() => openProductModal(item)}
+                      className="rounded-full ml-auto text-xs font-semibold shadow-xs"
+                    >
+                      <Plus className="size-3.5 mr-1" /> Add to Order
+                    </Button>
+                  </div>
+                </div>
+
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* 5. INTERACTIVE FULL MENU & ONLINE ORDERING */}
+      <section id="menu" className="py-16 sm:py-24 border-b border-border relative">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          
+          <div className="text-center max-w-3xl mx-auto mb-10">
+            <p className="eyebrow">Explore Our Authentic Dishes</p>
+            <h2 className="section-title text-foreground">
+              Order Online for <span className="text-primary italic">Pickup &amp; Delivery</span>
+            </h2>
+            <p className="text-sm sm:text-base text-muted-foreground mt-2">
+              Direct from our kitchen to your table with zero third-party markups. Select any dish to customize spice levels and side options.
+            </p>
+          </div>
+
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8 bg-card p-3 sm:p-4 rounded-2xl border border-border shadow-xs">
+            
+            <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none">
+              {CATEGORIES.map((cat) => {
+                const isActive = selectedCategory === cat.id;
+                const count = cat.id === 'all' 
+                  ? MENU_ITEMS.length 
+                  : MENU_ITEMS.filter(i => i.category === cat.id).length;
+
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
+                      isActive 
+                        ? 'bg-primary text-white shadow-xs' 
+                        : 'bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground'
+                    }`}
+                  >
+                    <span>{cat.label}</span>
+                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-border text-muted-foreground'}`}>
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="relative w-full md:w-72 shrink-0">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search Soon Tofu, Galbi..."
+                className="w-full pl-9 pr-8 py-2 text-xs rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
+                >
+                  <X className="size-3.5" />
+                </button>
+              )}
+            </div>
+
+          </div>
+
+          {searchQuery && (
+            <div className="mb-6 flex items-center justify-between text-xs text-muted-foreground">
+              <span>Showing results for "{searchQuery}" ({filteredMenu.length} items found)</span>
+              <button 
+                type="button" 
+                onClick={() => setSearchQuery('')}
+                className="text-primary font-bold hover:underline cursor-pointer"
+              >
+                Clear search
+              </button>
+            </div>
+          )}
+
+          {filteredMenu.length === 0 ? (
+            <div className="text-center py-16 bg-card rounded-2xl border border-border p-8">
+              <p className="font-display text-lg font-bold text-foreground">No dishes match your search</p>
+              <p className="text-xs text-muted-foreground mt-1">Try searching for "galbi", "seafood", or "tofu".</p>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}
+                className="mt-4 rounded-full text-xs"
+              >
+                Reset Filters
+              </Button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredMenu.map((item) => (
+                <div
+                  key={item.id}
+                  onClick={() => openProductModal(item)}
+                  className="group bg-card rounded-2xl border border-border p-4 hover:border-primary/50 transition-all duration-200 shadow-2xs hover:shadow-md cursor-pointer flex flex-col justify-between"
+                >
+                  <div className="flex gap-4">
+                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-muted shrink-0 relative border border-border/60">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-300"
+                        loading="lazy"
+                      />
+                      {item.hasSpiceLevel && (
+                        <span className="absolute bottom-1 right-1 bg-black/60 text-amber-300 p-1 rounded-md backdrop-blur-xs">
+                          <Flame className="size-3" />
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex-1 min-w-0 flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-start justify-between gap-1 mb-1">
+                          <h4 className="font-display font-bold text-base text-foreground group-hover:text-primary transition-colors leading-snug">
+                            {item.name}
+                          </h4>
+                        </div>
+                        <p className="text-xs font-semibold text-accent mb-1.5">
+                          {item.koreanName}
+                        </p>
+                        <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                          {item.description}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center justify-between mt-2 pt-2 border-t border-border/40">
+                        <span className="font-mono font-bold text-base text-primary">
+                          ${item.price.toFixed(2)}
+                        </span>
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openProductModal(item);
+                          }}
+                          className="h-7 px-3 text-xs font-bold rounded-lg group-hover:bg-primary group-hover:text-white transition-colors"
+                        >
+                          <Plus className="size-3 mr-0.5" /> Order
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+        </div>
+      </section>
+
+      {/* 6. BANCHAN & SPICE LEVEL CULTURAL GUIDE */}
+      <section id="banchan-guide" className="py-16 sm:py-20 bg-secondary/30 border-b border-border">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            
+            <div className="lg:col-span-6">
+              <p className="eyebrow">Custom Heat Customization</p>
+              <h2 className="section-title text-foreground mb-4">
+                Choose Your <span className="text-primary italic">Spice Harmony</span>
+              </h2>
+              <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+                Our Soon Tofu broth is crafted through 24-hour slow simmering with aromatics and roasted Korean red pepper oil (Gochutgaru). Choose your personal heat tier:
+              </p>
+
+              <div className="space-y-3">
+                {SPICE_LEVELS.map((spice) => (
+                  <div 
+                    key={spice.id}
+                    className="flex items-start gap-3.5 p-3.5 rounded-xl bg-card border border-border shadow-2xs"
+                  >
+                    <div 
+                      className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5 text-white font-bold text-xs"
+                      style={{ backgroundColor: spice.color }}
+                    >
+                      <Flame className="size-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-foreground">
+                        {spice.name}
+                      </h4>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {spice.desc}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="lg:col-span-6 bg-card rounded-2xl border border-border p-6 sm:p-8 shadow-xs">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-bold text-accent uppercase tracking-wider">Complimentary Hospitality</span>
+              </div>
+              <h3 className="font-display font-bold text-2xl text-foreground mb-2">
+                Generous House Banchan (반찬)
+              </h3>
+              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-6">
+                In authentic Korean dining, side dishes are the heart of the meal. At Tofu Chon, every dine-in and takeout order includes our freshly prepared banchan:
+              </p>
+
+              <div className="grid grid-cols-2 gap-3.5 text-xs font-medium">
+                <div className="flex items-center gap-2 p-2.5 rounded-lg bg-muted/60">
+                  <span className="w-2 h-2 rounded-full bg-primary"></span>
+                  <span>Artisanal Kimchi (김치)</span>
+                </div>
+                <div className="flex items-center gap-2 p-2.5 rounded-lg bg-muted/60">
+                  <span className="w-2 h-2 rounded-full bg-accent"></span>
+                  <span>Seasoned Bean Sprouts (콩나물)</span>
+                </div>
+                <div className="flex items-center gap-2 p-2.5 rounded-lg bg-muted/60">
+                  <span className="w-2 h-2 rounded-full bg-primary"></span>
+                  <span>Pickled Radish (단무지)</span>
+                </div>
+                <div className="flex items-center gap-2 p-2.5 rounded-lg bg-muted/60">
+                  <span className="w-2 h-2 rounded-full bg-accent"></span>
+                  <span>Braised Soy Potatoes (감자조림)</span>
+                </div>
+                <div className="flex items-center gap-2 p-2.5 rounded-lg bg-muted/60">
+                  <span className="w-2 h-2 rounded-full bg-primary"></span>
+                  <span>Savory Fish Cakes (어묵볶음)</span>
+                </div>
+                <div className="flex items-center gap-2 p-2.5 rounded-lg bg-muted/60">
+                  <span className="w-2 h-2 rounded-full bg-accent"></span>
+                  <span>Raw Farm Egg for Ttukbaegi (달걀)</span>
+                </div>
+              </div>
+
+              <div className="mt-6 p-3 rounded-xl bg-accent/10 border border-accent/30 text-xs text-foreground flex items-center gap-2">
+                <Info className="size-4 text-accent shrink-0" />
+                <span>Tip: Crack the fresh raw egg into your boiling stone pot the moment it arrives!</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* 7. OUR HERITAGE & TTUKBAEGI STORY */}
+      <section id="heritage" className="py-16 sm:py-24 border-b border-border relative overflow-hidden">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <div className="lg:col-span-6 order-2 lg:order-1">
+              <div className="relative rounded-2xl overflow-hidden border-2 border-border shadow-xl">
+                <img
+                  src="/images/galbi-sizzling.png"
+                  alt="Tofu Chon Koreatown LA Heritage Flame Charred Galbi"
+                  className="w-full h-80 sm:h-96 object-cover"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent"></div>
+                <div className="absolute bottom-6 left-6 right-6 text-white">
+                  <span className="text-xs font-bold text-amber-300 uppercase tracking-wider">Koreatown Tradition</span>
+                  <h4 className="font-display font-bold text-xl sm:text-2xl mt-1">Simmered in Earthenware (뚝배기)</h4>
+                  <p className="text-xs text-white/80 mt-1">Retaining intense heat from the first spoonful to the very last drop.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-6 order-1 lg:order-2">
+              <p className="eyebrow">The Tofu Chon Heritage</p>
+              <h2 className="section-title text-foreground mb-6">
+                Soul Food of <span className="text-primary italic">Koreatown, Los Angeles</span>
+              </h2>
+
+              <div className="space-y-4 text-muted-foreground text-sm sm:text-base leading-relaxed">
+                <p>
+                  Located on 8th Street in the vibrant heart of Los Angeles Koreatown, <strong className="text-foreground">Tofu Chon (두부촌)</strong> has spent decades honoring the time-tested craft of Korean comfort cooking.
+                </p>
+                <p>
+                  Our soft tofu is made fresh daily to ensure that delicate, custard-like texture that melts on your palate. Paired with our 24-hour slow-cooked beef bone broth and simmered inside genuine Korean earthenware bowls (<em className="text-foreground">ttukbaegi</em>), every serving arrives at your table boiling vigorously.
+                </p>
+                <p>
+                  Together with our sizzling sweet-savory flame-grilled LA Galbi short ribs, we invite you to experience the warmth, generosity, and authentic flavors of Seoul right here in Southern California.
+                </p>
+              </div>
+
+              <div className="mt-8 flex items-center gap-4">
+                <Button
+                  variant="default"
+                  onClick={() => setReserveOpen(true)}
+                  className="rounded-full font-bold text-xs"
+                >
+                  <Calendar className="size-3.5 mr-1" /> Reserve a Table
+                </Button>
+                <a
+                  href={RESTAURANT_INFO.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs font-bold text-accent hover:underline flex items-center gap-1"
+                >
+                  Follow on Instagram {RESTAURANT_INFO.instagram} <ExternalLink className="size-3" />
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* 8. KOREATOWN REVIEWS & TESTIMONIALS */}
+      <section id="reviews" className="py-16 sm:py-20 bg-secondary/30 border-b border-border">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <p className="eyebrow">Guest Testimonials</p>
+            <h2 className="section-title text-foreground">
+              Loved by <span className="text-primary italic">Local Diners</span>
+            </h2>
+            <p className="text-sm text-muted-foreground mt-2">
+              Read what Los Angeles Koreatown food enthusiasts have to say about our stews and sizzling BBQ.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            
+            <div className="bg-card rounded-2xl border border-border p-6 shadow-2xs flex flex-col justify-between">
+              <div>
+                <div className="flex text-amber-500 mb-3">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="size-4 fill-current" />
+                  ))}
+                </div>
+                <p className="text-xs sm:text-sm text-foreground italic leading-relaxed mb-4">
+                  "Hands down the best Galbi + Soon Tofu combo in Koreatown. The broth is deeply rich and savory without being salty, and the short ribs have that perfect smoky flame-kissed char. The banchan refills are prompt and generous."
+                </p>
+              </div>
+              <div className="pt-4 border-t border-border flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-primary/15 text-primary font-bold text-xs flex items-center justify-center">
+                  JK
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-foreground">Jennifer K.</p>
+                  <p className="text-[10px] text-muted-foreground">Koreatown Resident • Yelp Elite</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-card rounded-2xl border border-border p-6 shadow-2xs flex flex-col justify-between">
+              <div>
+                <div className="flex text-amber-500 mb-3">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="size-4 fill-current" />
+                  ))}
+                </div>
+                <p className="text-xs sm:text-sm text-foreground italic leading-relaxed mb-4">
+                  "I drive 45 minutes from the Valley just for the Spicy Galbi Jjim and the Mix Soon Tofu. The broth stays piping hot the entire time thanks to the earthenware bowls. Ordering direct online was seamless and ready on arrival."
+                </p>
+              </div>
+              <div className="pt-4 border-t border-border flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-accent/20 text-accent font-bold text-xs flex items-center justify-center">
+                  DL
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-foreground">David L.</p>
+                  <p className="text-[10px] text-muted-foreground">Food Blogger • Google Local Guide</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-card rounded-2xl border border-border p-6 shadow-2xs flex flex-col justify-between">
+              <div>
+                <div className="flex text-amber-500 mb-3">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="size-4 fill-current" />
+                  ))}
+                </div>
+                <p className="text-xs sm:text-sm text-foreground italic leading-relaxed mb-4">
+                  "The yellow croaker combo is legendary! Super crispy skin, tender moist meat, and the kimchi soon tofu has that authentic Seoul tanginess. You can tell they've been perfecting their recipes for decades."
+                </p>
+              </div>
+              <div className="pt-4 border-t border-border flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-primary/15 text-primary font-bold text-xs flex items-center justify-center">
+                  SM
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-foreground">Sarah M.</p>
+                  <p className="text-[10px] text-muted-foreground">Verified Diner</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* 9. LOCATION, HOURS & LIVE EMBEDDED GOOGLE MAP */}
+      <section id="location" className="py-16 sm:py-24 border-b border-border">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
+            
+            <div className="lg:col-span-5 flex flex-col justify-between bg-card rounded-2xl border border-border p-6 sm:p-8 shadow-xs">
+              <div>
+                <p className="eyebrow">Visit &amp; Dine</p>
+                <h2 className="font-display font-bold text-2xl sm:text-3xl text-foreground mb-4">
+                  Tofu Chon (두부촌)
+                </h2>
+                <p className="text-xs sm:text-sm text-muted-foreground mb-6 leading-relaxed">
+                  Conveniently situated in Koreatown on 8th Street with <strong className="text-foreground">free dedicated customer parking</strong> in the rear lot.
+                </p>
+
+                <div className="space-y-4 text-xs sm:text-sm">
+                  <div className="flex items-start gap-3">
+                    <MapPin className="size-4 text-accent shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-bold text-foreground">{RESTAURANT_INFO.address}</p>
+                      <p className="text-muted-foreground">{RESTAURANT_INFO.neighborhood}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <Clock className="size-4 text-accent shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-bold text-foreground">Operating Hours</p>
+                      {RESTAURANT_INFO.hours.map((h, i) => (
+                        <p key={i} className="text-muted-foreground">
+                          {h.days}: <span className="text-foreground font-medium">{h.time}</span>
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <Phone className="size-4 text-accent shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-bold text-foreground">Direct Inquiries &amp; Phone Orders</p>
+                      <a href={`tel:${RESTAURANT_INFO.phoneRaw}`} className="font-mono text-primary font-bold hover:underline">
+                        {RESTAURANT_INFO.phone}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-6 border-t border-border mt-6 flex flex-col sm:flex-row gap-3">
+                <a
+                  href={RESTAURANT_INFO.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-primary text-white font-bold text-xs shadow-xs hover:bg-[#73161c] transition-colors text-center"
+                >
+                  <Navigation className="size-4" /> Get Driving Directions
+                </a>
+                <Button
+                  variant="outline"
+                  size="default"
+                  onClick={() => setReserveOpen(true)}
+                  className="rounded-xl text-xs font-bold"
+                >
+                  <Calendar className="size-4 mr-1 text-accent" /> Book Table
+                </Button>
+              </div>
+            </div>
+
+            <div className="lg:col-span-7 bg-card rounded-2xl border border-border overflow-hidden shadow-xs flex flex-col">
+              <div className="relative w-full h-72 sm:h-96 bg-muted">
+                <iframe
+                  title="Tofu Chon Koreatown Location Map"
+                  src="https://maps.google.com/maps?q=3526+W+8th+St,+Los+Angeles,+CA+90005&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                  className="w-full h-full border-0"
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                ></iframe>
+              </div>
+
+              <div className="p-4 sm:p-5 bg-muted/40 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="text-left w-full sm:w-auto">
+                  <p className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                    <MapPin className="size-3.5 text-primary shrink-0" />
+                    <span>3526 W 8th St, Los Angeles, CA 90005</span>
+                  </p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">
+                    Free parking in rear lot • Between S Hobart Blvd &amp; S Harvard Blvd
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2 w-full sm:w-auto shrink-0 justify-end">
+                  <a
+                    href={RESTAURANT_INFO.mapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-card border border-border text-foreground hover:border-primary hover:text-primary transition-all text-xs font-bold shadow-2xs cursor-pointer"
+                    title="Open location in Google Maps"
+                  >
+                    <span>Google Maps</span>
+                    <ExternalLink className="size-3 text-accent" />
+                  </a>
+                  <a
+                    href="https://maps.apple.com/?q=Tofu+Chon+3526+W+8th+St+Los+Angeles+CA"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-card border border-border text-foreground hover:border-primary hover:text-primary transition-all text-xs font-bold shadow-2xs cursor-pointer"
+                    title="Open location in Apple Maps"
+                  >
+                    <span>Apple Maps</span>
+                    <ExternalLink className="size-3 text-accent" />
+                  </a>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* 10. LUXURY FOOTER */}
+      <footer className="bg-[#181413] text-[#EADFD3] py-14 border-t border-[#2C2422]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+            
+            <div>
+              <div className="flex items-center gap-2.5 mb-3">
+                <div className="w-9 h-9 rounded-xl bg-primary text-amber-200 flex items-center justify-center font-display font-bold text-base">
+                  두
+                </div>
+                <span className="font-display text-xl font-bold text-white tracking-tight">Tofu Chon</span>
+                <span className="text-xs text-accent">두부촌</span>
+              </div>
+              <p className="text-xs text-[#EADFD3]/70 leading-relaxed mb-4">
+                Authentic Korean Soon Tofu Stews, Sizzling LA Galbi, and Handcrafted Banchan in Koreatown, Los Angeles.
+              </p>
+              <p className="text-xs text-emerald-400 font-mono">
+                0% Third-party Commission When You Order Direct
+              </p>
+            </div>
+
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-accent mb-4">Quick Navigation</h4>
+              <ul className="space-y-2 text-xs text-[#EADFD3]/80">
+                <li><a href="#featured" className="hover:text-white transition-colors">Signature Combos</a></li>
+                <li><a href="#menu" className="hover:text-white transition-colors">Full Online Menu</a></li>
+                <li><a href="#banchan-guide" className="hover:text-white transition-colors">Banchan &amp; Spice Guide</a></li>
+                <li><a href="#heritage" className="hover:text-white transition-colors">Our Heritage</a></li>
+                <li><a href="#location" className="hover:text-white transition-colors">Location &amp; Free Parking</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-accent mb-4">Operating Hours</h4>
+              <ul className="space-y-2 text-xs text-[#EADFD3]/80">
+                {RESTAURANT_INFO.hours.map((h, i) => (
+                  <li key={i}>
+                    <p className="font-semibold text-white">{h.days}</p>
+                    <p className="text-muted-foreground">{h.time}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-accent mb-4">Contact &amp; Orders</h4>
+              <div className="space-y-2 text-xs text-[#EADFD3]/80">
+                <p>{RESTAURANT_INFO.address}</p>
+                <p>Phone: <a href={`tel:${RESTAURANT_INFO.phoneRaw}`} className="text-white font-mono hover:underline">{RESTAURANT_INFO.phone}</a></p>
+                <p>Instagram: <a href={RESTAURANT_INFO.instagramUrl} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">{RESTAURANT_INFO.instagram}</a></p>
+              </div>
+            </div>
+
+          </div>
+
+          <div className="pt-8 border-t border-[#2C2422] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#EADFD3]/60">
+            <p>© {new Date().getFullYear()} Tofu Chon Korean Restaurant. All rights reserved.</p>
+            <p className="flex items-center gap-1">
+              <span>Crafted with pride for Los Angeles Koreatown</span>
+            </p>
+          </div>
+        </div>
+      </footer>
+
+      {/* 11. PERSISTENT FLOATING "ORDER NOW / CART" ACTION WIDGET */}
+      <div className="fixed bottom-6 right-6 z-40 flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => {
+            if (cartItemCount > 0) {
+              setCartOpen(true);
+            } else {
+              const el = document.getElementById('menu');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}
+          className="group flex items-center gap-3 px-4 sm:px-5 py-3 rounded-full bg-primary text-white shadow-2xl hover:bg-[#73161c] border-2 border-amber-300/40 transition-all duration-300 active:scale-95 cursor-pointer floating-cart-glow"
+          title={cartItemCount > 0 ? "View Cart / Order Tray" : "Order Online Now (0% Fees)"}
+          aria-label="Order Online and View Cart"
+        >
+          <div className="relative flex items-center justify-center">
+            <ShoppingBag className="size-5 text-amber-200 group-hover:scale-110 transition-transform" />
+            {cartItemCount > 0 && (
+              <span className="absolute -top-2.5 -right-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-white text-[10px] font-black ring-2 ring-white shadow-xs">
+                {cartItemCount}
+              </span>
+            )}
+          </div>
+          <div className="flex flex-col text-left">
+            <span className="text-[12px] font-black uppercase tracking-wider text-amber-100 leading-tight">
+              {cartItemCount > 0 ? "Order Tray" : "Order Online"}
+            </span>
+            <span className="text-[10px] sm:text-[11px] font-medium text-white/90">
+              {cartItemCount > 0 ? `$${subtotal.toFixed(2)} • View Cart` : "0% Direct Fees • Pickup & Delivery"}
+            </span>
+          </div>
+          <ArrowRight className="size-4 text-amber-200 group-hover:translate-x-1 transition-transform ml-0.5 hidden sm:inline" />
+        </button>
+      </div>
+
+      {/* =========================================================================
+          --- MODAL 1: PRODUCT CUSTOMIZATION DIALOG (MASSONI CINEMATIC DNA) ---
+          ========================================================================= */}
+      {selectedProduct && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-xs animate-fadeIn">
+          <div className="relative w-full max-w-lg max-h-[90vh] bg-card rounded-3xl shadow-2xl overflow-hidden flex flex-col animate-fadeIn border border-border">
+            
+            <button
+              onClick={() => setSelectedProduct(null)}
+              className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/55 text-white hover:bg-black/80 transition-colors cursor-pointer shadow-md"
+            >
+              <X className="size-5" />
+            </button>
+
+            {/* Massoni Cinematic Hero Banner with Korean Culinary Typography */}
+            <div className="relative h-56 w-full bg-muted shrink-0 overflow-hidden">
+              <img 
+                src={selectedProduct.image} 
+                alt={selectedProduct.name} 
+                className="w-full h-full object-cover" 
+              />
+              <div className="hero-shade absolute inset-0" />
+              <div className="absolute bottom-4 left-6 right-6 text-white">
+                <p className="text-xs font-display italic text-amber-300 font-semibold tracking-wide">
+                  {selectedProduct.koreanName || '전통 한식 특선'} • Koreatown Heritage
+                </p>
+                <h3 className="font-display text-2xl font-bold tracking-tight text-white drop-shadow-sm">
+                  {selectedProduct.name}
+                </h3>
+              </div>
+            </div>
+
+            <div className="p-6 overflow-y-auto space-y-5 flex-1 text-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                {selectedProduct.description}
+              </p>
+
+              {/* Korean Spice Level Selector */}
+              {selectedProduct.hasSpiceLevel && (
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2 flex items-center justify-between">
+                    <span>Select Spice Level (매운맛 선택)</span>
+                    <span className="text-primary font-semibold text-[11px]">* Required</span>
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {SPICE_LEVELS.map((spice) => {
+                      const isSelected = modalSpice === spice.id;
+                      return (
+                        <button
+                          key={spice.id}
+                          type="button"
+                          onClick={() => setModalSpice(spice.id)}
+                          className={`flex items-center justify-between p-3 rounded-xl border text-xs transition-all cursor-pointer ${
+                            isSelected 
+                              ? 'border-primary bg-primary/10 text-primary font-bold shadow-2xs ring-1 ring-primary/40' 
+                              : 'border-border hover:bg-muted/50 text-foreground'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2 truncate">
+                            <span 
+                              className="w-2.5 h-2.5 rounded-full shrink-0"
+                              style={{ backgroundColor: spice.color }}
+                            />
+                            <span className="truncate">{spice.name.split('(')[0]}</span>
+                          </div>
+                          {isSelected && <Check className="size-4 text-primary shrink-0" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Rice Selection */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2 flex items-center justify-between">
+                  <span>Choice of Rice (밥 선택)</span>
+                  <span className="text-accent font-semibold text-[11px]">Included</span>
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    'Stone Pot Purple Rice (흑미밥)',
+                    'Steamed White Rice (쌀밥)',
+                    'No Rice (밥 제외)'
+                  ].map((rice) => {
+                    const isSelected = modalRice === rice;
+                    return (
+                      <button
+                        key={rice}
+                        type="button"
+                        onClick={() => setModalRice(rice)}
+                        className={`p-2.5 rounded-xl border text-xs font-semibold transition-all text-center cursor-pointer ${
+                          isSelected
+                            ? 'border-accent bg-accent/15 text-accent-foreground font-bold shadow-2xs'
+                            : 'border-border hover:bg-muted/50 text-foreground'
+                        }`}
+                      >
+                        <span className="block text-[11px] leading-tight">{rice.split('(')[0]}</span>
+                        <span className="text-[10px] text-muted-foreground">({rice.split('(')[1]}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Chef Extras & Add-ons */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                  Chef Extras &amp; Add-ons (추가 선택)
+                </label>
+                <div className="space-y-1.5">
+                  {[
+                    { name: 'Fresh Farm Egg for Ttukbaegi (날달걀 추가)', price: 1.50 },
+                    { name: 'Extra Organic Silken Tofu (순두부 추가)', price: 2.50 },
+                    { name: 'Full House Banchan Refill Box (반찬 포장 세트)', price: 3.50 },
+                    { name: 'Extra Sizzling LA Galbi Rib Piece (갈비 1대 추가)', price: 9.99 }
+                  ].map((addon, idx) => {
+                    const isChecked = modalAddOns.some(a => a.name === addon.name);
+                    return (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => {
+                          if (isChecked) {
+                            setModalAddOns(modalAddOns.filter(a => a.name !== addon.name));
+                          } else {
+                            setModalAddOns([...modalAddOns, addon]);
+                          }
+                        }}
+                        className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-xs transition-all cursor-pointer ${
+                          isChecked 
+                            ? 'border-primary bg-primary/5 text-primary font-semibold ring-1 ring-primary/20' 
+                            : 'border-border hover:bg-muted/50 text-foreground'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <div className={`w-4 h-4 rounded border flex items-center justify-center ${isChecked ? 'bg-primary border-primary text-white' : 'border-zinc-400'}`}>
+                            {isChecked && <Check className="size-3" />}
+                          </div>
+                          <span>{addon.name}</span>
+                        </div>
+                        <span className="font-bold text-accent">+${addon.price.toFixed(2)}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Special Notes */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
+                  Special Notes / Dietary Requests
+                </label>
+                <textarea
+                  value={modalInstructions}
+                  onChange={(e) => setModalInstructions(e.target.value)}
+                  placeholder="e.g. Scallions on side, extra crispy yellow croaker, broth extra hot..."
+                  rows={2}
+                  className="w-full p-2.5 rounded-xl border border-input text-xs focus:border-primary focus:outline-none bg-background text-foreground"
+                />
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 sm:p-6 bg-muted/40 border-t border-border flex items-center justify-between gap-4">
+              <div className="flex items-center gap-2 bg-card border border-border rounded-full px-3 py-1.5 shadow-2xs">
+                <button
+                  type="button"
+                  onClick={() => setModalQuantity(Math.max(1, modalQuantity - 1))}
+                  className="text-muted-foreground hover:text-primary cursor-pointer p-0.5"
+                >
+                  <Minus className="size-4" />
+                </button>
+                <span className="font-bold text-sm w-6 text-center font-mono">{modalQuantity}</span>
+                <button
+                  type="button"
+                  onClick={() => setModalQuantity(modalQuantity + 1)}
+                  className="text-muted-foreground hover:text-primary cursor-pointer p-0.5"
+                >
+                  <Plus className="size-4" />
+                </button>
+              </div>
+
+              <Button
+                onClick={handleAddToCart}
+                variant="default"
+                className="flex-1 font-bold text-xs sm:text-sm h-12 shadow-md rounded-2xl cursor-pointer"
+              >
+                <span>Add to Order</span>
+                <span className="ml-2 font-mono">
+                  ${((selectedProduct.price + modalAddOns.reduce((s, a) => s + a.price, 0)) * modalQuantity).toFixed(2)}
+                </span>
+              </Button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* =========================================================================
+          --- MODAL 2: SLIDE-OVER CART DRAWER (MASSONI TAKEOUT TRAY) ---
+          ========================================================================= */}
+      {cartOpen && (
+        <div className="fixed inset-0 z-50 overflow-hidden animate-fadeIn">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-xs" onClick={() => setCartOpen(false)} />
+          <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
+            <div className="w-screen max-w-md bg-card shadow-2xl flex flex-col text-foreground border-l border-border">
+              
+              <div className="p-6 border-b border-border bg-muted/30 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-xs">
+                    <ShoppingBag className="size-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-lg font-bold">Your Takeout Tray</h3>
+                    <p className="text-xs text-muted-foreground">{cart.length} items in order</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setCartOpen(false)} 
+                  className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+                >
+                  <X className="size-5" />
+                </button>
+              </div>
+
+              <div className="p-4 bg-muted/20 border-b border-border">
+                <div className="grid grid-cols-2 p-1 bg-card rounded-xl border border-border text-xs font-bold">
+                  <button
+                    type="button"
+                    onClick={() => setOrderType('pickup')}
+                    className={`py-2 rounded-lg transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                      orderType === 'pickup' 
+                        ? 'bg-primary text-white shadow-sm' 
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    <MapPin className="size-3.5" />
+                    <span>Curbside Pickup (Free)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setOrderType('delivery')}
+                    className={`py-2 rounded-lg transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                      orderType === 'delivery' 
+                        ? 'bg-primary text-white shadow-sm' 
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    <Truck className="size-3.5" />
+                    <span>Delivery ($4.99)</span>
+                  </button>
+                </div>
+                
+                <div className="flex justify-between items-center text-xs text-muted-foreground mt-2 px-1">
+                  {orderType === 'pickup' ? (
+                    <>
+                      <span className="flex items-center gap-1 font-medium">
+                        <Clock className="size-3.5 text-accent" /> Ready in: <strong className="text-foreground">20–25 mins</strong>
+                      </span>
+                      <span className="flex items-center gap-1 text-[11px] font-semibold text-primary">
+                        <MapPin className="size-3" /> 3526 W 8th St (Pickup)
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="flex items-center gap-1 font-medium">
+                        <Clock className="size-3.5 text-accent" /> Estimated: <strong className="text-foreground">35–45 mins</strong>
+                      </span>
+                      <span className="flex items-center gap-1 text-[11px] text-emerald-700 font-semibold">
+                        <Truck className="size-3" /> To Your Door
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-5 space-y-3">
+                {cart.length === 0 ? (
+                  <div className="text-center py-16">
+                    <ShoppingBag className="size-12 text-muted-foreground/40 mx-auto mb-3" />
+                    <p className="font-display font-bold text-base text-foreground">Your tray is empty</p>
+                    <p className="text-xs text-muted-foreground mt-1 mb-4">Add your favorite Soon Tofu combo, galbi, or pajeon.</p>
+                    <Button 
+                      onClick={() => {
+                        setCartOpen(false);
+                        const el = document.getElementById('menu');
+                        if (el) el.scrollIntoView({ behavior: 'smooth' });
+                      }} 
+                      variant="default" 
+                      size="sm"
+                      className="rounded-full font-bold text-xs"
+                    >
+                      Explore Menu
+                    </Button>
+                  </div>
+                ) : (
+                  cart.map((item, idx) => (
+                    <div key={idx} className="p-3.5 rounded-2xl border border-border bg-background flex gap-3 shadow-2xs">
+                      <img src={item.image} alt={item.name} className="w-16 h-16 rounded-xl object-cover shrink-0 border border-border/60" />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-start gap-1">
+                          <h4 className="font-display font-bold text-xs truncate text-foreground">{item.name}</h4>
+                          <span className="font-bold font-mono text-xs text-primary shrink-0">${(item.unitPrice * item.quantity).toFixed(2)}</span>
+                        </div>
+                        <div className="text-[11px] text-muted-foreground mt-0.5 space-y-0.5">
+                          {item.spiceLevel && <p className="text-primary font-semibold">Spice: {item.spiceLevel.toUpperCase()}</p>}
+                          {item.riceOption && <p>Rice: {item.riceOption}</p>}
+                          {item.addOns?.length > 0 && <p className="text-accent font-medium">+{item.addOns.map(a => a.name).join(', ')}</p>}
+                          {item.specialInstructions && <p className="italic">Note: "{item.specialInstructions}"</p>}
+                        </div>
+
+                        <div className="flex items-center justify-between mt-2.5 pt-2 border-t border-border/50">
+                          <div className="flex items-center gap-2 border border-border rounded-full px-2 py-0.5 text-xs bg-muted/20">
+                            <button onClick={() => updateCartQuantity(item.cartItemId, -1)} className="text-muted-foreground hover:text-primary cursor-pointer p-0.5">
+                              <Minus className="size-3" />
+                            </button>
+                            <span className="font-bold font-mono px-1 text-foreground">{item.quantity}</span>
+                            <button onClick={() => updateCartQuantity(item.cartItemId, 1)} className="text-muted-foreground hover:text-primary cursor-pointer p-0.5">
+                              <Plus className="size-3" />
+                            </button>
+                          </div>
+                          <button onClick={() => removeFromCart(item.cartItemId)} className="text-[11px] text-muted-foreground hover:text-red-600 flex items-center gap-1 cursor-pointer transition-colors">
+                            <Trash2 className="size-3" /> Remove
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              {cart.length > 0 && (
+                <div className="p-5 border-t border-border bg-muted/20 space-y-3">
+                  <form onSubmit={applyPromo} className="flex gap-2">
+                    <input
+                      type="text"
+                      value={promoInput}
+                      onChange={(e) => setPromoInput(e.target.value)}
+                      placeholder='Promo code (try "KOREA10")'
+                      className="flex-1 p-2 rounded-xl border border-input text-xs uppercase font-semibold bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                    />
+                    <Button type="submit" variant="secondary" size="sm" className="text-xs font-bold rounded-xl cursor-pointer">
+                      Apply
+                    </Button>
+                  </form>
+                  {promoMsg.text && (
+                    <p className={`text-xs font-semibold ${promoMsg.type === 'success' ? 'text-emerald-600' : 'text-red-500'}`}>
+                      {promoMsg.text}
+                    </p>
+                  )}
+
+                  <div className="space-y-1 text-xs text-muted-foreground pt-2 border-t border-border">
+                    <div className="flex justify-between">
+                      <span>Subtotal</span>
+                      <span className="font-semibold text-foreground font-mono">${subtotal.toFixed(2)}</span>
+                    </div>
+                    {discountAmount > 0 && (
+                      <div className="flex justify-between text-emerald-600 font-semibold">
+                        <span>Discount ({discountCode} - {discountPercent}%)</span>
+                        <span className="font-mono">-${discountAmount.toFixed(2)}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between">
+                      <span>LA County Sales Tax (9.5%)</span>
+                      <span className="font-semibold text-foreground font-mono">${salesTax.toFixed(2)}</span>
+                    </div>
+                    {orderType === 'delivery' && (
+                      <>
+                        <div className="flex justify-between">
+                          <span>Delivery Fee (Koreatown Area)</span>
+                          <span className="font-semibold text-foreground font-mono">${deliveryFee.toFixed(2)}</span>
+                        </div>
+                        {driverTip > 0 && (
+                          <div className="flex justify-between">
+                            <span>Driver Tip</span>
+                            <span className="font-semibold text-foreground font-mono">${driverTip.toFixed(2)}</span>
+                          </div>
+                        )}
+                      </>
+                    )}
+                    <div className="flex justify-between text-base font-bold text-foreground pt-1.5 border-t border-border">
+                      <span>Total Due</span>
+                      <span className="font-display text-primary text-lg font-mono">${grandTotal.toFixed(2)}</span>
+                    </div>
+                  </div>
+
+                  <Button
+                    onClick={() => { setCartOpen(false); setCheckoutStep('details'); setCheckoutOpen(true); }}
+                    variant="default"
+                    className="w-full h-12 text-sm font-bold shadow-md rounded-xl cursor-pointer"
+                  >
+                    <span>Proceed to Checkout</span>
+                    <ArrowRight className="size-4 ml-2" />
+                  </Button>
+                </div>
+              )}
+
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =========================================================================
+          --- MODAL 3: CHECKOUT MODAL WITH KOREAN FEAST BANNER & DRIVER TIP CHIPS ---
+          ========================================================================= */}
+      {checkoutOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-xs animate-fadeIn overflow-y-auto">
+          <div className="relative w-full max-w-lg bg-card rounded-3xl shadow-2xl overflow-hidden my-8 animate-fadeIn text-foreground border border-border">
+            
+            {/* Top Korean Feast Visual Banner Header */}
+            <div className="relative h-44 w-full bg-muted overflow-hidden shrink-0">
+              <img 
+                src="/images/korean-banchan-feast.jpg" 
+                alt="Korean Feast Table" 
+                className="w-full h-full object-cover"
+              />
+              <div className="hero-shade absolute inset-0" />
+              
+              {checkoutStep !== 'confirmed' && (
+                <button 
+                  onClick={() => setCheckoutOpen(false)} 
+                  className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/55 text-white hover:bg-black/80 cursor-pointer transition-colors shadow-md"
+                >
+                  <X className="size-5" />
+                </button>
+              )}
+
+              <div className="absolute bottom-3.5 left-5 right-5 text-white">
+                <span className="text-[11px] font-bold text-amber-300 uppercase tracking-widest block">
+                  두부촌 정성 주문 • Koreatown Direct
+                </span>
+                <h3 className="font-display text-xl sm:text-2xl font-bold">
+                  {checkoutStep === 'confirmed' 
+                    ? (confirmedOrder?.orderType === 'delivery' ? 'Delivery Order Confirmed!' : 'Pickup Order Confirmed!')
+                    : (orderType === 'delivery' ? 'Local Delivery Checkout' : 'Curbside Pickup Checkout')}
+                </h3>
+              </div>
+            </div>
+
+            {checkoutStep !== 'confirmed' ? (
+              <form onSubmit={checkoutStep === 'details' ? (e) => { e.preventDefault(); setCheckoutStep('payment'); } : handleCompleteOrder}>
+                
+                {/* 2-Step Navigation Tab Bar */}
+                <div className="flex border-b border-border bg-muted/40 text-xs font-bold">
+                  <button
+                    type="button"
+                    onClick={() => setCheckoutStep('details')}
+                    className={`flex-1 py-3 text-center border-b-2 transition-all cursor-pointer ${
+                      checkoutStep === 'details' 
+                        ? 'border-primary text-primary bg-card' 
+                        : 'border-transparent text-muted-foreground'
+                    }`}
+                  >
+                    {orderType === 'delivery' ? '1. Delivery Details' : '1. Pickup Details'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { 
+                      if (customerName && customerPhone && (orderType === 'pickup' || deliveryAddress.trim())) {
+                        setCheckoutStep('payment'); 
+                      }
+                    }}
+                    className={`flex-1 py-3 text-center border-b-2 transition-all cursor-pointer ${
+                      checkoutStep === 'payment' 
+                        ? 'border-primary text-primary bg-card' 
+                        : 'border-transparent text-muted-foreground'
+                    }`}
+                  >
+                    2. Payment &amp; Submit
+                  </button>
+                </div>
+
+                <div className="p-6 space-y-4 max-h-[58vh] overflow-y-auto">
+                  {checkoutStep === 'details' ? (
+                    <div className="space-y-4">
+                      
+                      {/* Fulfillment Switcher */}
+                      <div className="p-1 bg-muted/60 rounded-xl border border-border grid grid-cols-2 text-xs font-bold">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setOrderType('pickup');
+                            if (paymentMethod === 'cod') setPaymentMethod('counter');
+                          }}
+                          className={`py-2 rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                            orderType === 'pickup' 
+                              ? 'bg-primary text-white shadow-sm' 
+                              : 'text-muted-foreground hover:text-foreground'
+                          }`}
+                        >
+                          <MapPin className="size-3.5" />
+                          <span>Curbside Pickup (Free)</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setOrderType('delivery');
+                            if (paymentMethod === 'counter') setPaymentMethod('card');
+                          }}
+                          className={`py-2 rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                            orderType === 'delivery' 
+                              ? 'bg-primary text-white shadow-sm' 
+                              : 'text-muted-foreground hover:text-foreground'
+                          }`}
+                        >
+                          <Truck className="size-3.5" />
+                          <span>Doorstep Delivery ($4.99)</span>
+                        </button>
+                      </div>
+
+                      {/* Contact Info */}
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                              Full Name <span className="text-primary">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              required
+                              value={customerName}
+                              onChange={(e) => setCustomerName(e.target.value)}
+                              placeholder="e.g. Min-jun Park"
+                              className="w-full p-2.5 rounded-xl border border-input text-xs bg-background focus:border-primary focus:outline-none"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                              Phone Number <span className="text-primary">*</span>
+                            </label>
+                            <input
+                              type="tel"
+                              required
+                              value={customerPhone}
+                              onChange={(e) => setCustomerPhone(e.target.value)}
+                              placeholder="(213) 555-0199"
+                              className="w-full p-2.5 rounded-xl border border-input text-xs bg-background focus:border-primary focus:outline-none"
+                            />
+                            <span className="text-[10px] text-muted-foreground mt-0.5 block">
+                              {orderType === 'delivery' ? 'Used for driver delivery notifications' : 'Used for pickup readiness SMS'}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                            Email Address (Receipt)
+                          </label>
+                          <input
+                            type="email"
+                            value={customerEmail}
+                            onChange={(e) => setCustomerEmail(e.target.value)}
+                            placeholder="minjun@example.com"
+                            className="w-full p-2.5 rounded-xl border border-input text-xs bg-background focus:border-primary focus:outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      {/* PICKUP SPECIFIC SECTION */}
+                      {orderType === 'pickup' && (
+                        <div className="p-3.5 rounded-xl bg-primary/5 border border-primary/20 space-y-3">
+                          <div className="flex items-start gap-2.5">
+                            <MapPin className="size-5 text-primary shrink-0 mt-0.5" />
+                            <div>
+                              <span className="font-bold text-xs text-foreground block">Pickup Counter &amp; Curbside Bay</span>
+                              <p className="text-xs font-semibold text-primary">3526 W 8th St, Los Angeles, CA 90005</p>
+                              <p className="text-[11px] text-muted-foreground mt-0.5">
+                                Designated free parking in rear lot. Come right in or text us and we'll bring it to your car!
+                              </p>
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                              Pickup Time Preference
+                            </label>
+                            <select
+                              value={pickupTime}
+                              onChange={(e) => setPickupTime(e.target.value)}
+                              className="w-full p-2.5 rounded-xl border border-input text-xs bg-background focus:border-primary focus:outline-none font-medium"
+                            >
+                              <option value="ASAP (Ready in 20–25 mins)">ASAP (Ready in 20–25 mins)</option>
+                              <option value="Today in 35 mins">Today in 35 mins</option>
+                              <option value="Today in 50 mins">Today in 50 mins</option>
+                              <option value="Today in 1 hour 15 mins">Today in 1 hour 15 mins</option>
+                            </select>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* DELIVERY SPECIFIC SECTION WITH INTERACTIVE TIP CHIPS */}
+                      {orderType === 'delivery' && (
+                        <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/25 space-y-3">
+                          <div className="flex items-center gap-2 text-xs font-bold text-amber-900">
+                            <Truck className="size-4 text-amber-700" />
+                            <span>Koreatown Doorstep Delivery Information</span>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                              Street Address <span className="text-primary">*</span>
+                            </label>
+                            <div className="relative">
+                              <Home className="size-4 absolute left-3 top-3 text-muted-foreground" />
+                              <input
+                                type="text"
+                                required
+                                value={deliveryAddress}
+                                onChange={(e) => setDeliveryAddress(e.target.value)}
+                                placeholder="e.g. 3500 Wilshire Blvd"
+                                className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-input text-xs bg-background focus:border-primary focus:outline-none"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                              Apt / Suite / Gate Code
+                            </label>
+                            <input
+                              type="text"
+                              value={deliveryApt}
+                              onChange={(e) => setDeliveryApt(e.target.value)}
+                              placeholder="Apt 4B / Callbox #12"
+                              className="w-full p-2.5 rounded-xl border border-input text-xs bg-background focus:border-primary focus:outline-none"
+                            />
+                          </div>
+
+                          {/* DEDICATED PROMINENT DRIVER TIP CHIPS SECTION */}
+                          <div className="pt-2 border-t border-amber-500/20">
+                            <div className="flex items-center justify-between mb-1.5">
+                              <label className="block text-xs font-bold uppercase tracking-wider text-amber-900">
+                                Driver Tip (기사님 팁)
+                              </label>
+                              <span className="text-[11px] font-semibold text-amber-700">
+                                100% directly to your local driver
+                              </span>
+                            </div>
+
+                            {/* Tip Chip Buttons */}
+                            <div className="grid grid-cols-5 gap-1.5">
+                              {[
+                                { label: '$3.00', value: 3.00 },
+                                { label: '$4.00', value: 4.00 },
+                                { label: '$5.00', value: 5.00 },
+                                { label: '$7.00', value: 7.00 }
+                              ].map((tip) => {
+                                const isSelected = !isCustomTip && driverTip === tip.value;
+                                return (
+                                  <button
+                                    key={tip.label}
+                                    type="button"
+                                    onClick={() => handleSelectTip(tip.value)}
+                                    className={`py-2 px-1 rounded-xl text-xs font-bold transition-all cursor-pointer text-center ${
+                                      isSelected 
+                                        ? 'bg-primary text-white shadow-sm ring-2 ring-primary/30' 
+                                        : 'bg-card border border-amber-500/30 text-foreground hover:bg-amber-100/50'
+                                    }`}
+                                  >
+                                    {tip.label}
+                                  </button>
+                                );
+                              })}
+
+                              {/* Custom Tip Chip */}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setIsCustomTip(true);
+                                  if (!customTipInput) {
+                                    setCustomTipInput('6.00');
+                                    setDriverTip(6.00);
+                                  }
+                                }}
+                                className={`py-2 px-1 rounded-xl text-xs font-bold transition-all cursor-pointer text-center ${
+                                  isCustomTip 
+                                    ? 'bg-primary text-white shadow-sm ring-2 ring-primary/30' 
+                                    : 'bg-card border border-amber-500/30 text-foreground hover:bg-amber-100/50'
+                                }`}
+                              >
+                                Custom
+                              </button>
+                            </div>
+
+                            {/* Custom Tip Input if active */}
+                            {isCustomTip && (
+                              <div className="mt-2.5 flex items-center gap-2 bg-card p-2 rounded-xl border border-primary/40 animate-fadeIn">
+                                <span className="font-bold text-xs text-primary">$</span>
+                                <input
+                                  type="number"
+                                  step="0.50"
+                                  min="0"
+                                  value={customTipInput}
+                                  onChange={(e) => handleCustomTipChange(e.target.value)}
+                                  placeholder="Enter custom tip (e.g. 8.00)"
+                                  className="w-full text-xs font-mono font-bold bg-transparent focus:outline-none"
+                                />
+                                <span className="text-[11px] text-muted-foreground whitespace-nowrap">Custom Tip</span>
+                              </div>
+                            )}
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                              Driver Dropoff Notes
+                            </label>
+                            <input
+                              type="text"
+                              value={deliveryNotes}
+                              onChange={(e) => setDeliveryNotes(e.target.value)}
+                              placeholder="Leave at front door, ring doorbell, lobby front desk..."
+                              className="w-full p-2.5 rounded-xl border border-input text-xs bg-background focus:border-primary focus:outline-none"
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {/* General Kitchen Notes */}
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                          Special Kitchen Requests
+                        </label>
+                        <input
+                          type="text"
+                          value={orderNotes}
+                          onChange={(e) => setOrderNotes(e.target.value)}
+                          placeholder="Extra banchan, chopsticks for 3 people, sauce on side..."
+                          className="w-full p-2.5 rounded-xl border border-input text-xs bg-background focus:border-primary focus:outline-none"
+                        />
+                      </div>
+
+                    </div>
+                  ) : (
+                    /* STEP 2: PAYMENT & SUBMISSION */
+                    <div className="space-y-4">
+                      
+                      {/* Order Summary Recap Pill */}
+                      <div className="p-3.5 rounded-xl bg-muted/40 border border-border text-xs space-y-1.5">
+                        <div className="flex justify-between text-muted-foreground">
+                          <span>Items Subtotal:</span>
+                          <span className="font-semibold text-foreground font-mono">${subtotal.toFixed(2)}</span>
+                        </div>
+                        {discountAmount > 0 && (
+                          <div className="flex justify-between text-emerald-600 font-semibold">
+                            <span>Promo Discount:</span>
+                            <span className="font-mono">-${discountAmount.toFixed(2)}</span>
+                          </div>
+                        )}
+                        <div className="flex justify-between text-muted-foreground">
+                          <span>Sales Tax (9.5%):</span>
+                          <span className="font-mono">${salesTax.toFixed(2)}</span>
+                        </div>
+                        {orderType === 'delivery' && (
+                          <div className="flex justify-between text-muted-foreground">
+                            <span>Delivery + Tip (${driverTip.toFixed(2)}):</span>
+                            <span className="font-mono">${(deliveryFee + driverTip).toFixed(2)}</span>
+                          </div>
+                        )}
+                        <div className="flex justify-between text-sm font-bold text-foreground pt-1.5 border-t border-border">
+                          <span>Total to Pay:</span>
+                          <span className="font-display text-primary text-base font-mono">${grandTotal.toFixed(2)}</span>
+                        </div>
+                      </div>
+
+                      {/* Payment Method Selector Grid */}
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                          Select Payment Method
+                        </label>
+                        <div className="grid grid-cols-3 gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setPaymentMethod('card')}
+                            className={`p-2.5 rounded-xl border text-xs font-bold text-center transition-all cursor-pointer ${
+                              paymentMethod === 'card' 
+                                ? 'border-primary bg-primary/10 text-primary shadow-2xs' 
+                                : 'border-border text-foreground hover:bg-muted/40'
+                            }`}
+                          >
+                            <CreditCard className="size-4 mx-auto mb-1 text-accent" />
+                            Credit Card
+                          </button>
+                          
+                          <button
+                            type="button"
+                            onClick={() => setPaymentMethod('applepay')}
+                            className={`p-2.5 rounded-xl border text-xs font-bold text-center transition-all cursor-pointer ${
+                              paymentMethod === 'applepay' 
+                                ? 'border-primary bg-primary/10 text-primary shadow-2xs' 
+                                : 'border-border text-foreground hover:bg-muted/40'
+                            }`}
+                          >
+                            <span className="block text-sm"> / G Pay</span>
+                            Digital Wallet
+                          </button>
+
+                          {orderType === 'delivery' ? (
+                            <button
+                              type="button"
+                              onClick={() => setPaymentMethod('cod')}
+                              className={`p-2.5 rounded-xl border text-xs font-bold text-center transition-all cursor-pointer ${
+                                paymentMethod === 'cod' 
+                                  ? 'border-primary bg-primary/10 text-primary shadow-2xs' 
+                                  : 'border-border text-foreground hover:bg-muted/40'
+                              }`}
+                            >
+                              <Banknote className="size-4 mx-auto mb-1 text-accent" />
+                              Cash on Delivery
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => setPaymentMethod('counter')}
+                              className={`p-2.5 rounded-xl border text-xs font-bold text-center transition-all cursor-pointer ${
+                                paymentMethod === 'counter' 
+                                  ? 'border-primary bg-primary/10 text-primary shadow-2xs' 
+                                  : 'border-border text-foreground hover:bg-muted/40'
+                              }`}
+                            >
+                              <MapPin className="size-4 mx-auto mb-1 text-accent" />
+                              Pay at Pickup
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Simulated Card Form */}
+                      {paymentMethod === 'card' && (
+                        <div className="p-3.5 rounded-xl bg-muted/30 border border-border space-y-2.5 text-xs">
+                          <div>
+                            <span className="text-muted-foreground block mb-1 font-semibold">Card Number (Simulated)</span>
+                            <input 
+                              type="text" 
+                              readOnly 
+                              value="4242 •••• •••• 8833" 
+                              className="w-full p-2 rounded-lg border border-input font-mono bg-card text-foreground" 
+                            />
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <span className="text-muted-foreground block mb-1 font-semibold">Exp Date</span>
+                              <input 
+                                type="text" 
+                                readOnly 
+                                value="09/28" 
+                                className="w-full p-2 rounded-lg border border-input font-mono bg-card text-foreground" 
+                              />
+                            </div>
+                            <div>
+                              <span className="text-muted-foreground block mb-1 font-semibold">CVC</span>
+                              <input 
+                                type="text" 
+                                readOnly 
+                                value="789" 
+                                className="w-full p-2 rounded-lg border border-input font-mono bg-card text-foreground" 
+                              />
+                            </div>
+                          </div>
+                          <p className="text-[11px] text-emerald-700 flex items-center gap-1 pt-1 font-semibold">
+                            <ShieldCheck className="size-3.5" /> 256-Bit SSL Encrypted Direct Checkout
+                          </p>
+                        </div>
+                      )}
+
+                    </div>
+                  )}
+                </div>
+
+                {/* Modal Footer Controls */}
+                <div className="p-4 bg-muted/40 border-t border-border flex justify-between gap-3">
+                  {checkoutStep === 'payment' ? (
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => setCheckoutStep('details')}
+                      className="rounded-xl text-xs font-bold"
+                    >
+                      Back
+                    </Button>
+                  ) : (
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => setCheckoutOpen(false)}
+                      className="rounded-xl text-xs font-bold"
+                    >
+                      Cancel
+                    </Button>
+                  )}
+
+                  {checkoutStep === 'details' ? (
+                    <Button 
+                      type="submit" 
+                      variant="default" 
+                      size="sm" 
+                      className="flex-1 font-bold rounded-xl text-xs shadow-sm"
+                    >
+                      Continue to Payment &rarr;
+                    </Button>
+                  ) : (
+                    <Button 
+                      type="submit" 
+                      variant="default" 
+                      size="sm" 
+                      className="flex-1 font-bold rounded-xl text-xs shadow-md"
+                    >
+                      Place Order • ${grandTotal.toFixed(2)}
+                    </Button>
+                  )}
+                </div>
+
+              </form>
+            ) : (
+              /* STEP 3: ORDER CONFIRMED */
+              <div className="p-6 text-center space-y-5 animate-fadeIn">
+                <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto shadow-sm">
+                  <CheckCircle2 className="size-9" />
+                </div>
+                <div>
+                  <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold mb-1.5">
+                    ORDER ID: {confirmedOrder?.orderNumber}
+                  </span>
+                  <h3 className="font-display text-2xl font-bold text-foreground">
+                    Gamsahamnida (감사합니다), {confirmedOrder?.customerName}!
+                  </h3>
+                  <p className="text-xs text-muted-foreground mt-1 max-w-sm mx-auto">
+                    {confirmedOrder?.orderType === 'delivery'
+                      ? 'Your order has been transmitted directly to Tofu Chon\'s kitchen and our driver is preparing for dispatch.'
+                      : 'Your piping hot stews and galbi are now being handcrafted by our chefs for curbside pickup.'}
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-muted/40 text-left text-xs space-y-2 border border-border">
+                  <div className="flex justify-between font-bold">
+                    <span>{confirmedOrder?.orderType === 'delivery' ? 'Estimated Delivery Window:' : 'Estimated Ready Time:'}</span>
+                    <span className="text-primary font-mono">{confirmedOrder?.fulfillmentTime}</span>
+                  </div>
+
+                  {confirmedOrder?.orderType === 'delivery' ? (
+                    <>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Delivery Destination:</span>
+                        <span className="font-semibold text-right max-w-[60%] truncate">
+                          {confirmedOrder?.deliveryAddress}{confirmedOrder?.deliveryApt ? `, ${confirmedOrder.deliveryApt}` : ''} ({confirmedOrder?.deliveryZip})
+                        </span>
+                      </div>
+                      {confirmedOrder?.deliveryNotes && (
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Driver Note:</span>
+                          <span className="italic text-right max-w-[60%]">"{confirmedOrder.deliveryNotes}"</span>
+                        </div>
+                      )}
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Status Updates:</span>
+                        <span>Sent via SMS to {confirmedOrder?.customerPhone}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Pickup Counter:</span>
+                        <span>3526 W 8th St, Los Angeles, CA 90005</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Curbside Bay:</span>
+                        <span className="text-emerald-700 font-bold">Free Rear Customer Lot • Call (213) 505-9577</span>
+                      </div>
+                    </>
+                  )}
+
+                  <div className="flex justify-between pt-1 border-t border-border">
+                    <span className="text-muted-foreground">Payment Method:</span>
+                    <span className="font-semibold">
+                      {confirmedOrder?.paymentMethod === 'cod' 
+                        ? 'Cash upon Delivery' 
+                        : confirmedOrder?.paymentMethod === 'counter' 
+                        ? 'Pay at Pickup Counter' 
+                        : confirmedOrder?.paymentMethod === 'applepay'
+                        ? 'Digital Wallet ( / G Pay)'
+                        : 'Credit Card (Paid Online)'}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between text-sm font-bold pt-1 border-t border-border">
+                    <span>Total {confirmedOrder?.paymentMethod === 'cod' || confirmedOrder?.paymentMethod === 'counter' ? 'Due' : 'Paid'}:</span>
+                    <span className="font-display text-primary font-mono">${confirmedOrder?.grandTotal.toFixed(2)}</span>
+                  </div>
+                </div>
+
+                <div className="flex gap-2 pt-2">
+                  <Button 
+                    onClick={() => window.print()} 
+                    variant="outline" 
+                    size="sm" 
+                    className="flex-1 rounded-xl text-xs font-bold cursor-pointer"
+                  >
+                    <Printer className="size-3.5 mr-1" /> Print Receipt
+                  </Button>
+                  <Button 
+                    onClick={() => setCheckoutOpen(false)} 
+                    variant="default" 
+                    size="sm" 
+                    className="flex-1 font-bold rounded-xl text-xs cursor-pointer"
+                  >
+                    Back to Menu
+                  </Button>
+                </div>
+              </div>
+            )}
+
+          </div>
+        </div>
+      )}
+
+      {/* =========================================================================
+          --- MODAL 4: TABLE RESERVATION MODAL WITH KOREAN DINING ROOM PHOTO BANNER ---
+          ========================================================================= */}
+      {reserveOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-xs animate-fadeIn overflow-y-auto">
+          <div className="relative w-full max-w-lg bg-card rounded-3xl shadow-2xl overflow-hidden my-8 animate-fadeIn text-foreground border border-border">
+            
+            {/* Cinematic Korean Dining Room Interior Header Banner */}
+            <div className="relative h-48 w-full bg-muted overflow-hidden shrink-0">
+              <img 
+                src="/images/korean-dining-interior.jpg" 
+                alt="Tofu Chon Authentic Korean Dining Room Interior" 
+                className="w-full h-full object-cover"
+              />
+              <div className="hero-shade absolute inset-0" />
+              
+              <button 
+                onClick={() => {
+                  setReserveOpen(false);
+                  setReserveConfirmed(false);
+                }} 
+                className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/55 text-white hover:bg-black/80 cursor-pointer transition-colors shadow-md"
+              >
+                <X className="size-5" />
+              </button>
+
+              <div className="absolute bottom-4 left-6 right-6 text-white">
+                <p className="text-xs font-display italic text-amber-300 font-semibold tracking-wide">
+                  전통 한옥 다이닝 룸 • 3526 W 8th St, Koreatown LA
+                </p>
+                <h3 className="font-display text-2xl font-bold tracking-tight text-white drop-shadow-sm">
+                  Table Reservation (테이블 예약)
+                </h3>
+              </div>
+            </div>
+
+            {!reserveConfirmed ? (
+              <form onSubmit={handleBookReservation} className="p-6 space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase text-muted-foreground mb-1">Date</label>
+                    <input 
+                      type="date" 
+                      required 
+                      value={reserveDate} 
+                      onChange={(e) => setReserveDate(e.target.value)} 
+                      className="w-full p-2.5 rounded-xl border border-input text-xs bg-background text-foreground focus:outline-none focus:border-primary font-medium" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase text-muted-foreground mb-1">Time</label>
+                    <select 
+                      value={reserveTime} 
+                      onChange={(e) => setReserveTime(e.target.value)} 
+                      className="w-full p-2.5 rounded-xl border border-input text-xs bg-background text-foreground focus:outline-none focus:border-primary font-medium" 
+                    >
+                      <option value="11:30 AM">11:30 AM (Lunch)</option>
+                      <option value="12:00 PM">12:00 PM (Lunch)</option>
+                      <option value="1:00 PM">1:00 PM (Lunch)</option>
+                      <option value="5:00 PM">5:00 PM (Dinner)</option>
+                      <option value="5:30 PM">5:30 PM (Dinner)</option>
+                      <option value="6:00 PM">6:00 PM (Dinner)</option>
+                      <option value="6:30 PM">6:30 PM (Dinner)</option>
+                      <option value="7:00 PM">7:00 PM (Dinner)</option>
+                      <option value="7:30 PM">7:30 PM (Dinner)</option>
+                      <option value="8:00 PM">8:00 PM (Dinner)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase text-muted-foreground mb-1">Party Size</label>
+                    <select 
+                      value={reserveGuests} 
+                      onChange={(e) => setReserveGuests(e.target.value)} 
+                      className="w-full p-2.5 rounded-xl border border-input text-xs bg-background text-foreground focus:outline-none focus:border-primary font-medium" 
+                    >
+                      <option value="1 Guest">1 Guest</option>
+                      <option value="2 Guests">2 Guests</option>
+                      <option value="3 Guests">3 Guests</option>
+                      <option value="4 Guests">4 Guests</option>
+                      <option value="6 Guests">6 Guests</option>
+                      <option value="8+ Large Party">8+ Large Party</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase text-muted-foreground mb-1">Seating Area</label>
+                    <select 
+                      value={reserveSeating} 
+                      onChange={(e) => setReserveSeating(e.target.value)} 
+                      className="w-full p-2.5 rounded-xl border border-input text-xs bg-background text-foreground focus:outline-none focus:border-primary font-medium" 
+                    >
+                      <option value="Main Dining Room">Main Dining Room</option>
+                      <option value="Cozy Window Booth">Cozy Window Booth</option>
+                      <option value="Traditional Low Table (Ondol)">Traditional Low Table (Ondol 온돌)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase text-muted-foreground mb-1">Dining Occasion</label>
+                    <select 
+                      value={reserveOccasion} 
+                      onChange={(e) => setReserveOccasion(e.target.value)} 
+                      className="w-full p-2.5 rounded-xl border border-input text-xs bg-background text-foreground focus:outline-none focus:border-primary font-medium" 
+                    >
+                      <option value="Casual Dinner">Casual Dinner</option>
+                      <option value="Family Gathering">Family Gathering</option>
+                      <option value="Birthday Celebration">Birthday Celebration</option>
+                      <option value="K-Town Business Lunch">K-Town Business Lunch</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="pt-2 border-t border-border space-y-2.5">
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase text-muted-foreground mb-1">
+                      Guest Full Name <span className="text-primary">*</span>
+                    </label>
+                    <input 
+                      type="text" 
+                      required 
+                      value={reserveName} 
+                      onChange={(e) => setReserveName(e.target.value)} 
+                      placeholder="Your full name" 
+                      className="w-full p-2.5 rounded-xl border border-input text-xs bg-background text-foreground focus:outline-none focus:border-primary" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase text-muted-foreground mb-1">
+                      Mobile Phone (SMS Confirmation) <span className="text-primary">*</span>
+                    </label>
+                    <input 
+                      type="tel" 
+                      required 
+                      value={reservePhone} 
+                      onChange={(e) => setReservePhone(e.target.value)} 
+                      placeholder="(213) 555-0199" 
+                      className="w-full p-2.5 rounded-xl border border-input text-xs bg-background text-foreground focus:outline-none focus:border-primary" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold uppercase text-muted-foreground mb-1">
+                      Special Requests (Booster seats, dietary notes)
+                    </label>
+                    <input 
+                      type="text" 
+                      value={reserveNotes} 
+                      onChange={(e) => setReserveNotes(e.target.value)} 
+                      placeholder="e.g. Baby booster seat, celebrating a birthday..." 
+                      className="w-full p-2.5 rounded-xl border border-input text-xs bg-background text-foreground focus:outline-none focus:border-primary" 
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-2 flex justify-between gap-3">
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => setReserveOpen(false)}
+                    className="rounded-xl text-xs font-bold cursor-pointer"
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    type="submit" 
+                    variant="default" 
+                    size="sm" 
+                    className="flex-1 font-bold rounded-xl text-xs shadow-md cursor-pointer"
+                  >
+                    Confirm Table Reservation
+                  </Button>
+                </div>
+              </form>
+            ) : (
+              /* RESERVATION CONFIRMED FINALE */
+              <div className="p-6 text-center space-y-5 animate-fadeIn">
+                <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto shadow-sm">
+                  <CheckCircle2 className="size-9" />
+                </div>
+                <div>
+                  <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold mb-1.5">
+                    CONFIRMATION: {confirmedResCode}
+                  </span>
+                  <h3 className="font-display text-2xl font-bold text-foreground">
+                    Table Reserved, {reserveName}!
+                  </h3>
+                  <p className="text-xs text-muted-foreground mt-1 max-w-sm mx-auto">
+                    We look forward to serving you an authentic bubbling Soon Tofu &amp; KBBQ experience in our traditional dining room.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-muted/40 text-left text-xs space-y-2 border border-border">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Date &amp; Time:</span>
+                    <span className="font-bold text-foreground">{reserveDate} at {reserveTime}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Party Size:</span>
+                    <span className="font-bold text-accent">{reserveGuests}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Seating:</span>
+                    <span>{reserveSeating}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Location:</span>
+                    <span className="font-medium">3526 W 8th St, Los Angeles, CA 90005</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Parking:</span>
+                    <span className="text-emerald-700 font-bold">Free Customer Lot in Rear</span>
+                  </div>
+                </div>
+
+                <Button
+                  variant="default"
+                  onClick={() => {
+                    setReserveOpen(false);
+                    setReserveConfirmed(false);
+                  }}
+                  className="rounded-xl text-xs font-bold px-8 shadow-sm cursor-pointer"
+                >
+                  Done
+                </Button>
+              </div>
+            )}
+
+          </div>
+        </div>
+      )}
+
+      {/* 16. TOAST NOTIFICATION */}
+      {toastMessage && (
+        <div className="fixed bottom-24 lg:bottom-20 right-6 z-50 bg-[#1C1716] text-white px-4 py-3 rounded-2xl shadow-xl border border-accent/40 flex items-center gap-3 animate-fadeIn">
+          <div className="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
+          <span className="text-xs font-semibold">{toastMessage}</span>
+        </div>
+      )}
+
+    </main>
   );
 }

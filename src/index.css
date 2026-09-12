@@ -1,270 +1,208 @@
-/* ==========================================================================
-   TOFU CHON (두부촌) - MODERN KOREAN CULINARY DESIGN SYSTEM
-   ========================================================================== */
+@import "tailwindcss" source(none);
+@source "../src";
+@source "./src";
+@source "../index.html";
+
+@theme inline {
+  --font-sans: "Jua", BlinkMacSystemFont, sans-serif;
+  --font-display: "Do Hyeon", "Playfair Display", Georgia, serif;
+  --font-editorial: "Lora", "Noto Serif KR", Georgia, serif;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
 
 :root {
-  --bg-primary: #0b0d11;
-  --bg-secondary: #131720;
-  --bg-tertiary: #1b202c;
-  --bg-card: rgba(20, 24, 34, 0.75);
-  --bg-card-hover: rgba(28, 34, 48, 0.9);
-  --bg-glass: rgba(11, 13, 17, 0.82);
-  
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-highlight: rgba(230, 57, 70, 0.35);
-  --border-gold: rgba(212, 175, 55, 0.3);
-
-  --accent-red: #E63946;
-  --accent-red-hover: #F24351;
-  --accent-crimson: #C1121F;
-  --accent-gold: #D4AF37;
-  --accent-amber: #E5A93B;
-
-  --text-primary: #F8F9FA;
-  --text-secondary: #CBD5E1;
-  --text-muted: #94A3B8;
-  --text-gold: #E5C365;
-
-  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-heading: 'Outfit', 'Plus Jakarta Sans', sans-serif;
-  --font-korean: 'Noto Serif KR', serif;
-
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-full: 9999px;
-
-  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.7);
-  --shadow-glow-red: 0 0 35px rgba(230, 57, 70, 0.28);
-  --shadow-glow-gold: 0 0 30px rgba(212, 175, 55, 0.22);
-
-  --transition-fast: 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-normal: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-smooth: 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  --radius: 0.75rem;
+  --background: #FDFBF7;
+  --foreground: #1C1917;
+  --card: #FFFFFF;
+  --card-foreground: #1C1917;
+  --popover: #FFFFFF;
+  --popover-foreground: #1C1917;
+  --primary: #8C1D24;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F5EDE2;
+  --secondary-foreground: #4A1015;
+  --muted: #F3ECE2;
+  --muted-foreground: #786E65;
+  --accent: #C88A2C;
+  --accent-foreground: #1C1917;
+  --border: #E8DFD3;
+  --input: #E8DFD3;
+  --ring: #8C1D24;
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@layer base {
+  * {
+    border-color: var(--color-border);
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-width: 100%;
+    overflow-x: hidden;
+  }
+
+  #root {
+    width: 100%;
+    min-width: 100%;
+    min-height: 100vh;
+  }
 }
 
-html {
-  scroll-behavior: smooth;
-  color-scheme: dark;
+/* Typography utilities */
+@utility font-display { font-family: var(--font-display); }
+@utility font-editorial { font-family: var(--font-editorial); }
+@utility nav-link {
+  position: relative;
+  &::after { 
+    content: ""; 
+    position: absolute; 
+    left: 0; 
+    right: 100%; 
+    bottom: -0.35rem; 
+    height: 2px; 
+    background: var(--color-primary); 
+    transition: right 200ms ease; 
+  }
+  &:hover::after { right: 0; }
 }
 
-body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: var(--font-sans);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+@utility hero-shade { 
+  background: linear-gradient(180deg, rgba(24, 16, 14, 0.0) 0%, rgba(24, 16, 14, 0.15) 70%, rgba(24, 16, 14, 0.35) 100%); 
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg-primary);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--bg-tertiary);
-  border-radius: var(--radius-full);
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-red);
+@utility eyebrow { 
+  margin-bottom: 0.75rem; 
+  color: var(--color-accent); 
+  font-size: 0.75rem; 
+  font-weight: 700; 
+  text-transform: uppercase; 
+  letter-spacing: 0.16em; 
 }
 
-/* Base Typography */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
-  color: var(--text-primary);
-  font-weight: 700;
-  letter-spacing: -0.02em;
+@utility section-title { 
+  font-family: var(--font-display); 
+  font-size: clamp(2rem, 3.5vw, 3rem); 
+  line-height: 1.16; 
+  font-weight: 700; 
 }
 
-.korean-seal {
-  font-family: var(--font-korean);
-  letter-spacing: 0.05em;
+/* Korean Dancheong Heritage Ribbon */
+.korean-ribbon {
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(90deg, #8C1D24 0% 33.3%, #C88A2C 33.3% 66.6%, #1E3A8A 66.6% 100%);
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/* Traditional Korean Lattice Background Pattern (창살 격자 무늬) */
+/* Clean pristine background without noisy dots */
+.korean-lattice-bg {
+  background-color: #FDFBF7;
 }
 
-button {
-  font-family: inherit;
-  cursor: pointer;
-  border: none;
-  background: none;
-  outline: none;
+/* Korean Paper Hanji Subtle Texture */
+.hanji-texture {
+  background-color: #FAF6EF;
+  background-image: radial-gradient(rgba(200, 138, 44, 0.1) 1px, transparent 0);
+  background-size: 16px 16px;
 }
 
-/* Buttons */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: linear-gradient(135deg, var(--accent-red) 0%, var(--accent-crimson) 100%);
-  color: #FFFFFF;
-  font-weight: 700;
-  font-size: 0.95rem;
-  padding: 12px 24px;
-  border-radius: var(--radius-full);
-  box-shadow: 0 4px 18px rgba(230, 57, 70, 0.4);
-  transition: var(--transition-normal);
-  white-space: nowrap;
-}
-.btn-primary:hover {
-  background: linear-gradient(135deg, var(--accent-red-hover) 0%, var(--accent-red) 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(230, 57, 70, 0.6);
+/* Subtle Korean Steam Effect */
+@keyframes steamRise {
+  0% { transform: translateY(0) scaleX(1); opacity: 0; }
+  30% { opacity: 0.7; }
+  60% { transform: translateY(-16px) scaleX(1.15) rotate(2deg); opacity: 0.5; }
+  100% { transform: translateY(-32px) scaleX(1.3) rotate(-2deg); opacity: 0; }
 }
 
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--border-subtle);
-  backdrop-filter: blur(12px);
-  color: var(--text-primary);
-  font-weight: 600;
-  font-size: 0.95rem;
-  padding: 12px 24px;
-  border-radius: var(--radius-full);
-  transition: var(--transition-normal);
-  white-space: nowrap;
+.animate-steam-1 {
+  animation: steamRise 3.2s infinite ease-out;
 }
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.25);
-  transform: translateY(-2px);
-}
-
-.btn-gold {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-amber) 100%);
-  color: #111418;
-  font-weight: 800;
-  font-size: 0.95rem;
-  padding: 12px 24px;
-  border-radius: var(--radius-full);
-  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.35);
-  transition: var(--transition-normal);
-}
-.btn-gold:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(212, 175, 55, 0.55);
-}
-
-/* Badges */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
-}
-
-.badge-red {
-  background: rgba(230, 57, 70, 0.18);
-  color: #ff6b77;
-  border: 1px solid rgba(230, 57, 70, 0.4);
-}
-
-.badge-gold {
-  background: rgba(212, 175, 55, 0.18);
-  color: #f7d77a;
-  border: 1px solid rgba(212, 175, 55, 0.4);
-}
-
-.badge-green {
-  background: rgba(72, 187, 120, 0.18);
-  color: #68d391;
-  border: 1px solid rgba(72, 187, 120, 0.4);
-}
-
-/* Layout Utilities */
-.container {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-.section-padding {
-  padding: 90px 0;
-}
-
-.section-header {
-  text-align: center;
-  max-width: 680px;
-  margin: 0 auto 50px auto;
-}
-
-.section-title {
-  font-size: 2.4rem;
-  margin-bottom: 12px;
-  background: linear-gradient(180deg, #FFFFFF 20%, #CBD5E1 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.section-subtitle {
-  color: var(--text-muted);
-  font-size: 1.05rem;
-  line-height: 1.6;
+.animate-steam-2 {
+  animation: steamRise 3.8s infinite ease-out 1.2s;
 }
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 20px rgba(230, 57, 70, 0.3); }
-  50% { box-shadow: 0 0 35px rgba(230, 57, 70, 0.6); }
+  0%, 100% { box-shadow: 0 0 15px rgba(140, 29, 36, 0.3); }
+  50% { box-shadow: 0 0 25px rgba(140, 29, 36, 0.6); }
 }
 
-@keyframes slideInRight {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+.floating-cart-glow {
+  animation: pulseGlow 3s infinite ease-in-out;
 }
 
-@keyframes modalPop {
-  from { opacity: 0; transform: scale(0.94); }
-  to { opacity: 1; transform: scale(1); }
+
+
+/* AUTHENTIC KOREAN-INSPIRED TYPOGRAPHY (Do Hyeon & Jua) */
+:root {
+  --font-korean-title: "Do Hyeon", "Black Han Sans", sans-serif;
+  --font-korean-body: "Jua", "Song Myung", sans-serif;
+  --font-display: "Do Hyeon", "Noto Serif KR", serif;
+  --font-sans: "Jua", sans-serif;
 }
 
-.animate-fade {
-  animation: fadeIn 0.4s var(--transition-normal) forwards;
+html, body {
+  font-family: "Jua", "Song Myung", sans-serif !important;
+  letter-spacing: 0.02em;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .section-padding {
-    padding: 60px 0;
-  }
-  .section-title {
-    font-size: 1.9rem;
-  }
-  .container {
-    padding: 0 16px;
-  }
+body, p, span, a, button, input, select, textarea, li, div, label {
+  font-family: "Jua", "Song Myung", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, .font-display, .section-title {
+  font-family: "Do Hyeon", "Noto Serif KR", sans-serif !important;
+  letter-spacing: 0.03em;
+}
+
+.korean-vintage-font {
+  font-family: "Do Hyeon", sans-serif !important;
+}
+
+.korean-body-font {
+  font-family: "Jua", sans-serif !important;
 }

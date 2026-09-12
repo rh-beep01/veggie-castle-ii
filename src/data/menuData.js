@@ -44,7 +44,7 @@ export const MENU_ITEMS = [
     koreanName: "갈비 + 순두부 콤보",
     price: 32.99,
     category: "combos",
-    image: "/images/galbi-sizzling.png",
+    image: "/images/galbi-sizzling.jpg",
     description: "Our signature flame-grilled Korean BBQ short ribs glazed in sweet soy garlic marinade, paired with your choice of bubbling Soon Tofu stew, purple/white rice, and assortment of banchan.",
     isPopular: true,
     isCombo: true,
@@ -69,7 +69,7 @@ export const MENU_ITEMS = [
     koreanName: "조기구이 + 순두부 콤보",
     price: 27.99,
     category: "combos",
-    image: "/images/yellow-croaker-combo.png",
+    image: "/images/yellow-croaker-combo.jpg",
     description: "Whole fresh yellow croaker pan-fried until crackling crisp outside with tender sweet flaky meat, served with bubbling Soon Tofu and lemon wedges.",
     isPopular: true,
     isCombo: true,
@@ -93,7 +93,7 @@ export const MENU_ITEMS = [
     koreanName: "비빔밥 + 순두부 콤보",
     price: 27.99,
     category: "combos",
-    image: "/images/bibimbap.png",
+    image: "/images/bibimbap.jpg",
     description: "Traditional brass bowl Bibimbap with seasoned mountain greens, fried egg, and savory beef, accompanied by hot Soon Tofu stew.",
     isCombo: true,
     hasSpiceLevel: true
@@ -128,7 +128,7 @@ export const MENU_ITEMS = [
     koreanName: "섞어 순두부",
     price: 17.49,
     category: "tofu",
-    image: "/images/mix-soon-tofu.png",
+    image: "/images/mix-soon-tofu.jpg",
     description: "The classic Koreatown crowd favorite. Silken organic soft tofu bubbling in an earthenware ttukbaegi with tender beef, ocean shrimp, and whole clams.",
     isPopular: true,
     hasSpiceLevel: true,
@@ -140,7 +140,7 @@ export const MENU_ITEMS = [
     koreanName: "소고기 순두부",
     price: 17.49,
     category: "tofu",
-    image: "/images/mix-soon-tofu.png",
+    image: "/images/mix-soon-tofu.jpg",
     description: "Simmered in rich 24-hour slow-simmered beef broth loaded with generous cuts of tender beef brisket and silken tofu curds.",
     isPopular: true,
     hasSpiceLevel: true
@@ -151,7 +151,7 @@ export const MENU_ITEMS = [
     koreanName: "해물 순두부",
     price: 17.49,
     category: "tofu",
-    image: "/images/mix-soon-tofu.png",
+    image: "/images/mix-soon-tofu.jpg",
     description: "Fresh Manila clams, succulent prawns, and baby squid gently cooked in our fragrant, briny seafood chili broth.",
     isPopular: true,
     hasSpiceLevel: true
@@ -162,7 +162,7 @@ export const MENU_ITEMS = [
     koreanName: "돼지 김치 순두부",
     price: 17.49,
     category: "tofu",
-    image: "/images/mix-soon-tofu.png",
+    image: "/images/mix-soon-tofu.jpg",
     description: "Aged ripe artisanal kimchi sautéed with savory pork belly slices, stewed with silky tofu for a deeply flavorful, tangy kick.",
     hasSpiceLevel: true
   },
@@ -172,7 +172,7 @@ export const MENU_ITEMS = [
     koreanName: "돼지고기 순두부",
     price: 17.49,
     category: "tofu",
-    image: "/images/mix-soon-tofu.png",
+    image: "/images/mix-soon-tofu.jpg",
     description: "Tender slices of savory pork stewed with velvety soft tofu in our piping hot stone bowl.",
     hasSpiceLevel: true
   },
@@ -182,7 +182,7 @@ export const MENU_ITEMS = [
     koreanName: "굴 순두부",
     price: 17.49,
     category: "tofu",
-    image: "/images/mix-soon-tofu.png",
+    image: "/images/mix-soon-tofu.jpg",
     description: "Plump, fresh coastal oysters poached gently with silken tofu in a delicate, briny broth.",
     hasSpiceLevel: true
   },
@@ -192,7 +192,7 @@ export const MENU_ITEMS = [
     koreanName: "곱창 순두부",
     price: 17.49,
     category: "tofu",
-    image: "/images/mix-soon-tofu.png",
+    image: "/images/mix-soon-tofu.jpg",
     description: "Savory, chewy Gopchang (tender beef small intestines) stewed in robust spicy pepper broth with silken tofu curds.",
     hasSpiceLevel: true,
     badge: "Authentic"
@@ -216,7 +216,7 @@ export const MENU_ITEMS = [
     koreanName: "갈비",
     price: 32.99,
     category: "specials",
-    image: "/images/galbi-sizzling.png",
+    image: "/images/galbi-sizzling.jpg",
     description: "Generous sizzling cast iron platter of premium Korean BBQ beef short ribs charred to perfection over flame with caramelized sweet onions.",
     isPopular: true,
     badge: "Sizzling Plate"
@@ -255,7 +255,7 @@ export const MENU_ITEMS = [
     koreanName: "해물파전",
     price: 26.99,
     category: "specials",
-    image: "/images/seafood-pancake.png",
+    image: "/images/seafood-pancake.jpg",
     description: "Extra crispy, oversized golden pancake loaded with whole scallions, tender squid, and plump shrimp, served with seasoned soy-chili dipping sauce.",
     isPopular: true,
     badge: "Crispy Delight"
@@ -266,7 +266,7 @@ export const MENU_ITEMS = [
     koreanName: "조기구이",
     price: 26.99,
     category: "specials",
-    image: "/images/yellow-croaker.png",
+    image: "/images/yellow-croaker.jpg",
     description: "Two whole yellow croakers deep-fried until shatteringly crispy outside, tender and juicy inside, seasoned with sea salt.",
     isPopular: true
   },
@@ -312,7 +312,7 @@ export const MENU_ITEMS = [
     koreanName: "갈비탕",
     price: 22.99,
     category: "specials",
-    image: "/images/galbitang.png",
+    image: "/images/galbitang.jpg",
     description: "Deeply comforting clear beef bone broth simmered for hours with massive, fall-off-the-bone beef short ribs, chewy glass noodles, and delicate egg ribbon garnish.",
     isPopular: true,
     badge: "Comfort Classic"
@@ -323,7 +323,7 @@ export const MENU_ITEMS = [
     koreanName: "비빔밥",
     price: 20.99,
     category: "specials",
-    image: "/images/bibimbap.png",
+    image: "/images/bibimbap.jpg",
     description: "Served in an authentic Korean golden brass bowl with seasoned mountain greens, zucchini, carrots, seasoned beef, and a perfect sunny-side-up egg."
   },
   {
@@ -343,7 +343,7 @@ export const MENU_ITEMS = [
     koreanName: "김치볶음밥",
     price: 18.99,
     category: "specials",
-    image: "/images/bibimbap.png",
+    image: "/images/bibimbap.jpg",
     description: "Smoky wok-fried rice with aged kimchi, pork crumbles, toasted seaweed, sesame oil, and topped with a sunny-side-up fried egg."
   },
   {
@@ -352,7 +352,7 @@ export const MENU_ITEMS = [
     koreanName: "만두튀김",
     price: 10.99,
     category: "specials",
-    image: "/images/mix-soon-tofu.png",
+    image: "/images/mix-soon-tofu.jpg",
     description: "Eight golden crispy pan-fried dumplings filled with seasoned pork, chives, and tofu, served with spicy vinegar soy dip."
   },
 
