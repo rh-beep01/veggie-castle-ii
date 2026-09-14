@@ -909,9 +909,30 @@ export default function App() {
             </p>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8 bg-card p-3 sm:p-4 rounded-2xl border border-border shadow-xs">
+          <div className="flex flex-col gap-3.5 mb-8 bg-card p-3.5 sm:p-4 rounded-2xl border border-border shadow-xs">
             
-            <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none">
+            {/* Search Input Bar */}
+            <div className="relative w-full">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search Jerk, Oyster Mushroom, Juice, Burger, Plantains..."
+                className="w-full pl-9 pr-8 py-2.5 text-xs rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
+                >
+                  <X className="size-3.5" />
+                </button>)}
+            </div>
+
+            {/* Food Categories: Non-scrollable, all visible together in one go */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 w-full">
               {CATEGORIES.map((cat) => {
                 const isActive = selectedCategory === cat.id;
                 const count = cat.id === 'all' 
@@ -923,37 +944,20 @@ export default function App() {
                     key={cat.id}
                     type="button"
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
+                    className={`px-3 py-2.5 sm:px-3 sm:py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-between sm:justify-center gap-1.5 ${
                       isActive 
                         ? 'bg-primary text-white shadow-xs' 
                         : 'bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground'
                     }`}
                   >
-                    <span>{cat.label}</span>
-                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-border text-muted-foreground'}`}>
+                    <span className="truncate">{cat.label}</span>
+                    <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md ${
+                      isActive ? 'bg-white/20 text-white' : 'bg-background/80 text-muted-foreground'
+                    }`}>
                       {count}
                     </span>
                   </button>);
               })}
-            </div>
-
-            <div className="relative w-full md:w-72 shrink-0">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search Jerk, Oyster Mushroom, Juice, Burger..."
-                className="w-full pl-9 pr-8 py-2 text-xs rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
-                >
-                  <X className="size-3.5" />
-                </button>)}
             </div>
 
           </div>
