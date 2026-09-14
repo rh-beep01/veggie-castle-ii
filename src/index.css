@@ -230,3 +230,7 @@ h1, h2, h3, h4, h5, h6, .font-display, .section-title {
   font-family: "Playfair Display", Georgia, serif !important;
   letter-spacing: 0.02em;
 }
+
+.safe-area-pb {
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}

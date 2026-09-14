@@ -78,6 +78,7 @@ export default function App() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedDiet, setSelectedDiet] = useState('all');
 
   // Hero Slideshow State
   const [heroSlide, setHeroSlide] = useState(0);
@@ -173,6 +174,21 @@ export default function App() {
     const t = setTimeout(() => setToastMessage(null), 3000);
     return () => clearTimeout(t);
   }, [toastMessage]);
+
+  // WCAG 2.2 AA Accessibility: Escape key listener closes drawers & modals
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        if (mobileNavOpen) setMobileNavOpen(false);
+        if (selectedProduct) setSelectedProduct(null);
+        if (cartOpen) setCartOpen(false);
+        if (checkoutOpen) setCheckoutOpen(false);
+        if (reserveOpen) setReserveOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [mobileNavOpen, selectedProduct, cartOpen, checkoutOpen, reserveOpen]);
 
   // Financial Calculations
   const cartItemCount = cart.reduce((sum, i) => sum + i.quantity, 0);
@@ -344,7 +360,7 @@ export default function App() {
   const currentSlide = HERO_SLIDES[heroSlide];
 
   return (
-    <main className="min-h-screen w-full overflow-x-hidden bg-background text-foreground selection:bg-accent/30">
+    <main className="min-h-screen w-full overflow-x-hidden bg-background text-foreground selection:bg-accent/30 pb-20 md:pb-0">
       
             {/* 1. TOP ANNOUNCEMENT BAR */}
       <div className="bg-[#1C1716] text-[#EADFD3] px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-medium border-b border-[#2C2422] relative z-20">
@@ -1519,7 +1535,7 @@ export default function App() {
               <div className="hero-shade absolute inset-0" />
               <div className="absolute bottom-4 left-6 right-6 text-white">
                 <p className="text-xs font-display italic text-amber-300 font-semibold tracking-wide">
-                  {selectedProduct.koreanName || '  '} • South Richmond Hill Heritage
+                  {selectedProduct.badge || '100% Vegan'} • Queens, NY Heritage
                 </p>
                 <h3 className="font-display text-2xl font-bold tracking-tight text-white drop-shadow-sm">
                   {selectedProduct.name}
@@ -2709,6 +2725,57 @@ export default function App() {
           <div className="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
           <span className="text-xs font-semibold">{toastMessage}</span>
         </div>)}
+
+      {/* 11. MOBILE THUMB-ZONE ERGONOMIC CONVERSION BAR (Fixed Bottom for Phones) */}
+      <nav 
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-card/95 backdrop-blur-md border-t border-border px-3 py-2 shadow-[0_-4px_20px_rgba(0,0,0,0.12)] flex items-center justify-between gap-2 safe-area-pb"
+        aria-label="Quick Mobile Actions"
+      >
+        <a
+          href={`tel:${RESTAURANT_INFO.phoneRaw}`}
+          className="flex-1 flex flex-col items-center justify-center h-12 rounded-xl bg-muted/80 text-foreground font-semibold text-[11px] border border-border/80 active:bg-muted"
+          title="Direct Call Veggie Castle II"
+        >
+          <Phone className="size-4 text-accent mb-0.5" />
+          <span>Call</span>
+        </a>
+
+        <a
+          href={RESTAURANT_INFO.mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-1 flex flex-col items-center justify-center h-12 rounded-xl bg-muted/80 text-foreground font-semibold text-[11px] border border-border/80 active:bg-muted"
+          title="Open Directions in Google Maps"
+        >
+          <MapPin className="size-4 text-primary mb-0.5" />
+          <span>Map</span>
+        </a>
+
+        <button
+          type="button"
+          onClick={() => {
+            if (cartItemCount > 0) {
+              setCartOpen(true);
+            } else {
+              const el = document.getElementById('menu');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}
+          className="flex-[2.2] flex items-center justify-center gap-2 h-12 rounded-xl bg-primary text-white font-bold text-xs shadow-md active:scale-98 transition-transform cursor-pointer"
+        >
+          <div className="relative">
+            <ShoppingBag className="size-4 text-white" />
+            {cartItemCount > 0 && (
+              <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-white text-[9px] font-black ring-1 ring-white">
+                {cartItemCount}
+              </span>
+            )}
+          </div>
+          <span>
+            {cartItemCount > 0 ? `Tray (${subtotal.toFixed(2)})` : 'Order Pickup'}
+          </span>
+        </button>
+      </nav>
 
     </main>);
 }
