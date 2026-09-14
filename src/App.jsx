@@ -35,6 +35,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import Button from './components/ui/Button';
+import BrandLogo from './components/BrandLogo';
 import { RESTAURANT_INFO, SPICE_LEVELS, CATEGORIES, MENU_ITEMS } from './data/menuData';
 
 // Dynamic Hero Food Slideshow Dataset
@@ -427,19 +428,8 @@ export default function App() {
         <div className="mx-auto flex h-16 sm:h-18 max-w-7xl items-center justify-between gap-2 sm:gap-3 px-3 sm:px-6 lg:px-8">
           
           {/* Brand Logo & Title */}
-          <a href="#top" className="flex items-center gap-2 sm:gap-2.5 min-w-0 py-1 group text-decoration-none">
-            <div className="w-8 h-8 sm:w-11 sm:h-11 rounded-xl bg-primary text-primary-foreground flex flex-col items-center justify-center shadow-xs group-hover:scale-105 transition-transform border border-primary/20 shrink-0">
-              <span className="font-display text-xs sm:text-sm font-black leading-none text-amber-300">VC</span>
-              <span className="text-[7px] sm:text-[8px] tracking-tighter uppercase font-bold text-white/80">ITAL</span>
-            </div>
-            <div className="flex flex-col min-w-0">
-              <span className="font-display text-base sm:text-xl lg:text-2xl font-bold tracking-tight text-primary leading-tight truncate">
-                Veggie Castle II
-              </span>
-              <span className="text-[8px] sm:text-[9px] tracking-wider uppercase font-semibold text-muted-foreground truncate hidden xs:block">
-                100% Vegan • Queens, NY
-              </span>
-            </div>
+          <a href="#top" className="group text-decoration-none block py-1" aria-label="Veggie Castle II Home">
+            <BrandLogo size="sm" variant="light" />
           </a>
 
           {/* Desktop Nav */}
@@ -1450,19 +1440,8 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
             
             <div>
-              <div className="flex items-center gap-2.5 mb-3">
-                <div className="w-10 h-10 rounded-xl bg-primary text-primary-foreground flex flex-col items-center justify-center shadow-sm border border-amber-400/30 shrink-0">
-                  <span className="font-display text-xs font-black leading-none text-amber-300">VC</span>
-                  <span className="text-[7px] tracking-tighter uppercase font-bold text-white/90">ITAL</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-display text-xl font-bold text-white tracking-tight leading-tight">
-                    Veggie Castle II
-                  </span>
-                  <span className="text-[9px] tracking-wider uppercase font-semibold text-amber-400/90">
-                    100% Vegan • Queens, NY
-                  </span>
-                </div>
+              <div className="mb-4">
+                <BrandLogo size="md" variant="dark" />
               </div>
               <p className="text-xs text-[#EADFD3]/70 leading-relaxed mb-4">
                 100% Vegan Caribbean Comfort Food, Plant-Based Platters & Raw Cold-Pressed Juices in South Richmond Hill, Queens, NY.
