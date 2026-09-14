@@ -645,9 +645,23 @@ export default function App() {
                 <a
                   href={`tel:${RESTAURANT_INFO.phoneRaw}`}
                   className="inline-flex items-center justify-center gap-2 h-12 px-6 rounded-full border border-white/20 bg-black/40 backdrop-blur-md hover:bg-black/60 font-semibold text-sm text-white transition-colors w-full sm:w-auto"
+                  title="Direct Call Veggie Castle II"
                 >
                   <Phone className="size-4 text-amber-400" />
                   <span>Call Direct</span>
+                </a>
+
+                {/* Follow on Instagram CTA Button */}
+                <a
+                  href={RESTAURANT_INFO.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 h-12 px-5 rounded-full border border-pink-500/40 bg-gradient-to-r from-purple-950/60 via-pink-950/60 to-rose-950/60 hover:from-purple-900/80 hover:to-pink-900/80 backdrop-blur-md font-semibold text-sm text-white transition-all duration-200 hover:scale-105 shadow-md group w-full sm:w-auto cursor-pointer"
+                  title="Follow Veggie Castle II on Instagram (@veggiecastle)"
+                >
+                  <svg className="size-4 text-pink-400 group-hover:scale-110 transition-transform shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></svg>
+                  <span>Follow @veggiecastle</span>
+                  <ExternalLink className="size-3 text-pink-300/70 group-hover:text-pink-200 transition-colors" />
                 </a>
               </div>
 
