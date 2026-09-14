@@ -233,7 +233,7 @@ export default function App() {
     const addOnTotal = modalAddOns.reduce((sum, a) => sum + a.price, 0);
     unitPrice += addOnTotal;
 
-    const cartItemId = `${selectedProduct.id}-${modalSpice || 'none'}-${modalRice}-${modalAddOns.map(a => a.name).join('_')}-${Date.now}`;
+    const cartItemId = `${selectedProduct.id}-${modalSpice || 'none'}-${modalRice}-${modalAddOns.map(a => a.name).join('_')}-${Date.now()}`;
 
     const newItem = {
       cartItemId,
@@ -274,9 +274,9 @@ export default function App() {
 
   // Apply Promo Code
   const applyPromo = (e) => {
-    e.preventDefault;
+    e.preventDefault();
     const code = promoInput.trim().toUpperCase();
-    if (code === 'KOREA10' || code === 'TOFULA10' || code === 'MASSONI10') {
+    if (code === 'VEGGIE10' || code === 'QUEENS10' || code === 'ITAL10') {
       setDiscountPercent(10);
       setDiscountCode(code);
       setPromoMsg({ text: '10% South Richmond Hill Community discount applied!', type: 'success' });
@@ -285,7 +285,7 @@ export default function App() {
       setDiscountCode(code);
       setPromoMsg({ text: '15% Welcome discount applied!', type: 'success' });
     } else {
-      setPromoMsg({ text: 'Invalid promo code. Try "KOREA10"', type: 'error' });
+      setPromoMsg({ text: 'Invalid promo code. Try "VEGGIE10"', type: 'error' });
     }
   };
 
@@ -307,10 +307,10 @@ export default function App() {
 
   // Complete Order
   const handleCompleteOrder = (e) => {
-    e.preventDefault;
+    e.preventDefault();
     if (cart.length === 0) return;
 
-    const orderNumber = `TC-${Math.floor(1000 + Math.random * 9000)}`;
+    const orderNumber = `VC-${Math.floor(1000 + Math.random() * 9000)}`;
     const confirmed = {
       orderNumber,
       date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
@@ -351,8 +351,8 @@ export default function App() {
 
   // Handle Reservation submission
   const handleBookReservation = (e) => {
-    e.preventDefault;
-    const code = `TC-RES-${Math.floor(1000 + Math.random * 9000)}`;
+    e.preventDefault();
+    const code = `VC-RES-${Math.floor(1000 + Math.random() * 9000)}`;
     setConfirmedResCode(code);
     setReserveConfirmed(true);
   };
@@ -1011,23 +1011,30 @@ export default function App() {
                             {item.name}
                           </h4>
                         </div>
-                        <p className="text-xs font-semibold text-accent mb-1.5">
-                          <span className="text-emerald-700 font-medium">{item.badge || "100% Plant-Based"}</span>
-                        </p>
+                        <div className="flex flex-wrap items-center gap-1.5 my-1.5">
+                          <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-950 border border-emerald-300">
+                            {item.badge || "100% Ital"}
+                          </span>
+                          {(item.category === 'juices' || item.category === 'blends' || item.category === 'salads') && (
+                            <span className="inline-flex items-center text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-amber-100 text-amber-950 border border-amber-300">
+                              Gluten-Free
+                            </span>
+                          )}
+                        </div>
                         <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
                           {item.description}
                         </p>
                       </div>
 
                       <div className="flex items-center justify-between mt-2 pt-2 border-t border-border/40">
-                        <span className="font-mono font-bold text-base text-primary">
+                        <span className="font-mono tabular-nums font-extrabold text-base text-emerald-900 dark:text-emerald-300">
                           ${item.price.toFixed(2)}
                         </span>
                         <Button
                           variant="secondary"
                           size="sm"
                           onClick={(e) => {
-                            e.stopPropagation;
+                            e.stopPropagation();
                             openProductModal(item);
                           }}
                           className="h-7 px-3 text-xs font-bold rounded-lg group-hover:bg-primary group-hover:text-white transition-colors"
@@ -1935,7 +1942,14 @@ export default function App() {
             </div>
 
             {checkoutStep !== 'confirmed' ? (
-              <form onSubmit={checkoutStep === 'details' ? (e) => { e.preventDefault; setCheckoutStep('payment'); } : handleCompleteOrder}>
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                if (checkoutStep === 'details') {
+                  setCheckoutStep('payment');
+                } else {
+                  handleCompleteOrder(e);
+                }
+              }}>
                 
                 {/* 2-Step Navigation Tab Bar */}
                 <div className="flex border-b border-border bg-muted/40 text-xs font-bold">
@@ -2017,7 +2031,7 @@ export default function App() {
                               required
                               value={customerName}
                               onChange={(e) => setCustomerName(e.target.value)}
-                              placeholder="e.g. Min-jun Park"
+                              placeholder="e.g. Marcus Campbell"
                               className="w-full p-2.5 rounded-xl border border-input text-xs bg-background focus:border-primary focus:outline-none"
                             />
                           </div>
@@ -2030,7 +2044,7 @@ export default function App() {
                               required
                               value={customerPhone}
                               onChange={(e) => setCustomerPhone(e.target.value)}
-                              placeholder="(213) 555-0199"
+                              placeholder="(718) 555-0199"
                               className="w-full p-2.5 rounded-xl border border-input text-xs bg-background focus:border-primary focus:outline-none"
                             />
                             <span className="text-[10px] text-muted-foreground mt-0.5 block">
@@ -2047,7 +2061,7 @@ export default function App() {
                             type="email"
                             value={customerEmail}
                             onChange={(e) => setCustomerEmail(e.target.value)}
-                            placeholder="minjun@example.com"
+                            placeholder="marcus@example.com"
                             className="w-full p-2.5 rounded-xl border border-input text-xs bg-background focus:border-primary focus:outline-none"
                           />
                         </div>
@@ -2103,7 +2117,7 @@ export default function App() {
                                 required
                                 value={deliveryAddress}
                                 onChange={(e) => setDeliveryAddress(e.target.value)}
-                                placeholder="e.g. 3500 Wilshire Blvd"
+                                placeholder="e.g. 104-20 Liberty Ave"
                                 className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-input text-xs bg-background focus:border-primary focus:outline-none"
                               />
                             </div>
@@ -2238,7 +2252,7 @@ export default function App() {
                             <span className="font-mono">-${discountAmount.toFixed(2)}</span>
                           </div>)}
                         <div className="flex justify-between text-muted-foreground">
-                          <span>Sales Tax (9.5%):</span>
+                          <span>Sales Tax (8.875%):</span>
                           <span className="font-mono">${salesTax.toFixed(2)}</span>
                         </div>
                         {orderType === 'delivery' && (
@@ -2404,7 +2418,7 @@ export default function App() {
                     ORDER ID: {confirmedOrder?.orderNumber}
                   </span>
                   <h3 className="font-display text-2xl font-bold text-foreground">
-                    Gamsahamnida , {confirmedOrder?.customerName}!
+                    Respect & One Love, {confirmedOrder?.customerName}!
                   </h3>
                   <p className="text-xs text-muted-foreground mt-1 max-w-sm mx-auto">
                     {confirmedOrder?.orderType === 'delivery'
