@@ -346,43 +346,60 @@ export default function App() {
   return (
     <main className="min-h-screen w-full overflow-x-hidden bg-background text-foreground selection:bg-accent/30">
       
-      {/* 1. TOP ANNOUNCEMENT BAR (Korean Cultural Detailing with Phone & Address) */}
-      <div className="bg-[#1C1716] text-[#EADFD3] px-4 py-2 text-xs font-medium border-b border-[#2C2422] relative z-20">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
-          <a
-            href={RESTAURANT_INFO.mapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-accent hover:text-white transition-colors group shrink-0"
-            title="Open Veggie Castle II in Google Maps / Get Directions"
-          >
-            <MapPin className="size-3.5 text-accent group-hover:scale-110 transition-transform shrink-0" />
-            <span className="font-semibold underline decoration-accent/50 underline-offset-2 group-hover:decoration-white">
-              {RESTAURANT_INFO.address}
-            </span>
-            <span className="hidden sm:inline-flex items-center gap-0.5 text-[10px] bg-accent/20 text-accent group-hover:bg-accent group-hover:text-white px-2 py-0.5 rounded-full font-bold transition-all ml-1">
-              Directions <ExternalLink className="size-2.5 ml-0.5" />
-            </span>
-          </a>
+            {/* 1. TOP ANNOUNCEMENT BAR */}
+      <div className="bg-[#1C1716] text-[#EADFD3] px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-medium border-b border-[#2C2422] relative z-20">
+        <div className="mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-3 max-w-7xl">
+          
+          {/* Top Row on Mobile: Address & Quick Phone Call */}
+          <div className="flex items-center justify-between gap-2 w-full sm:w-auto">
+            <a
+              href={RESTAURANT_INFO.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-accent hover:text-white transition-colors group min-w-0"
+              title="Open in Google Maps"
+            >
+              <MapPin className="size-3 text-accent shrink-0 group-hover:scale-110 transition-transform" />
+              <span className="font-semibold underline decoration-accent/50 underline-offset-2 group-hover:decoration-white truncate text-[11px] sm:text-xs">
+                132-09 Liberty Ave, Queens NY
+              </span>
+              <span className="hidden md:inline-flex items-center gap-0.5 text-[10px] bg-accent/20 text-accent px-1.5 py-0.5 rounded-full font-bold ml-1">
+                Directions <ExternalLink className="size-2 ml-0.5" />
+              </span>
+            </a>
 
-          <p className="hidden md:block text-center text-xs text-[#EADFD3]/90 truncate mx-2">
+            {/* Direct Phone Call Button on Mobile */}
+            <a
+              href={`tel:${RESTAURANT_INFO.phoneRaw}`}
+              className="sm:hidden flex items-center gap-1 text-white hover:text-accent font-mono font-bold text-[10px] bg-white/10 px-2 py-0.5 rounded-md shrink-0 border border-white/15"
+            >
+              <Phone className="size-2.5 text-accent shrink-0" />
+              <span>{RESTAURANT_INFO.phone}</span>
+            </a>
+          </div>
+
+          {/* Center Message (Desktop only) */}
+          <p className="hidden lg:block text-center text-xs text-[#EADFD3]/90 truncate mx-2">
             <strong className="text-white">Queens' Iconic 100% Plant-Based Caribbean Comfort &amp; Cold-Pressed Juices</strong>
           </p>
 
-          <div className="flex items-center gap-3 text-xs shrink-0 ml-auto sm:ml-0">
+          {/* Bottom Row on Mobile / Right on Desktop: Hours & Phone */}
+          <div className="flex items-center justify-between sm:justify-end gap-3 text-[10px] sm:text-xs shrink-0 w-full sm:w-auto border-t border-white/10 sm:border-t-0 pt-0.5 sm:pt-0">
             <span className="flex items-center gap-1.5 text-emerald-400 font-semibold">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
-              <span className="hidden sm:inline">Open Today:</span> 10:30 AM – 10:00 PM
+              <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+              <span>Open Daily: 9:30 AM – 10:00 PM</span>
             </span>
+
             <a
               href={`tel:${RESTAURANT_INFO.phoneRaw}`}
-              className="flex items-center gap-1 text-[#EADFD3] hover:text-white font-mono font-semibold transition-colors"
+              className="hidden sm:flex items-center gap-1 text-[#EADFD3] hover:text-white font-mono font-semibold transition-colors"
               title="Direct Call Veggie Castle II"
             >
               <Phone className="size-3 text-accent shrink-0" />
               <span>{RESTAURANT_INFO.phone}</span>
             </a>
           </div>
+
         </div>
       </div>
 
@@ -391,28 +408,25 @@ export default function App() {
 
       {/* 2. STICKY LUXURY HEADER */}
       <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-md shadow-xs">
-        <div className="mx-auto flex h-18 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-16 sm:h-18 max-w-7xl items-center justify-between gap-2 sm:gap-3 px-3 sm:px-6 lg:px-8">
           
-          <a href="#top" className="flex items-center gap-2.5 shrink-0 py-1 group text-decoration-none">
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary text-primary-foreground flex flex-col items-center justify-center shadow-xs group-hover:scale-105 transition-transform border border-primary/20">
-              <span className="font-display text-sm font-black leading-none text-amber-300">VC</span>
-              <span className="text-[8px] tracking-tighter uppercase font-bold text-white/80">ITAL</span>
+          {/* Brand Logo & Title */}
+          <a href="#top" className="flex items-center gap-2 sm:gap-2.5 min-w-0 py-1 group text-decoration-none">
+            <div className="w-8 h-8 sm:w-11 sm:h-11 rounded-xl bg-primary text-primary-foreground flex flex-col items-center justify-center shadow-xs group-hover:scale-105 transition-transform border border-primary/20 shrink-0">
+              <span className="font-display text-xs sm:text-sm font-black leading-none text-amber-300">VC</span>
+              <span className="text-[7px] sm:text-[8px] tracking-tighter uppercase font-bold text-white/80">ITAL</span>
             </div>
-            <div className="flex flex-col">
-              <div className="flex items-baseline gap-1.5">
-                <span className="font-display text-lg sm:text-xl lg:text-2xl font-bold tracking-tight text-primary leading-tight">
-                  Veggie Castle II
-                </span>
-                <span className="text-xs font-semibold text-accent tracking-normal">
-                  
-                </span>
-              </div>
-              <span className="text-[9px] tracking-widest uppercase font-semibold text-muted-foreground">
-                Plant-Based &amp; Vegan • South Richmond Hill, Queens
+            <div className="flex flex-col min-w-0">
+              <span className="font-display text-base sm:text-xl lg:text-2xl font-bold tracking-tight text-primary leading-tight truncate">
+                Veggie Castle II
+              </span>
+              <span className="text-[8px] sm:text-[9px] tracking-wider uppercase font-semibold text-muted-foreground truncate hidden xs:block">
+                100% Vegan • Queens, NY
               </span>
             </div>
           </a>
 
+          {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center justify-center flex-1 mx-4 gap-6 xl:gap-7 whitespace-nowrap">
             <a href="#featured" className="nav-link text-[13px] font-semibold text-foreground/80 hover:text-primary transition-colors py-1">
               Combos
@@ -434,44 +448,50 @@ export default function App() {
             </a>
           </nav>
 
-          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+          {/* Header Action Buttons (Mobile-Optimized to prevent cut-off) */}
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+            
+            {/* Book Table Button - Always visible! Compact on mobile */}
             <Button
               variant="outline"
               size="sm"
               onClick={() => setReserveOpen(true)}
-              className="hidden sm:inline-flex rounded-full text-xs font-semibold h-9 px-3.5"
+              className="rounded-full text-[11px] sm:text-xs font-semibold h-8 sm:h-9 px-2 sm:px-3.5 border-primary/30 hover:bg-primary/5"
             >
-              <Calendar className="size-3.5 text-accent mr-1" />
-              <span>Book Table</span>
+              <Calendar className="size-3 sm:size-3.5 text-accent mr-1 shrink-0" />
+              <span className="hidden sm:inline">Book Table</span>
+              <span className="sm:hidden">Book</span>
             </Button>
 
+            {/* Cart Button - Fully visible on all phones */}
             <button
               type="button"
               onClick={() => setCartOpen(true)}
-              className="relative flex items-center justify-center gap-2 h-9 sm:h-10 px-3.5 sm:px-4 rounded-full bg-primary text-white border border-primary hover:bg-[#73161c] shadow-xs hover:shadow-md transition-all duration-200 active:scale-95 shrink-0 cursor-pointer"
+              className="relative flex items-center justify-center gap-1.5 sm:gap-2 h-8 sm:h-9 px-2.5 sm:px-4 rounded-full bg-primary text-white border border-primary hover:bg-primary/90 shadow-xs transition-all active:scale-95 shrink-0 cursor-pointer"
               title="View Cart / Order Tray"
             >
               <div className="relative flex items-center">
-                <ShoppingBag className="size-4 text-white" />
+                <ShoppingBag className="size-3.5 sm:size-4 text-white" />
                 {cartItemCount > 0 && (
-                  <span className="absolute -top-2.5 -right-2.5 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-white text-[10px] font-black shadow-xs ring-1 ring-white/40">
+                  <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-white text-[9px] sm:text-[10px] font-black shadow-xs ring-1 ring-white/40">
                     {cartItemCount}
                   </span>)}
               </div>
-              <span className="font-bold text-white text-xs">Cart</span>
+              <span className="font-bold text-white text-[11px] sm:text-xs">Cart</span>
               {cartItemCount > 0 && (
-                <span className="font-mono font-bold text-xs pl-1.5 border-l border-white/30 text-amber-200 hidden sm:inline">
+                <span className="font-mono font-bold text-xs pl-1.5 border-l border-white/30 text-amber-200 hidden md:inline">
                   ${subtotal.toFixed(2)}
                 </span>)}
             </button>
 
+            {/* Mobile Menu Hamburger */}
             <button
               type="button"
               onClick={() => setMobileNavOpen(!mobileNavOpen)}
-              className="lg:hidden flex items-center justify-center p-2 rounded-xl border border-border bg-card text-foreground hover:bg-muted transition-colors cursor-pointer"
+              className="lg:hidden flex items-center justify-center p-1.5 sm:p-2 rounded-xl border border-border bg-card text-foreground hover:bg-muted transition-colors cursor-pointer shrink-0"
               aria-label="Toggle navigation menu"
             >
-              {mobileNavOpen ? <X className="size-5" /> : <MenuIcon className="size-5" />}
+              {mobileNavOpen ? <X className="size-4 sm:size-5" /> : <MenuIcon className="size-4 sm:size-5" />}
             </button>
           </div>
         </div>
