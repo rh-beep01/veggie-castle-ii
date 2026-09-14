@@ -1623,8 +1623,8 @@ export default function App() {
                           onClick={() => setModalRice(rice)}
                           className={`p-2.5 rounded-xl border text-xs font-semibold transition-all text-center cursor-pointer ${
                             isSelected
-                              ? 'border-accent bg-accent/15 text-accent-foreground font-bold shadow-2xs ring-1 ring-accent/30'
-                              : 'border-border hover:bg-muted/50 text-foreground'
+                              ? 'border-primary bg-primary text-white font-bold shadow-sm'
+                              : 'border-border bg-card hover:bg-muted/50 text-foreground font-medium'
                           }`}
                         >
                           <span className="block text-[11px] leading-tight font-medium">{rice}</span>
