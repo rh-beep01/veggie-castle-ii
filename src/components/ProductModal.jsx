@@ -73,7 +73,7 @@ export default function ProductModal({ item, onClose, onAddToCart }) {
             </div>
           )}
 
-          {/* Egg Preference for Soon Tofu */}
+          {/* Egg Preference for Protein Plate */}
           {item.hasSpiceLevel && (
             <div className="modal-option-group">
               <label className="option-group-label">Egg Preference</label>

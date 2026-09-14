@@ -1,399 +1,511 @@
 export const RESTAURANT_INFO = {
-  name: "Tofu Chon",
-  koreanName: "두부촌",
-  tagline: "Authentic Korean Soon Tofu & Sizzling KBBQ in Koreatown",
-  address: "3526 W 8th St, Los Angeles, CA 90005",
-  neighborhood: "Koreatown, Los Angeles",
-  phone: "(213) 505-9577",
-  phoneRaw: "+12135059577",
-  instagram: "@tofuchonla",
-  instagramUrl: "https://www.instagram.com/tofuchonla/",
-  mapsUrl: "https://www.google.com/maps/search/?api=1&query=Tofu+Chon+3526+W+8th+St+Los+Angeles+CA",
+  name: "Veggie Castle II",
+  tagline: "100% Vegan Caribbean Comfort Food & Juice Bar in South Richmond Hill",
+  address: "132-09 Liberty Ave, South Richmond Hill, NY 11419",
+  neighborhood: "South Richmond Hill, Queens, NY",
+  phone: "718.641.8342",
+  phoneRaw: "+17186418342",
+  phone2: "718.975.4978",
+  phone2Raw: "+17189754978",
+  phone2Label: "Brooklyn (Flatbush Ave)",
+  instagram: "@veggiecastle",
+  instagramUrl: "https://www.instagram.com/veggiecastle/",
+  mapsUrl: "https://www.google.com/maps/search/?api=1&query=Veggie+Castle+II+132-09+Liberty+Ave+South+Richmond+Hill+NY+11419",
   hours: [
-    { days: "Monday – Saturday", time: "10:30 AM – 10:00 PM" },
-    { days: "Sunday", time: "11:00 AM – 9:30 PM" }
+    { days: "Monday – Sunday", time: "9:30 AM – 10:00 PM" }
   ],
   features: [
     "0% Fee Direct Online Ordering",
-    "Curbside Pickup & Fast Local Delivery",
-    "Fresh Silken Tofu Made Daily",
-    "Generous House Banchan Included"
+    "100% Plant-Based & Vegan",
+    "Fresh Cold-Pressed Juice Bar",
+    "Pickup & Local Delivery"
   ]
 };
 
-export const SPICE_LEVELS = [
-  { id: "mild", name: "Mild (순한맛)", desc: "Gentle warming flavor, subtle chili essence", color: "#48bb78" },
-  { id: "medium", name: "Medium (보통맛)", desc: "Traditional balance of savory broth and kick", color: "#ed8936" },
-  { id: "spicy", name: "Spicy (매운맛)", desc: "Authentic Korean heat, aromatic red chili oil", color: "#e53e3e" },
-  { id: "danger", name: "Extra Spicy / Danger (아주 매운맛)", desc: "For true spice enthusiasts with bird's eye chili", color: "#9b2c2c" }
+export const SIDES_LIST = [
+  "Rice & Peas", "Yellow Rice", "Spinach Rice w/ Chick Peas",
+  "Fried Rice", "Cook Up Rice", "Vegetable Chow Mein",
+  "Mac & Cheese", "Baked Ziti", "Vegan Rasta Pasta",
+  "Stir-Fry Veggies", "String Beans & Mushrooms",
+  "Roasted or Stewed Eggplant", "Okra", "Collard Greens",
+  "Broccoli & Cauliflower Medley (Steamed)",
+  "Kale", "Spinach", "Asparagus", "Butternut Squash",
+  "Brussel Sprouts", "Acorn Squash W/ Walnuts",
+  "Stewed Peas", "Curry or Stewed Chick Peas"
 ];
 
+export const PROTEIN_OPTIONS = {
+  tofuAndJackfruit: [
+    "Sweet n Sour", "Stir-Fry", "BBQ Jackfruit",
+    "Curry", "Scrambled Tofu", "Curry Jackfruit",
+    "Jerk", "Jerk Jackfruit"
+  ],
+  seitanAndSoy: [
+    "Curry Seitan", "Curry Beef", "Stir-fry Salmon",
+    "Stew Seitan", "Oxtail", "Vegan Saltfish",
+    "Ginger Chicken", "Stew Beef", "Pepper Pot",
+    "Curry Chicken", "Stir-Fry Beef", "Drumsticks",
+    "Jerk Chicken", "Stew Salmon"
+  ]
+};
+
 export const CATEGORIES = [
-  { id: "all", label: "All Items (전체)" },
-  { id: "combos", label: "Combos (콤보)" },
-  { id: "tofu", label: "Soon Tofu (순두부)" },
-  { id: "specials", label: "House Specials (특선요리)" },
-  { id: "drinks", label: "Drinks (주류/음료)" }
+  { id: "all",      label: "All Items" },
+  { id: "grill",   label: "Grill Menu" },
+  { id: "proteins",label: "Protein Plates" },
+  { id: "salads",  label: "Salads & Wraps" },
+  { id: "juices",  label: "Juice Cures" },
+  { id: "blends",  label: "Signature Blends" },
+];
+
+export const SPICE_LEVELS = [
+  {
+    id: "mild",
+    name: "Mild ? Island Herbs & Thyme",
+    desc: "Gentle island aromatics, fresh thyme, scallions, garlic, sweet peppers, and coconut milk with zero burn.",
+    color: "#156E34"
+  },
+  {
+    id: "medium",
+    name: "Medium ? Scotch Bonnet Warmth",
+    desc: "Classic Caribbean warmth with authentic Jamaican pimento and a balanced hint of sun-ripened Scotch Bonnet.",
+    color: "#D9820B"
+  },
+  {
+    id: "hot",
+    name: "Fiery Hot ? Authentic Island Kick",
+    desc: "Bold and fiery with freshly crushed Scotch Bonnet peppers for true island spice lovers.",
+    color: "#E63946"
+  }
 ];
 
 export const MENU_ITEMS = [
-  // COMBOS
-  {
-    id: "combo-galbi",
-    name: "Galbi + Soon Tofu Combo",
-    koreanName: "갈비 + 순두부 콤보",
-    price: 32.99,
-    category: "combos",
-    image: "/images/galbi-sizzling.jpg",
-    description: "Our signature flame-grilled Korean BBQ short ribs glazed in sweet soy garlic marinade, paired with your choice of bubbling Soon Tofu stew, purple/white rice, and assortment of banchan.",
+  // GRILL MENU
+  { 
+    id: "grill-classic-veggie-burger", 
+    name: "Classic Veggie Burger", 
+    price: 7.00, 
+    comboPrice: 12.00, 
+    category: "grill", 
+    description: "Soy or Black Bean Burger, Lettuce, Tomatoes, Pickles, Onions, Ketchup, Signature Burger Sauce on Whole Wheat Bun.", 
+    comboDesc: "Combo includes Fries and Bottled Juice.", 
+    isPopular: true, 
+    badge: "Fan Favorite",
+    image: "/images/oyster-mushroom-burger.jpg"
+  },
+  { 
+    id: "grill-veggie-burger-supreme", 
+    name: "Veggie Burger Supreme", 
+    price: 9.00, 
+    comboPrice: 14.00, 
+    category: "grill", 
+    description: "Lettuce, Tomato, Onions, Pickles, Ketchup, Signature Burger Sauce.", 
+    comboDesc: "Combo includes Fries and Bottled Juice.", 
     isPopular: true,
-    isCombo: true,
-    hasSpiceLevel: true,
-    badge: "Most Popular"
+    badge: "House Favorite",
+    image: "/images/oyster-mushroom-burger.jpg"
   },
-  {
-    id: "combo-bulgogi",
-    name: "Bulgogi + Soon Tofu Combo",
-    koreanName: "소불고기 + 순두부 콤보",
-    price: 28.99,
-    category: "combos",
-    image: "/images/hero-feast.jpg",
-    description: "Tender thinly-sliced prime ribeye marinated in fruit-infused savory soy sauce, served sizzling with your personal hot stone Soon Tofu stew.",
-    isPopular: true,
-    isCombo: true,
-    hasSpiceLevel: true
+  { 
+    id: "grill-vegan-classic-chicken", 
+    name: "Vegan Classic Chicken Sandwich", 
+    price: 7.00, 
+    comboPrice: 12.00, 
+    category: "grill", 
+    description: "Lettuce, Tomato, Onions, Pickles, Ketchup, Signature Burger Sauce.", 
+    comboDesc: "Combo includes Fries and Bottled Juice.",
+    badge: "Classic",
+    image: "/images/vegan-chopped-cheese.jpg"
   },
-  {
-    id: "combo-yellow-croaker",
-    name: "Deep Fried Yellow Croaker + Soon Tofu Combo",
-    koreanName: "조기구이 + 순두부 콤보",
-    price: 27.99,
-    category: "combos",
-    image: "/images/yellow-croaker-combo.jpg",
-    description: "Whole fresh yellow croaker pan-fried until crackling crisp outside with tender sweet flaky meat, served with bubbling Soon Tofu and lemon wedges.",
-    isPopular: true,
-    isCombo: true,
-    hasSpiceLevel: true,
-    badge: "Chef's Choice"
+  { 
+    id: "grill-jerk-vegan-chicken", 
+    name: "Jerk Vegan Chicken Sandwich", 
+    price: 7.00, 
+    comboPrice: 12.00, 
+    category: "grill", 
+    description: "Lettuce, Tomato, Cucumber, Onions, BBQ Sauce and Burger Sauce.", 
+    comboDesc: "Combo includes Fries and Bottled Juice.", 
+    isPopular: true, 
+    badge: "Jerk Style",
+    image: "/images/vegan-jerk-wrap.jpg"
   },
-  {
-    id: "combo-spicy-pork",
-    name: "Spicy Pork + Soon Tofu Combo",
-    koreanName: "돼지불고기 + 순두부 콤보",
-    price: 27.99,
-    category: "combos",
-    image: "/images/hero-feast.jpg",
-    description: "Thinly sliced pork belly wok-charred with scallions, onions, and spicy Korean chili paste (Jeyuk Bokkeum), served with soothing Soon Tofu.",
-    isCombo: true,
-    hasSpiceLevel: true
+  { 
+    id: "grill-vegan-fish-n-chips", 
+    name: "Vegan Fish N' Chips", 
+    price: 12.00, 
+    category: "grill", 
+    description: "Crispy battered golden vegan fish fillets served with hot seasoned french fries, homemade tartar sauce, and lemon.", 
+    isPopular: true, 
+    badge: "Island Classic",
+    image: "/images/vegan-fish-chips.jpg"
   },
-  {
-    id: "combo-bibimbob",
-    name: "Bibimbob + Soon Tofu Combo",
-    koreanName: "비빔밥 + 순두부 콤보",
-    price: 27.99,
-    category: "combos",
-    image: "/images/bibimbap.jpg",
-    description: "Traditional brass bowl Bibimbap with seasoned mountain greens, fried egg, and savory beef, accompanied by hot Soon Tofu stew.",
-    isCombo: true,
-    hasSpiceLevel: true
+  { 
+    id: "grill-vegan-fish-sandwich", 
+    name: "Vegan Fish Sandwich", 
+    price: 7.00, 
+    comboPrice: 12.00, 
+    category: "grill", 
+    description: "Lettuce, Tomato, Pickles, Onion, Remoulade Sauce on a toasted bun.", 
+    comboDesc: "Combo includes Fries and Bottled Juice.",
+    badge: "Crispy",
+    image: "/images/vegan-fish-chips.jpg"
   },
-  {
-    id: "combo-spicy-chicken",
-    name: "Spicy Chicken + Soon Tofu Combo",
-    koreanName: "매운닭불고기 + 순두부 콤보",
-    price: 26.99,
-    category: "combos",
-    image: "/images/hero-feast.jpg",
-    description: "Boneless tender chicken marinated in smoky gochujang chili glaze, served with bubbling stone pot Soon Tofu.",
-    isCombo: true,
-    hasSpiceLevel: true
+  { 
+    id: "grill-oyster-mushroom-burger", 
+    name: "Oyster Mushroom Burger", 
+    price: 10.00, 
+    comboPrice: 14.00, 
+    category: "grill", 
+    description: "Crispy fried golden oyster mushrooms, vegan cheddar, lettuce, tomato, pickles, onions, ketchup, house remoulade on brioche.", 
+    comboDesc: "Combo includes Fries and Bottled Juice.", 
+    isPopular: true, 
+    badge: "Best Seller #1",
+    image: "/images/oyster-mushroom-burger.jpg"
   },
-  {
-    id: "combo-soy-chicken",
-    name: "Soy Sauce Chicken + Soon Tofu Combo",
-    koreanName: "간장닭불고기 + 순두부 콤보",
-    price: 26.99,
-    category: "combos",
-    image: "/images/hero-feast.jpg",
-    description: "Tender chicken thigh glazed in sweet caramelized garlic soy reduction, paired with aromatic Soon Tofu stew.",
-    isCombo: true,
-    hasSpiceLevel: true
+  { 
+    id: "grill-jackfruit-sandwich", 
+    name: "Jackfruit Sandwich", 
+    price: 9.11, 
+    category: "grill", 
+    description: "BBQ Jackfruit, Vegan Cheese, Coleslaw, Fried Onion Rings, Signature Burger Sauce.",
+    badge: "BBQ Jackfruit",
+    image: "/images/vegan-chopped-cheese.jpg"
+  },
+  { 
+    id: "grill-rasta-man-special", 
+    name: "Rasta Man Special", 
+    price: 12.00, 
+    category: "grill", 
+    description: "Chicken or Burger Strips with Fries and a Salad. Ketchup and Sweet Onion Vinaigrette.", 
+    badge: "Signature",
+    image: "/images/vegan-feast-hero.jpg"
+  },
+  { 
+    id: "grill-po-boy", 
+    name: "Po Boy", 
+    price: 10.53, 
+    category: "grill", 
+    description: "Fried Oyster Mushroom, Lettuce, Shredded Carrots, Cucumbers, Red Onions, and Remoulade Sauce on a Hero.",
+    badge: "Hero Sandwich",
+    image: "/images/vegan-fish-chips.jpg"
+  },
+  { 
+    id: "grill-chopped-cheese", 
+    name: "Chopped Cheese", 
+    price: 10.53, 
+    category: "grill", 
+    description: "Sizzling plant-based beef, grilled onions, melted vegan cheese, lettuce, tomato, chipotle and burger sauce on a toasted hero roll.", 
+    isPopular: true, 
+    badge: "Queens Legend",
+    image: "/images/vegan-chopped-cheese.jpg"
+  },
+  { 
+    id: "grill-impossible-burger", 
+    name: "Impossible Burger", 
+    price: 13.53, 
+    category: "grill", 
+    description: "Classic / BBQ Style / Cali Style. Sizzling plant-based Impossible patty with vegan cheese, crisp veggies, and signature sauce.", 
+    badge: "Plant-Based Beef",
+    image: "/images/vegan-chopped-cheese.jpg"
+  },
+  { 
+    id: "grill-philly-cheese-steak", 
+    name: "Philly Cheese Steak", 
+    price: 8.17, 
+    category: "grill", 
+    description: "Grilled Mushrooms, Onion and Pepper with Vegan Cheese and Burger Sauce on a toasted hero.",
+    badge: "Savory",
+    image: "/images/vegan-chopped-cheese.jpg"
   },
 
-  // SOON TOFU STEWS (All $17.49)
-  {
-    id: "tofu-mix",
-    name: "Mix Soon Tofu",
-    koreanName: "섞어 순두부",
-    price: 17.49,
-    category: "tofu",
-    image: "/images/mix-soon-tofu.jpg",
-    description: "The classic Koreatown crowd favorite. Silken organic soft tofu bubbling in an earthenware ttukbaegi with tender beef, ocean shrimp, and whole clams.",
-    isPopular: true,
-    hasSpiceLevel: true,
-    badge: "House Specialty"
+  // PROTEIN PLATES
+  { 
+    id: "protein-small", 
+    name: "Small Protein Plate", 
+    price: 9.00, 
+    category: "proteins", 
+    description: "2 Sides + 1 Protein. Choose from Tofu & Jackfruit or Seitan & Soy options. Served with seasoned rice and hot island sides.", 
+    isPopular: true, 
+    badge: "2 Sides + 1 Protein",
+    image: "/images/vegan-curry-plate.jpg"
   },
-  {
-    id: "tofu-beef",
-    name: "Beef Soon Tofu",
-    koreanName: "소고기 순두부",
-    price: 17.49,
-    category: "tofu",
-    image: "/images/mix-soon-tofu.jpg",
-    description: "Simmered in rich 24-hour slow-simmered beef broth loaded with generous cuts of tender beef brisket and silken tofu curds.",
-    isPopular: true,
-    hasSpiceLevel: true
+  { 
+    id: "protein-medium", 
+    name: "Medium Protein Plate", 
+    price: 12.50, 
+    category: "proteins", 
+    description: "2 Sides + 2 Proteins. Mix and match your favorite plant-based proteins (Jerk Jackfruit, Curry Tofu, Vegan Saltfish, Seitan) with Caribbean sides.", 
+    isPopular: true, 
+    badge: "2 Sides + 2 Proteins",
+    image: "/images/vegan-curry-plate.jpg"
   },
-  {
-    id: "tofu-seafood",
-    name: "Seafood Soon Tofu",
-    koreanName: "해물 순두부",
-    price: 17.49,
-    category: "tofu",
-    image: "/images/mix-soon-tofu.jpg",
-    description: "Fresh Manila clams, succulent prawns, and baby squid gently cooked in our fragrant, briny seafood chili broth.",
-    isPopular: true,
-    hasSpiceLevel: true
-  },
-  {
-    id: "tofu-pork-kimchi",
-    name: "Pork Kimchi Soon Tofu",
-    koreanName: "돼지 김치 순두부",
-    price: 17.49,
-    category: "tofu",
-    image: "/images/mix-soon-tofu.jpg",
-    description: "Aged ripe artisanal kimchi sautéed with savory pork belly slices, stewed with silky tofu for a deeply flavorful, tangy kick.",
-    hasSpiceLevel: true
-  },
-  {
-    id: "tofu-pork",
-    name: "Pork Soon Tofu",
-    koreanName: "돼지고기 순두부",
-    price: 17.49,
-    category: "tofu",
-    image: "/images/mix-soon-tofu.jpg",
-    description: "Tender slices of savory pork stewed with velvety soft tofu in our piping hot stone bowl.",
-    hasSpiceLevel: true
-  },
-  {
-    id: "tofu-oyster",
-    name: "Oyster Soon Tofu",
-    koreanName: "굴 순두부",
-    price: 17.49,
-    category: "tofu",
-    image: "/images/mix-soon-tofu.jpg",
-    description: "Plump, fresh coastal oysters poached gently with silken tofu in a delicate, briny broth.",
-    hasSpiceLevel: true
-  },
-  {
-    id: "tofu-intestine",
-    name: "Beef Intestine Soon Tofu",
-    koreanName: "곱창 순두부",
-    price: 17.49,
-    category: "tofu",
-    image: "/images/mix-soon-tofu.jpg",
-    description: "Savory, chewy Gopchang (tender beef small intestines) stewed in robust spicy pepper broth with silken tofu curds.",
-    hasSpiceLevel: true,
-    badge: "Authentic"
+  { 
+    id: "protein-large", 
+    name: "Large Protein Plate", 
+    price: 17.00, 
+    category: "proteins", 
+    description: "3 Sides + 2 Proteins. The ultimate Caribbean vegan feast: two proteins, three hot sides (Rice & Peas, Mac & Cheese, Plantains, Callaloo).", 
+    isPopular: true, 
+    badge: "3 Sides + 2 Proteins",
+    image: "/images/vegan-feast-hero.jpg"
   },
 
-  // HOUSE SPECIALS
-  {
-    id: "special-galbi-jjim",
-    name: "Spicy Galbi Jjim (Braised Beef Short Ribs)",
-    koreanName: "매운갈비찜",
-    price: 79.99,
-    category: "specials",
-    image: "/images/galbi-jjim.jpg",
-    description: "Grand festive centerpiece for 2-3 guests! Fall-off-the-bone prime beef short ribs slow-braised in a rich, glossy spicy chili pepper sauce with tender radish, shiitake, and carrots.",
+  // SALADS & WRAPS
+  { 
+    id: "salad-garden", 
+    name: "Garden Salad", 
+    price: 9.99, 
+    category: "salads", 
+    description: "Romaine, Arugula, Red Onions, Tomatoes, Cucumber, Avocado, Chickpeas. Choice of Sweet Onion Vinaigrette, Ranch, Goddess, or House Dressing.", 
     isPopular: true,
-    badge: "Grand Feast"
+    badge: "Fresh & Crisp",
+    image: "/images/fresh-island-salad.jpg"
   },
-  {
-    id: "special-galbi",
-    name: "Galbi (Grilled KBBQ Short Ribs)",
-    koreanName: "갈비",
-    price: 32.99,
-    category: "specials",
-    image: "/images/galbi-sizzling.jpg",
-    description: "Generous sizzling cast iron platter of premium Korean BBQ beef short ribs charred to perfection over flame with caramelized sweet onions.",
+  { 
+    id: "salad-falafel", 
+    name: "Falafel Salad", 
+    price: 11.99, 
+    category: "salads", 
+    description: "Garden salad base topped with crispy golden falafels and house garlic tahini dressing.",
+    badge: "Golden Falafel",
+    image: "/images/fresh-island-salad.jpg"
+  },
+  { 
+    id: "salad-vegan-steak", 
+    name: "Vegan Steak Salad", 
+    price: 12.99, 
+    category: "salads", 
+    description: "Garden salad base topped with seasoned vegan steak strips, avocado, and balsamic vinaigrette.", 
+    isPopular: true, 
+    badge: "High Protein",
+    image: "/images/fresh-island-salad.jpg"
+  },
+  { 
+    id: "salad-vegan-chicken", 
+    name: "Vegan Chicken Salad", 
+    price: 11.99, 
+    category: "salads", 
+    description: "Garden salad base topped with juicy vegan grilled chicken strips and house dressing.",
+    badge: "Plant Protein",
+    image: "/images/fresh-island-salad.jpg"
+  },
+  { 
+    id: "salad-vegan-fish", 
+    name: "Vegan Fish Salad", 
+    price: 12.99, 
+    category: "salads", 
+    description: "Garden salad topped with Veggie Castle's famous seasoned vegan fish fillets.",
+    badge: "Island Herb",
+    image: "/images/fresh-island-salad.jpg"
+  },
+  { 
+    id: "salad-tarrus-riley", 
+    name: "Tarrus 'Singy Singy' Riley Special", 
+    price: 14.99, 
+    category: "salads", 
+    description: "Grilled Jerk Chicken Salad tossed with Cassava and Sweet Plantains. Named after legendary reggae artist Tarrus Riley.", 
+    isPopular: true, 
+    badge: "Celebrity Special",
+    image: "/images/vegan-jerk-wrap.jpg"
+  },
+  { 
+    id: "wrap-grilled-jerk-chicken", 
+    name: "Grilled / Jerk Chicken Wrap", 
+    price: 10.99, 
+    category: "salads", 
+    description: "Vegan Jerk Chicken, Romaine and Arugula, Vegan Cheddar, Sliced Avocado, and Chipotle Mayo wrapped in spinach tortilla.", 
     isPopular: true,
-    badge: "Sizzling Plate"
-  },
-  {
-    id: "special-marinated-crab",
-    name: "Spicy Marinated Crab",
-    koreanName: "양념게장",
-    price: 32.99,
-    category: "specials",
-    image: "/images/hero-feast.jpg",
-    description: "Fresh raw blue crab marinated in a vibrant sweet-and-spicy chili pepper garlic sauce (Yangnyeom Gejang). A beloved Koreatown 'rice thief'.",
-    badge: "Koreatown Legend"
-  },
-  {
-    id: "special-bulgogi",
-    name: "Bulgogi (Marinated Beef)",
-    koreanName: "불고기",
-    price: 28.99,
-    category: "specials",
-    image: "/images/hero-feast.jpg",
-    description: "Classic marinated ribeye beef slices sautéed with sweet onions, scallions, and toasted sesame seeds on a hot platter."
-  },
-  {
-    id: "special-spicy-pork",
-    name: "Spicy Pork (Jeyuk Bokkeum)",
-    koreanName: "돼지불고기",
-    price: 27.99,
-    category: "specials",
-    image: "/images/hero-feast.jpg",
-    description: "Spicy gochujang marinated pork belly slices seared over high heat with roasted garlic and scallions."
-  },
-  {
-    id: "special-seafood-pancake",
-    name: "Seafood Pancake (Haemul Pajeon)",
-    koreanName: "해물파전",
-    price: 26.99,
-    category: "specials",
-    image: "/images/seafood-pancake.jpg",
-    description: "Extra crispy, oversized golden pancake loaded with whole scallions, tender squid, and plump shrimp, served with seasoned soy-chili dipping sauce.",
-    isPopular: true,
-    badge: "Crispy Delight"
-  },
-  {
-    id: "special-yellow-croaker",
-    name: "Deep Fried Yellow Croaker",
-    koreanName: "조기구이",
-    price: 26.99,
-    category: "specials",
-    image: "/images/yellow-croaker.jpg",
-    description: "Two whole yellow croakers deep-fried until shatteringly crispy outside, tender and juicy inside, seasoned with sea salt.",
-    isPopular: true
-  },
-  {
-    id: "special-spicy-chicken",
-    name: "Spicy Chicken",
-    koreanName: "매운닭불고기",
-    price: 26.99,
-    category: "specials",
-    image: "/images/hero-feast.jpg",
-    description: "Flame-seared tender chicken thighs stir-fried in chef's signature red chili sauce with onions."
-  },
-  {
-    id: "special-soy-chicken",
-    name: "Soy Sauce Chicken",
-    koreanName: "간장닭불고기",
-    price: 26.99,
-    category: "specials",
-    image: "/images/hero-feast.jpg",
-    description: "Sweet and savory soy garlic glazed chicken sautéed with vegetables."
-  },
-  {
-    id: "special-spicy-squid",
-    name: "Spicy Stir-Fried Squid (Ojingeo Bokkeum)",
-    koreanName: "오징어볶음",
-    price: 24.99,
-    category: "specials",
-    image: "/images/hero-feast.jpg",
-    description: "Tender calamari squid stir-fried with crunchy cabbage, scallions, and fiery Korean chili pepper sauce."
-  },
-  {
-    id: "special-japchae",
-    name: "Japchae (Glass Noodles)",
-    koreanName: "잡채",
-    price: 22.99,
-    category: "specials",
-    image: "/images/hero-feast.jpg",
-    description: "Sweet potato glass noodles stir-fried with rich sesame oil, spinach, shiitake mushrooms, carrots, and sweet soy."
-  },
-  {
-    id: "special-galbitang",
-    name: "Beef Rib Soup (Galbitang)",
-    koreanName: "갈비탕",
-    price: 22.99,
-    category: "specials",
-    image: "/images/galbitang.jpg",
-    description: "Deeply comforting clear beef bone broth simmered for hours with massive, fall-off-the-bone beef short ribs, chewy glass noodles, and delicate egg ribbon garnish.",
-    isPopular: true,
-    badge: "Comfort Classic"
-  },
-  {
-    id: "special-bibimbob",
-    name: "Bibimbob",
-    koreanName: "비빔밥",
-    price: 20.99,
-    category: "specials",
-    image: "/images/bibimbap.jpg",
-    description: "Served in an authentic Korean golden brass bowl with seasoned mountain greens, zucchini, carrots, seasoned beef, and a perfect sunny-side-up egg."
-  },
-  {
-    id: "special-donkatsu",
-    name: "Pork Cutlet / Cheese Donkach",
-    koreanName: "돈까스",
-    price: 20.99,
-    category: "specials",
-    image: "/images/cheese-donkatsu.png",
-    description: "Golden crispy panko-crusted pork cutlet smothered with rich, stretching mozzarella cheese, served with sesame cabbage slaw and tonkatsu sauce.",
-    isPopular: true,
-    badge: "Viral Stretch"
-  },
-  {
-    id: "special-kimchi-fried-rice",
-    name: "Kimchi Fried Rice",
-    koreanName: "김치볶음밥",
-    price: 18.99,
-    category: "specials",
-    image: "/images/bibimbap.jpg",
-    description: "Smoky wok-fried rice with aged kimchi, pork crumbles, toasted seaweed, sesame oil, and topped with a sunny-side-up fried egg."
-  },
-  {
-    id: "special-dumplings",
-    name: "Fried Dumplings (8 pcs)",
-    koreanName: "만두튀김",
-    price: 10.99,
-    category: "specials",
-    image: "/images/mix-soon-tofu.jpg",
-    description: "Eight golden crispy pan-fried dumplings filled with seasoned pork, chives, and tofu, served with spicy vinegar soy dip."
+    badge: "Jerk Wrap",
+    image: "/images/vegan-jerk-wrap.jpg"
   },
 
-  // DRINKS
-  {
-    id: "drink-soju",
-    name: "Korean Soju (Chamisul / Jinro)",
-    koreanName: "소주",
-    price: 11.99,
-    category: "drinks",
-    image: "/images/korean-drinks.jpg",
-    description: "The quintessential Korean spirit. Clean, smooth, and refreshing 375ml green bottle. Pairs perfectly with Soon Tofu and KBBQ.",
-    badge: "21+ Only"
+  // JUICE CURES
+  { 
+    id: "juice-cold", 
+    name: "Cold Buster Juice", 
+    price: 7.99, 
+    category: "juices", 
+    description: "Cayenne, Grapefruit, Garlic, Ginger, Lemon, Orange. Nature's immune-boosting powerhouse.", 
+    isPopular: true, 
+    badge: "Immune Boost",
+    image: "/images/cold-pressed-juices.jpg"
   },
-  {
-    id: "drink-makgeolli",
-    name: "Makgeolli (Cloudy Rice Wine)",
-    koreanName: "막걸리",
-    price: 11.99,
-    category: "drinks",
-    image: "/images/korean-drinks.jpg",
-    description: "Traditional unfiltered Korean sparkling rice wine. Sweet, tangy, and served chilled in authentic golden brass bowls.",
-    badge: "21+ Only"
+  { 
+    id: "juice-multi-v", 
+    name: "Multi V", 
+    price: 8.99, 
+    category: "juices", 
+    description: "Carrot, Apple, Beets, Papaya, Pineapple, Mixed Berries, Celery, Broccoli, Ginger. Complete vitamin surge.", 
+    isPopular: true, 
+    badge: "Bestseller #1",
+    image: "/images/cold-pressed-juices.jpg"
   },
-  {
-    id: "drink-beer",
-    name: "Korean Beer (Cass / Terra / Hite)",
-    koreanName: "맥주",
-    price: 8.99,
-    category: "drinks",
-    image: "/images/korean-drinks.jpg",
-    description: "Ice-cold, ultra-crisp Korean lager bottle. The ultimate companion to sizzling meat.",
-    badge: "21+ Only"
+  { 
+    id: "juice-acai", 
+    name: "Acai Berry Blend", 
+    price: 9.99, 
+    category: "juices", 
+    description: "Acai Berries, Mixed Berries, and Pineapple. Pure antioxidant superfood blend.", 
+    isPopular: true, 
+    badge: "Superfood",
+    image: "/images/cold-pressed-juices.jpg"
   },
-  {
-    id: "drink-soft",
-    name: "Soft Drink / Korean Soda",
-    koreanName: "음료수",
-    price: 2.50,
-    category: "drinks",
-    image: "/images/korean-drinks.jpg",
-    description: "Choice of Coca-Cola, Diet Coke, Sprite, or Korean specialty beverages (Milkis, Sac Sac Orange)."
-  }
+  { 
+    id: "juice-green", 
+    name: "Green Juice", 
+    price: 8.99, 
+    category: "juices", 
+    description: "Spinach, Kale, Parsley, Celery, Watercress, Cucumber and Broccoli. 100% alkalizing green vitalizer.",
+    badge: "Pure Green",
+    image: "/images/cold-pressed-juices.jpg"
+  },
+  { 
+    id: "juice-protein-shake", 
+    name: "Protein Shake", 
+    price: 10.99, 
+    category: "juices", 
+    description: "Banana, Plant Protein Powder, Almond Milk, Cinnamon and Sea Moss. High-protein recovery fuel.", 
+    isPopular: true, 
+    badge: "High Protein",
+    image: "/images/sea-moss-smoothie.jpg"
+  },
+  { 
+    id: "juice-red-lion", 
+    name: "The Red Lion", 
+    price: 8.99, 
+    category: "juices", 
+    description: "Beet, Mixed Berries, and Apple. Powerful blood-building and endurance blend.", 
+    badge: "Blood Builder",
+    image: "/images/cold-pressed-juices.jpg"
+  },
+  { 
+    id: "juice-wheatgrass", 
+    name: "Wheatgrass Shot", 
+    price: 5.99, 
+    category: "juices", 
+    description: "Pure raw Wheatgrass shot. Detoxifying, alkalizing, and instant energy surge.", 
+    badge: "Detox Shot",
+    image: "/images/cold-pressed-juices.jpg"
+  },
+  { 
+    id: "juice-brain-booster", 
+    name: "Brain Booster", 
+    price: 8.99, 
+    category: "juices", 
+    description: "Spinach, Celery, Carrot and Lemon. Sharpen your focus and mental clarity naturally.",
+    badge: "Focus Blend",
+    image: "/images/cold-pressed-juices.jpg"
+  },
+  { 
+    id: "juice-hangover", 
+    name: "Hangover Cure", 
+    price: 7.99, 
+    category: "juices", 
+    description: "Watermelon, Ginger, Orange, Cucumber. Fast deep cellular rehydration and electrolyte replenishment.",
+    badge: "Electrolytes",
+    image: "/images/cold-pressed-juices.jpg"
+  },
+  { 
+    id: "juice-skin-moisture", 
+    name: "Skin Moisture", 
+    price: 8.99, 
+    category: "juices", 
+    description: "Apple, Pineapple, Ginger, and Aloe. Hydrate and glow from the inside out.", 
+    badge: "Glow Up",
+    image: "/images/cold-pressed-juices.jpg"
+  },
+  { 
+    id: "juice-stress", 
+    name: "Stress Reliever", 
+    price: 7.99, 
+    category: "juices", 
+    description: "Strawberry, Banana, Almond Milk, and Chamomile extract. Calming and soothing nourishment.",
+    badge: "Relaxation",
+    image: "/images/cold-pressed-juices.jpg"
+  },
+  { 
+    id: "juice-depression", 
+    name: "Depression Cure", 
+    price: 7.99, 
+    category: "juices", 
+    description: "Carrot, Beet, Apple, Spinach. Mood-lifting and dopamine-supporting natural blend.",
+    badge: "Mood Lift",
+    image: "/images/cold-pressed-juices.jpg"
+  },
+  { 
+    id: "juice-diabetes", 
+    name: "Diabetes Control", 
+    price: 7.99, 
+    category: "juices", 
+    description: "Watercress, Celery, Parsley, Aloe, and Cucumber. Low glycemic, insulin-sensitizing greens.",
+    badge: "Low Glycemic",
+    image: "/images/cold-pressed-juices.jpg"
+  },
+  { 
+    id: "juice-kidney", 
+    name: "Kidney Cleanser", 
+    price: 7.99, 
+    category: "juices", 
+    description: "Carrot, Beet, and Celery. Traditional cleansing tonic for kidneys and lymphatic flow.",
+    badge: "Detox Cleanser",
+    image: "/images/cold-pressed-juices.jpg"
+  },
+
+  // SIGNATURE BLENDS
+  { 
+    id: "blend-ital-jockey", 
+    name: "Ital Jockey", 
+    price: 12.99, 
+    category: "blends", 
+    description: "Wildcrafted Sea Moss, Rolled Oats, Raw Almonds, Banana, Almond Milk, Plant Protein, Ginseng, and Island Nutmeg. The legendary Veggie Castle signature power blend.", 
+    isPopular: true, 
+    badge: "Original Signature",
+    image: "/images/sea-moss-smoothie.jpg"
+  },
+  { 
+    id: "blend-fruit-moss", 
+    name: "Fruit Moss", 
+    price: 11.99, 
+    category: "blends", 
+    description: "Wildcrafted Sea Moss, Mango, Banana, Mixed Berries, Pineapple, and Papaya. Tropical island vitamin explosion.", 
+    isPopular: true, 
+    badge: "Tropical Sea Moss",
+    image: "/images/sea-moss-smoothie.jpg"
+  },
+  { 
+    id: "blend-carrot-moss", 
+    name: "Carrot Moss", 
+    price: 11.99, 
+    category: "blends", 
+    description: "Fresh Carrot Juice, Sea Moss, Rolled Oats, Almonds, Banana, Almond Milk, Plant Protein, Ginseng, and Cinnamon.", 
+    badge: "Carrot & Moss",
+    image: "/images/sea-moss-smoothie.jpg"
+  },
+  { 
+    id: "blend-spinach-moss", 
+    name: "Spinach Moss", 
+    price: 11.99, 
+    category: "blends", 
+    description: "Organic Spinach, Wildcrafted Sea Moss, Spirulina, Rolled Oats, Almonds, Banana, Almond Milk, Plant Protein, and Spices.", 
+    badge: "Green Power Moss",
+    image: "/images/sea-moss-smoothie.jpg"
+  },
+  { 
+    id: "blend-the-juliet", 
+    name: "The Juliet", 
+    price: 12.99, 
+    category: "blends", 
+    description: "Strawberry, Banana, Papaya, Pineapple, Almond Milk, Crushed Almonds, and Caribbean Spices. Sweet, velvety, indulgent.", 
+    isPopular: true, 
+    badge: "Sweet & Creamy",
+    image: "/images/sea-moss-smoothie.jpg"
+  },
+  { 
+    id: "blend-sexual-drive", 
+    name: "Sexual Drive", 
+    price: 13.99, 
+    category: "blends", 
+    description: "Melon, Ginger, Banana, Sea Moss, Maca Root, and Yohimbe. The legendary stamina, circulation, and vitality elixir.", 
+    badge: "Vitality Boost",
+    image: "/images/sea-moss-smoothie.jpg"
+  },
 ];

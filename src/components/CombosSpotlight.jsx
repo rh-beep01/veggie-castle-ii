@@ -12,9 +12,9 @@ export default function CombosSpotlight({ onSelectItem }) {
           <span className="badge badge-red">
             <Flame size={14} /> Signature Combinations
           </span>
-          <h2 className="section-title">Best of Both Worlds: Soon Tofu + BBQ Combos</h2>
+          <h2 className="section-title">Best of Both Worlds: Protein Plate + BBQ Combos</h2>
           <p className="section-subtitle">
-            Every combo includes your choice of freshly bubbling Soon Tofu stew, tender BBQ meats or fried yellow croaker, steamed rice, and full seasonal banchan.
+            Every combo includes your choice of freshly bubbling Protein Plate stew, tender BBQ meats or fried yellow croaker, steamed rice, and full seasonal sides.
           </p>
         </div>
 
@@ -46,7 +46,7 @@ export default function CombosSpotlight({ onSelectItem }) {
                 <p className="combo-card-desc">{combo.description}</p>
                 
                 <div className="combo-card-footer">
-                  <span className="combo-includes">Includes Soon Tofu + Meat + Rice + Banchan</span>
+                  <span className="combo-includes">Includes Protein Plate + Meat + Rice + Sides</span>
                   <button 
                     className="btn-primary combo-add-btn"
                     onClick={() => onSelectItem(combo)}

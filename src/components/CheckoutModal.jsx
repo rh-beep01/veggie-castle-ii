@@ -113,7 +113,7 @@ export default function CheckoutModal({ isOpen, onClose, cart, onClearCart }) {
             <div className="order-id-badge">Order #{orderId}</div>
             
             <p className="success-msg">
-              Thank you, <strong>{customerName}</strong>! Your order has been sent directly to the kitchen at <strong>Tofu Chon</strong>.
+              Thank you, <strong>{customerName}</strong>! Your order has been sent directly to the kitchen at <strong>Veggie Castle II</strong>.
             </p>
 
             <div className="pickup-details-card">
@@ -128,7 +128,7 @@ export default function CheckoutModal({ isOpen, onClose, cart, onClearCart }) {
                 <MapPin size={18} className="pickup-icon" />
                 <div>
                   <strong>Pickup Location:</strong>
-                  <span>{RESTAURANT_INFO.address} (Koreatown)</span>
+                  <span>{RESTAURANT_INFO.address} (South Richmond Hill)</span>
                 </div>
               </div>
               <div className="pickup-item">

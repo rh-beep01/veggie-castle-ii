@@ -10,7 +10,7 @@ export default function LocationHoursSection() {
           <span className="badge badge-red">Visit Us</span>
           <h2 className="section-title">Location & Hours</h2>
           <p className="section-subtitle">
-            Located in the heart of Los Angeles Koreatown on West 8th Street. Dine-in, take-out, and curbside parking available.
+            Located at 132-09 Liberty Ave in South Richmond Hill, Queens. Dine-in, take-out, and local delivery available.
           </p>
         </div>
 
@@ -19,7 +19,7 @@ export default function LocationHoursSection() {
           <div className="location-info-card">
             <div className="loc-info-header">
               <span className="loc-korean">{RESTAURANT_INFO.koreanName}</span>
-              <h3>Tofu Chon Koreatown</h3>
+              <h3>Veggie Castle II Queens</h3>
               <p className="loc-address">
                 <MapPin size={18} className="text-red" /> {RESTAURANT_INFO.address}
               </p>
@@ -82,7 +82,7 @@ export default function LocationHoursSection() {
           {/* Interactive Map Visual Card */}
           <div className="map-visual-card">
             <iframe 
-              title="Tofu Chon Location"
+              title="Veggie Castle II Location"
               src="https://maps.google.com/maps?q=3526%20W%208th%20St,%20Los%20Angeles,%20CA%2090005&t=&z=16&ie=UTF8&iwloc=&output=embed"
               className="map-iframe"
               loading="lazy"

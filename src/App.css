@@ -20,7 +20,7 @@
 }
 
 .navbar-top-banner {
-  background: linear-gradient(90deg, #181c26 0%, #1e2433 100%);
+  background: linear-gradient(90deg, #0D1F0E 0%, #112214 100%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   padding: 6px 0;
   font-size: 0.8rem;
@@ -37,9 +37,9 @@
   gap: 10px;
 }
 .banner-pill {
-  background: rgba(230, 57, 70, 0.2);
-  color: #ff858f;
-  border: 1px solid rgba(230, 57, 70, 0.4);
+  background: rgba(27, 107, 47, 0.2);
+  color: #5DD68A;
+  border: 1px solid rgba(27, 107, 47, 0.4);
   font-size: 0.72rem;
   font-weight: 700;
   padding: 2px 8px;
@@ -81,7 +81,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 14px rgba(230, 57, 70, 0.4);
+  box-shadow: 0 4px 14px rgba(27, 107, 47, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
 .seal-korean {
@@ -158,12 +158,12 @@
   border-radius: var(--radius-full);
   font-weight: 700;
   font-size: 0.9rem;
-  box-shadow: 0 4px 16px rgba(230, 57, 70, 0.35);
+  box-shadow: 0 4px 16px rgba(27, 107, 47, 0.35);
   transition: var(--transition-fast);
 }
 .nav-cart-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(230, 57, 70, 0.55);
+  box-shadow: 0 6px 20px rgba(27, 107, 47, 0.55);
 }
 .cart-icon-wrapper {
   position: relative;
@@ -277,7 +277,7 @@
   color: #FFFFFF;
 }
 .hero-title-highlight {
-  background: linear-gradient(135deg, var(--accent-red) 0%, #ff858f 100%);
+  background: linear-gradient(135deg, var(--accent-red) 0%, #5DD68A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -479,7 +479,7 @@
 .category-pill.active {
   background: linear-gradient(135deg, var(--accent-red) 0%, var(--accent-crimson) 100%);
   color: #FFFFFF;
-  box-shadow: 0 4px 12px rgba(230, 57, 70, 0.35);
+  box-shadow: 0 4px 12px rgba(27, 107, 47, 0.35);
 }
 
 .search-input-wrapper {
@@ -507,7 +507,7 @@
 }
 .menu-search-input:focus {
   border-color: var(--accent-red);
-  box-shadow: 0 0 12px rgba(230, 57, 70, 0.25);
+  box-shadow: 0 0 12px rgba(27, 107, 47, 0.25);
 }
 .clear-search-btn {
   position: absolute;
@@ -621,9 +621,9 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(230, 57, 70, 0.15);
+  background: rgba(27, 107, 47, 0.15);
   color: #ff808b;
-  border: 1px solid rgba(230, 57, 70, 0.35);
+  border: 1px solid rgba(27, 107, 47, 0.35);
   padding: 7px 14px;
   border-radius: var(--radius-full);
   font-size: 0.82rem;
@@ -633,7 +633,7 @@
 .item-add-btn:hover {
   background: var(--accent-red);
   color: #FFFFFF;
-  box-shadow: 0 4px 12px rgba(230, 57, 70, 0.4);
+  box-shadow: 0 4px 12px rgba(27, 107, 47, 0.4);
 }
 
 .no-items-placeholder {
@@ -779,9 +779,9 @@
   background: rgba(255, 255, 255, 0.06);
 }
 .spice-option-card.active {
-  background: rgba(230, 57, 70, 0.12);
+  background: rgba(27, 107, 47, 0.12);
   border-color: var(--accent-red);
-  box-shadow: 0 0 14px rgba(230, 57, 70, 0.25);
+  box-shadow: 0 0 14px rgba(27, 107, 47, 0.25);
 }
 .spice-header {
   display: flex;
@@ -1343,7 +1343,7 @@
 .pillar-icon-wrap {
   width: 42px;
   height: 42px;
-  background: rgba(230, 57, 70, 0.15);
+  background: rgba(27, 107, 47, 0.15);
   color: var(--accent-red);
   border-radius: var(--radius-sm);
   display: flex;
@@ -1622,4 +1622,119 @@
     gap: 8px;
     text-align: center;
   }
+}
+
+
+
+/* ======================================================
+   VEGGIE CASTLE II — VEGAN NATURE BACKGROUND SYSTEM
+   ====================================================== */
+
+/* Page-level background: fresh organic wash */
+body {
+  background-image:
+    radial-gradient(ellipse at 0% 0%, rgba(27, 107, 47, 0.03) 0%, transparent 55%),
+    radial-gradient(ellipse at 100% 100%, rgba(200, 155, 44, 0.03) 0%, transparent 55%);
+  background-attachment: fixed;
+}
+
+/* === SECTION BACKGROUNDS === */
+
+/* Featured / Spotlights — clean with subtle green wash */
+#featured {
+  background: linear-gradient(180deg, #F7FBF4 0%, #EEF7EA 100%);
+  position: relative;
+}
+#featured::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 15% 30%, rgba(27, 107, 47, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 85% 70%, rgba(200, 155, 44, 0.05) 0%, transparent 35%);
+  pointer-events: none;
+}
+
+/* Menu section — warm cream with leaf dot texture */
+#menu {
+  background-color: #F2F9EF;
+  background-image:
+    radial-gradient(rgba(27, 107, 47, 0.09) 1.5px, transparent 0),
+    radial-gradient(rgba(200, 155, 44, 0.05) 1px, transparent 0);
+  background-size: 28px 28px, 56px 56px;
+  background-position: 0 0, 14px 14px;
+}
+
+/* Story/Heritage section — dark lush rainforest feel */
+#heritage {
+  background: linear-gradient(135deg, #0A1A0B 0%, #112A12 50%, #0D1F0E 100%);
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(27, 107, 47, 0.4) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(200, 155, 44, 0.12) 0%, transparent 50%);
+  color: #E8F5E3;
+}
+#heritage .text-foreground { color: #E8F5E3; }
+#heritage .text-muted-foreground { color: #9DC49A; }
+#heritage .section-title { color: #E8F5E3; }
+
+/* Location section — earthy, warm terracotta-green blend */
+#location {
+  background: linear-gradient(180deg, #EEF7EA 0%, #F5F8F0 100%);
+  position: relative;
+  overflow: hidden;
+}
+#location::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0; left: 0; height: 120px;
+  background: linear-gradient(to top, rgba(27, 107, 47, 0.04), transparent);
+  pointer-events: none;
+}
+
+/* Juice / Blends section — vibrant tropical feel */
+#menu .hanji-texture {
+  background-color: #EDF7EB;
+}
+
+/* === CARD HOVER ENHANCEMENTS === */
+.menu-card {
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+.menu-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(27, 107, 47, 0.13);
+  border-color: rgba(27, 107, 47, 0.25);
+}
+
+/* === TOP BANNER — deep forest dark green === */
+.navbar-top-banner {
+  background: linear-gradient(90deg, #0A1F0B 0%, #102512 100%) !important;
+  border-bottom: 1px solid rgba(27, 107, 47, 0.25) !important;
+}
+
+/* === NAVBAR scrolled state — dark forest glass === */
+.navbar-header.scrolled {
+  background: rgba(10, 26, 11, 0.96) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* === BANNER PILL — green accent === */
+.banner-pill {
+  background: rgba(27, 107, 47, 0.2) !important;
+  color: #7DDB96 !important;
+  border: 1px solid rgba(27, 107, 47, 0.4) !important;
+}
+
+/* === FLOATING CART GLOW — green pulse === */
+@keyframes pulseGlowGreen {
+  0%, 100% { box-shadow: 0 0 15px rgba(27, 107, 47, 0.4); }
+  50% { box-shadow: 0 0 28px rgba(27, 107, 47, 0.7), 0 0 8px rgba(200, 155, 44, 0.3); }
+}
+.floating-cart-glow {
+  animation: pulseGlowGreen 3s infinite ease-in-out !important;
+}
+
+/* === SPICE LEVEL — repurposed as preparation style chips === */
+.seal-badge {
+  background: linear-gradient(135deg, #1B6B2F 0%, #14401A 100%) !important;
 }

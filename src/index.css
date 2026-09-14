@@ -4,9 +4,9 @@
 @source "../index.html";
 
 @theme inline {
-  --font-sans: "Jua", BlinkMacSystemFont, sans-serif;
-  --font-display: "Do Hyeon", "Playfair Display", Georgia, serif;
-  --font-editorial: "Lora", "Noto Serif KR", Georgia, serif;
+  --font-sans: "Outfit", BlinkMacSystemFont, sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-editorial: "Playfair Display", Georgia, serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -33,23 +33,24 @@
 
 :root {
   --radius: 0.75rem;
-  --background: #FDFBF7;
-  --foreground: #1C1917;
+  /* Rich Caribbean Vegan Botanical Palette */
+  --background: #F5FAF3;
+  --foreground: #102816;
   --card: #FFFFFF;
-  --card-foreground: #1C1917;
+  --card-foreground: #102816;
   --popover: #FFFFFF;
-  --popover-foreground: #1C1917;
-  --primary: #8C1D24;
+  --popover-foreground: #102816;
+  --primary: #156E34;        /* Lush Rainforest Emerald Green */
   --primary-foreground: #FFFFFF;
-  --secondary: #F5EDE2;
-  --secondary-foreground: #4A1015;
-  --muted: #F3ECE2;
-  --muted-foreground: #786E65;
-  --accent: #C88A2C;
-  --accent-foreground: #1C1917;
-  --border: #E8DFD3;
-  --input: #E8DFD3;
-  --ring: #8C1D24;
+  --secondary: #EAF5E9;
+  --secondary-foreground: #102816;
+  --muted: #E2F0E0;
+  --muted-foreground: #4A6E4E;
+  --accent: #D9820B;         /* Golden Sunshine Papaya / Turmeric */
+  --accent-foreground: #FFFFFF;
+  --border: #CFE5CD;
+  --input: #CFE5CD;
+  --ring: #156E34;
 }
 
 @layer base {
@@ -102,7 +103,7 @@
 }
 
 @utility hero-shade { 
-  background: linear-gradient(180deg, rgba(24, 16, 14, 0.0) 0%, rgba(24, 16, 14, 0.15) 70%, rgba(24, 16, 14, 0.35) 100%); 
+  background: linear-gradient(180deg, rgba(8, 22, 11, 0.0) 0%, rgba(8, 22, 11, 0.35) 60%, rgba(8, 22, 11, 0.75) 100%); 
 }
 
 @utility eyebrow { 
@@ -121,39 +122,65 @@
   font-weight: 700; 
 }
 
-/* Korean Dancheong Heritage Ribbon */
-.korean-ribbon {
-  height: 4px;
+/* Botanical Ital ribbon: Vibrant Gold, Lush Green, Warm Coral */
+.vital-ribbon, .korean-ribbon {
+  height: 6px;
   width: 100%;
-  background: linear-gradient(90deg, #8C1D24 0% 33.3%, #C88A2C 33.3% 66.6%, #1E3A8A 66.6% 100%);
+  background: linear-gradient(90deg, #156E34 0% 35%, #D9820B 35% 70%, #E63946 70% 100%);
 }
 
-/* Traditional Korean Lattice Background Pattern (창살 격자 무늬) */
-/* Clean pristine background without noisy dots */
-.korean-lattice-bg {
-  background-color: #FDFBF7;
+/* === ENHANCED VEGAN BOTANICAL BACKGROUNDS === */
+
+/* Base texture: Organic botanical leaf veins & subtle sunlit gradients */
+.vegan-lattice-bg, .korean-lattice-bg {
+  background-color: #F5FAF3;
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(21, 110, 52, 0.06) 0%, transparent 45%),
+    radial-gradient(circle at 85% 75%, rgba(217, 130, 11, 0.05) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(21, 110, 52, 0.03) 0%, transparent 60%);
 }
 
-/* Korean Paper Hanji Subtle Texture */
-.hanji-texture {
-  background-color: #FAF6EF;
-  background-image: radial-gradient(rgba(200, 138, 44, 0.1) 1px, transparent 0);
-  background-size: 16px 16px;
+/* Hero section: deep emerald rainforest night backdrop */
+.vegan-hero-bg {
+  background-color: #07170B;
+  background-image:
+    radial-gradient(ellipse at 15% 45%, rgba(21, 110, 52, 0.35) 0%, transparent 60%),
+    radial-gradient(ellipse at 85% 25%, rgba(217, 130, 11, 0.22) 0%, transparent 55%),
+    radial-gradient(circle at 50% 80%, rgba(16, 40, 22, 0.6) 0%, transparent 70%);
 }
 
-/* Subtle Korean Steam Effect */
-@keyframes steamRise {
-  0% { transform: translateY(0) scaleX(1); opacity: 0; }
-  30% { opacity: 0.7; }
-  60% { transform: translateY(-16px) scaleX(1.15) rotate(2deg); opacity: 0.5; }
-  100% { transform: translateY(-32px) scaleX(1.3) rotate(-2deg); opacity: 0; }
+/* Menu & showcase sections: crisp organic leaf pattern */
+.vegan-section-bg {
+  background-color: #F2F8F0;
+  background-image:
+    radial-gradient(rgba(21, 110, 52, 0.07) 1.5px, transparent 1.5px),
+    radial-gradient(rgba(217, 130, 11, 0.05) 1.5px, transparent 1.5px);
+  background-size: 32px 32px;
+  background-position: 0 0, 16px 16px;
 }
 
-.animate-steam-1 {
-  animation: steamRise 3.2s infinite ease-out;
+/* Botanical leaf SVG overlay utility */
+.botanical-pattern-overlay {
+  background-image: radial-gradient(circle at 2px 2px, rgba(21, 110, 52, 0.08) 1px, transparent 0);
+  background-size: 24px 24px;
 }
-.animate-steam-2 {
-  animation: steamRise 3.8s infinite ease-out 1.2s;
+
+/* Dark section (heritage & story): deep tropical canopy */
+.vegan-dark-bg {
+  background-color: #08190D;
+  background-image:
+    radial-gradient(ellipse at 25% 65%, rgba(21, 110, 52, 0.38) 0%, transparent 60%),
+    radial-gradient(ellipse at 75% 30%, rgba(217, 130, 11, 0.18) 0%, transparent 50%);
+}
+
+/* Organic seed & leaf fiber texture */
+.hanji-texture, .vital-texture {
+  background-color: #EEF7EC;
+  background-image: 
+    radial-gradient(rgba(21, 110, 52, 0.10) 1.5px, transparent 0),
+    radial-gradient(rgba(217, 130, 11, 0.07) 1.2px, transparent 0);
+  background-size: 24px 24px, 48px 48px;
+  background-position: 0 0, 12px 12px;
 }
 
 /* Animations */
@@ -166,43 +193,40 @@
   animation: fadeIn 0.3s ease-out forwards;
 }
 
+@keyframes steamRise {
+  0% { transform: translateY(0) scaleX(1); opacity: 0; }
+  30% { opacity: 0.7; }
+  60% { transform: translateY(-16px) scaleX(1.15) rotate(2deg); opacity: 0.5; }
+  100% { transform: translateY(-32px) scaleX(1.3) rotate(-2deg); opacity: 0; }
+}
+
+.animate-steam-1 { animation: steamRise 3.2s infinite ease-out; }
+.animate-steam-2 { animation: steamRise 3.8s infinite ease-out 1.2s; }
+
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 15px rgba(140, 29, 36, 0.3); }
-  50% { box-shadow: 0 0 25px rgba(140, 29, 36, 0.6); }
+  0%, 100% { box-shadow: 0 0 15px rgba(21, 110, 52, 0.35); }
+  50% { box-shadow: 0 0 28px rgba(21, 110, 52, 0.65); }
 }
 
 .floating-cart-glow {
   animation: pulseGlow 3s infinite ease-in-out;
 }
 
-
-
-/* AUTHENTIC KOREAN-INSPIRED TYPOGRAPHY (Do Hyeon & Jua) */
 :root {
-  --font-korean-title: "Do Hyeon", "Black Han Sans", sans-serif;
-  --font-korean-body: "Jua", "Song Myung", sans-serif;
-  --font-display: "Do Hyeon", "Noto Serif KR", serif;
-  --font-sans: "Jua", sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-sans: "Outfit", sans-serif;
 }
 
 html, body {
-  font-family: "Jua", "Song Myung", sans-serif !important;
-  letter-spacing: 0.02em;
+  font-family: "Outfit", sans-serif !important;
+  letter-spacing: 0.01em;
 }
 
 body, p, span, a, button, input, select, textarea, li, div, label {
-  font-family: "Jua", "Song Myung", sans-serif;
+  font-family: "Outfit", sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6, .font-display, .section-title {
-  font-family: "Do Hyeon", "Noto Serif KR", sans-serif !important;
-  letter-spacing: 0.03em;
-}
-
-.korean-vintage-font {
-  font-family: "Do Hyeon", sans-serif !important;
-}
-
-.korean-body-font {
-  font-family: "Jua", sans-serif !important;
+  font-family: "Playfair Display", Georgia, serif !important;
+  letter-spacing: 0.02em;
 }

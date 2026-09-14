@@ -19,7 +19,7 @@ export default function MenuSection({ onSelectItem }) {
       <div className="container">
         <div className="section-header">
           <span className="badge badge-gold">
-            <Sparkles size={14} /> Authentic Koreatown Menu
+            <Sparkles size={14} /> Authentic South Richmond Hill Menu
           </span>
           <h2 className="section-title">Explore Our Full Menu</h2>
           <p className="section-subtitle">
@@ -46,7 +46,7 @@ export default function MenuSection({ onSelectItem }) {
             <Search size={18} className="search-icon" />
             <input 
               type="text"
-              placeholder="Search dishes (e.g. Galbi, Soon Tofu, Pancake)..."
+              placeholder="Search dishes (e.g. Jerk Vegan Chicken, Protein Plate, Pancake)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="menu-search-input"

@@ -40,52 +40,36 @@ import { RESTAURANT_INFO, SPICE_LEVELS, CATEGORIES, MENU_ITEMS } from './data/me
 // Dynamic Hero Food Slideshow Dataset
 const HERO_SLIDES = [
   {
-    image: '/images/korean-banchan-feast.jpg',
-    badge: 'Royal Korean Feast (궁중 한상차림)',
-    title: 'Grand Banchan & Soon Tofu Banquet',
-    korean: '두부촌 정성 특선 한상차림',
-    desc: 'Bubbling Soon Tofu stew in black earthenware ttukbaegi with charred prime LA Galbi and golden brass banchan.',
-    targetId: 'combo-galbi'
+    image: '/images/vegan-feast-hero.jpg',
+    badge: 'Royal Caribbean Vegan Feast',
+    title: 'Grand Ital Protein Banquet',
+    botanical: '100% Plant-Based ? Island Herbs & Spices',
+    desc: 'Generous platter of tender jerk BBQ jackfruit, golden sweet fried plantains, Jamaican rice and peas, creamy vegan baked mac and cheese, callaloo, and steamed island greens.',
+    targetId: 'protein-large'
   },
   {
-    image: '/images/hero-feast.jpg',
-    badge: 'Koreatown #1 Signature',
-    title: 'Galbi + Soon Tofu Combo',
-    korean: '갈비 + 순두부 콤보 ($32.99)',
-    desc: 'Sweet-savory soy garlic marinated short ribs charred over high flame, paired with your personal bubbling soft tofu stew.',
-    targetId: 'combo-galbi'
+    image: '/images/cold-pressed-juices.jpg',
+    badge: 'Fresh Daily Cold-Pressed Cures',
+    title: 'Signature Raw Juice Bar Cures',
+    botanical: 'Cold Buster ? Multi V ? Pure Green ? Acai Berry',
+    desc: 'Artisan cold-pressed immunity elixirs packed with fresh ginger, turmeric, organic kale, beets, sea moss, and tropical citrus. 100% raw and revitalizing.',
+    targetId: 'juice-multi-v'
   },
   {
-    image: '/images/galbi-sizzling.jpg',
-    badge: 'Flame-Seared Cast Iron',
-    title: 'Sizzling LA Galbi Short Ribs',
-    korean: '지글지글 직화 LA 갈비 ($32.99)',
-    desc: 'Generous platter of premium beef short ribs charred to caramelized perfection with sweet onions and roasted sesame.',
-    targetId: 'special-galbi'
+    image: '/images/oyster-mushroom-burger.jpg',
+    badge: 'Queens Fan Favorite #1',
+    title: 'Crispy Fried Oyster Mushroom Burger',
+    botanical: 'Fried Oyster Mushrooms ? Chipotle Remoulade ? Brioche',
+    desc: 'Oversized crispy golden oyster mushrooms layered with melted vegan cheddar, crisp romaine lettuce, ripe tomato, dill pickles, and dripping house chipotle remoulade with waffle fries.',
+    targetId: 'grill-oyster-mushroom-burger'
   },
   {
-    image: '/images/galbi-jjim.jpg',
-    badge: 'Grand Feast for 2–3 Guests',
-    title: 'Spicy Braised Galbi Jjim',
-    korean: '특선 매운갈비찜 ($79.99)',
-    desc: 'Fall-off-the-bone prime beef short ribs slow-braised in a rich, glossy spicy red chili reduction with tender radish & shiitake.',
-    targetId: 'special-galbi-jjim'
-  },
-  {
-    image: '/images/mix-soon-tofu.jpg',
-    badge: '24-Hour Bone Broth',
-    title: 'Mix Soon Tofu (Beef + Seafood)',
-    korean: '섞어 순두부 ($17.49)',
-    desc: 'Handmade organic silken tofu bubbling vigorously with prime beef, ocean prawns, and whole clams in red pepper broth.',
-    targetId: 'tofu-mix'
-  },
-  {
-    image: '/images/seafood-pancake.jpg',
-    badge: 'Golden Shatteringly Crispy',
-    title: 'Haemul Pajeon Seafood Pancake',
-    korean: '바삭바삭 해물파전 ($26.99)',
-    desc: 'Oversized crispy scallion pancake loaded with ocean calamari and tender sweet prawns, served with seasoned soy-chili dip.',
-    targetId: 'special-seafood-pancake'
+    image: '/images/vegan-curry-plate.jpg',
+    badge: 'Warm Turmeric Island Simmer',
+    title: 'Golden Curry Chickpea & Tofu Plate',
+    botanical: 'Yellow Turmeric Rice ? Sweet Plantains ? Spiced Cabbage',
+    desc: 'Fragrant golden curry simmered with organic tofu cubes, tender chickpeas, and Jamaican pimento, served alongside yellow turmeric rice and caramelized sweet plantains.',
+    targetId: 'protein-medium'
   }
 ];
 
@@ -111,7 +95,7 @@ export default function App() {
   // Cart State with localStorage
   const [cart, setCart] = useState(() => {
     try {
-      const saved = localStorage.getItem('tofu_chon_cart');
+      const saved = localStorage.getItem('veggie_castle_cart');
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -120,7 +104,7 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('tofu_chon_cart', JSON.stringify(cart));
+      localStorage.setItem('veggie_castle_cart', JSON.stringify(cart));
     } catch {
       // ignore
     }
@@ -134,7 +118,7 @@ export default function App() {
 
   // Product Customization Modal State
   const [modalSpice, setModalSpice] = useState('medium');
-  const [modalRice, setModalRice] = useState('Stone Pot Purple Rice (돌솥 흑미밥)');
+  const [modalRice, setModalRice] = useState('Yellow Rice');
   const [modalAddOns, setModalAddOns] = useState([]);
   const [modalInstructions, setModalInstructions] = useState('');
   const [modalQuantity, setModalQuantity] = useState(1);
@@ -156,11 +140,11 @@ export default function App() {
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [customerEmail, setCustomerEmail] = useState('');
-  const [pickupTime, setPickupTime] = useState('ASAP (Ready in 20–25 mins)');
-  const [deliveryTime, setDeliveryTime] = useState('ASAP (Estimated 35–45 mins)');
+  const [pickupTime, setPickupTime] = useState('ASAP (Ready in 15-20 mins)');
+  const [deliveryTime, setDeliveryTime] = useState('ASAP (Estimated 30-45 mins)');
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [deliveryApt, setDeliveryApt] = useState('');
-  const [deliveryZip, setDeliveryZip] = useState('Koreatown (90005)');
+  const [deliveryZip, setDeliveryZip] = useState('Richmond Hill (11419)');
   const [deliveryNotes, setDeliveryNotes] = useState('');
   const [orderNotes, setOrderNotes] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('card');
@@ -173,7 +157,7 @@ export default function App() {
   });
   const [reserveTime, setReserveTime] = useState('6:30 PM');
   const [reserveGuests, setReserveGuests] = useState('2 Guests');
-  const [reserveSeating, setReserveSeating] = useState('Main Dining Room');
+  const [reserveSeating, setReserveSeating] = useState('Indoor Seating');
   const [reserveOccasion, setReserveOccasion] = useState('Casual Dinner');
   const [reserveName, setReserveName] = useState('');
   const [reservePhone, setReservePhone] = useState('');
@@ -195,7 +179,7 @@ export default function App() {
   const subtotal = cart.reduce((sum, i) => sum + i.unitPrice * i.quantity, 0);
   const discountAmount = (subtotal * discountPercent) / 100;
   const taxableAmount = Math.max(0, subtotal - discountAmount);
-  const salesTax = taxableAmount * 0.095; // LA County sales tax 9.5%
+  const salesTax = taxableAmount * 0.08875; // NY sales tax 8.875%
   const deliveryFee = orderType === 'delivery' ? 4.99 : 0;
   const tipAmount = orderType === 'delivery' ? driverTip : 0;
   const grandTotal = taxableAmount + salesTax + deliveryFee + tipAmount;
@@ -210,7 +194,7 @@ export default function App() {
     const matchesSearch = 
       !q || 
       item.name.toLowerCase().includes(q) || 
-      (item.koreanName && item.koreanName.includes(q)) || 
+      (item.badge && item.badge.toLowerCase().includes(q)) || 
       (item.description && item.description.toLowerCase().includes(q));
     return matchesCategory && matchesSearch;
   });
@@ -218,8 +202,8 @@ export default function App() {
   // Open Product Customization Modal
   const openProductModal = (product) => {
     setSelectedProduct(product);
-    setModalSpice(product.hasSpiceLevel ? 'medium' : null);
-    setModalRice('Stone Pot Purple Rice (돌솥 흑미밥)');
+    setModalSpice(product.hasprepStyle ? 'medium' : null);
+    setModalRice('Yellow Rice');
     setModalAddOns([]);
     setModalInstructions('');
     setModalQuantity(1);
@@ -233,18 +217,18 @@ export default function App() {
     const addOnTotal = modalAddOns.reduce((sum, a) => sum + a.price, 0);
     unitPrice += addOnTotal;
 
-    const cartItemId = `${selectedProduct.id}-${modalSpice || 'none'}-${modalRice}-${modalAddOns.map(a => a.name).join('_')}-${Date.now()}`;
+    const cartItemId = `${selectedProduct.id}-${modalSpice || 'none'}-${modalRice}-${modalAddOns.map(a => a.name).join('_')}-${Date.now}`;
 
     const newItem = {
       cartItemId,
       product: selectedProduct,
       name: selectedProduct.name,
-      koreanName: selectedProduct.koreanName,
+      badge: selectedProduct.badge || '100% Vegan',
       unitPrice,
       basePrice: selectedProduct.price,
       quantity: modalQuantity,
       image: selectedProduct.image,
-      spiceLevel: modalSpice,
+      prepStyle: modalSpice,
       riceOption: modalRice,
       addOns: modalAddOns,
       specialInstructions: modalInstructions
@@ -265,8 +249,7 @@ export default function App() {
           }
           return item;
         })
-        .filter(Boolean)
-    );
+        .filter(Boolean));
   };
 
   const removeFromCart = (cartItemId) => {
@@ -275,12 +258,12 @@ export default function App() {
 
   // Apply Promo Code
   const applyPromo = (e) => {
-    e.preventDefault();
+    e.preventDefault;
     const code = promoInput.trim().toUpperCase();
     if (code === 'KOREA10' || code === 'TOFULA10' || code === 'MASSONI10') {
       setDiscountPercent(10);
       setDiscountCode(code);
-      setPromoMsg({ text: '10% Koreatown Community discount applied!', type: 'success' });
+      setPromoMsg({ text: '10% South Richmond Hill Community discount applied!', type: 'success' });
     } else if (code === 'WELCOME') {
       setDiscountPercent(15);
       setDiscountCode(code);
@@ -308,10 +291,10 @@ export default function App() {
 
   // Complete Order
   const handleCompleteOrder = (e) => {
-    e.preventDefault();
+    e.preventDefault;
     if (cart.length === 0) return;
 
-    const orderNumber = `TC-${Math.floor(1000 + Math.random() * 9000)}`;
+    const orderNumber = `TC-${Math.floor(1000 + Math.random * 9000)}`;
     const confirmed = {
       orderNumber,
       date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
@@ -352,8 +335,8 @@ export default function App() {
 
   // Handle Reservation submission
   const handleBookReservation = (e) => {
-    e.preventDefault();
-    const code = `TC-RES-${Math.floor(1000 + Math.random() * 9000)}`;
+    e.preventDefault;
+    const code = `TC-RES-${Math.floor(1000 + Math.random * 9000)}`;
     setConfirmedResCode(code);
     setReserveConfirmed(true);
   };
@@ -371,7 +354,7 @@ export default function App() {
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 text-accent hover:text-white transition-colors group shrink-0"
-            title="Open Tofu Chon in Google Maps / Get Directions"
+            title="Open Veggie Castle II in Google Maps / Get Directions"
           >
             <MapPin className="size-3.5 text-accent group-hover:scale-110 transition-transform shrink-0" />
             <span className="font-semibold underline decoration-accent/50 underline-offset-2 group-hover:decoration-white">
@@ -383,8 +366,8 @@ export default function App() {
           </a>
 
           <p className="hidden md:block text-center text-xs text-[#EADFD3]/90 truncate mx-2">
-            <span className="text-amber-300 font-bold mr-1.5">두부촌 (Tofu Chon)</span>
-            <strong className="text-white">Authentic Korean Soon Tofu &amp; Sizzling Galbi</strong>
+            <span className="text-amber-300 font-bold mr-1.5"> (Veggie Castle II)</span>
+            <strong className="text-white">Queens' Iconic 100% Plant-Based Caribbean Comfort &amp; Cold-Pressed Juices</strong>
           </p>
 
           <div className="flex items-center gap-3 text-xs shrink-0 ml-auto sm:ml-0">
@@ -395,7 +378,7 @@ export default function App() {
             <a
               href={`tel:${RESTAURANT_INFO.phoneRaw}`}
               className="flex items-center gap-1 text-[#EADFD3] hover:text-white font-mono font-semibold transition-colors"
-              title="Direct Call Tofu Chon"
+              title="Direct Call Veggie Castle II"
             >
               <Phone className="size-3 text-accent shrink-0" />
               <span>{RESTAURANT_INFO.phone}</span>
@@ -404,8 +387,8 @@ export default function App() {
         </div>
       </div>
 
-      {/* Korean Dancheong Heritage Ribbon */}
-      <div className="korean-ribbon"></div>
+      {/* Vital Botanical Heritage Ribbon */}
+      <div className="vital-ribbon"></div>
 
       {/* 2. STICKY LUXURY HEADER */}
       <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-md shadow-xs">
@@ -413,20 +396,20 @@ export default function App() {
           
           <a href="#top" className="flex items-center gap-2.5 shrink-0 py-1 group text-decoration-none">
             <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary text-primary-foreground flex flex-col items-center justify-center shadow-xs group-hover:scale-105 transition-transform border border-primary/20">
-              <span className="font-display text-base sm:text-lg font-black leading-none text-amber-200">두</span>
+              <span className="font-display text-base sm:text-lg font-black leading-none text-amber-200"></span>
               <span className="text-[8px] tracking-tighter uppercase font-bold text-white/80">CHON</span>
             </div>
             <div className="flex flex-col">
               <div className="flex items-baseline gap-1.5">
                 <span className="font-display text-lg sm:text-xl lg:text-2xl font-bold tracking-tight text-primary leading-tight">
-                  Tofu Chon
+                  Veggie Castle II
                 </span>
                 <span className="text-xs font-semibold text-accent tracking-normal">
-                  두부촌
+                  
                 </span>
               </div>
               <span className="text-[9px] tracking-widest uppercase font-semibold text-muted-foreground">
-                Soon Tofu &amp; KBBQ • Koreatown LA
+                Plant-Based &amp; Vegan • South Richmond Hill, Queens
               </span>
             </div>
           </a>
@@ -438,8 +421,8 @@ export default function App() {
             <a href="#menu" className="nav-link text-[13px] font-semibold text-foreground/80 hover:text-primary transition-colors py-1">
               Full Menu
             </a>
-            <a href="#banchan-guide" className="nav-link text-[13px] font-semibold text-foreground/80 hover:text-primary transition-colors py-1">
-              Banchan &amp; Spice
+            <a href="#sides-guide" className="nav-link text-[13px] font-semibold text-foreground/80 hover:text-primary transition-colors py-1">
+              Sides &amp; Spice
             </a>
             <a href="#heritage" className="nav-link text-[13px] font-semibold text-foreground/80 hover:text-primary transition-colors py-1">
               Our Story
@@ -474,15 +457,13 @@ export default function App() {
                 {cartItemCount > 0 && (
                   <span className="absolute -top-2.5 -right-2.5 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-white text-[10px] font-black shadow-xs ring-1 ring-white/40">
                     {cartItemCount}
-                  </span>
-                )}
+                  </span>)}
               </div>
               <span className="font-bold text-white text-xs">Cart</span>
               {cartItemCount > 0 && (
                 <span className="font-mono font-bold text-xs pl-1.5 border-l border-white/30 text-amber-200 hidden sm:inline">
                   ${subtotal.toFixed(2)}
-                </span>
-              )}
+                </span>)}
             </button>
 
             <button
@@ -505,14 +486,14 @@ export default function App() {
               <a href="#menu" onClick={() => setMobileNavOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted text-foreground transition-colors">
                 Full Menu &amp; Ordering
               </a>
-              <a href="#banchan-guide" onClick={() => setMobileNavOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted text-foreground transition-colors">
-                Banchan &amp; Spice Guide
+              <a href="#sides-guide" onClick={() => setMobileNavOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted text-foreground transition-colors">
+                Sides &amp; Spice Guide
               </a>
               <a href="#heritage" onClick={() => setMobileNavOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted text-foreground transition-colors">
-                Our Heritage &amp; Ttukbaegi
+                Our Ital Heritage &amp; Story
               </a>
               <a href="#reviews" onClick={() => setMobileNavOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted text-foreground transition-colors">
-                Koreatown Reviews
+                South Richmond Hill Reviews
               </a>
               <a href="#location" onClick={() => setMobileNavOpen(false)} className="px-3 py-2 rounded-lg hover:bg-muted text-foreground transition-colors">
                 Hours &amp; Location Map
@@ -534,8 +515,7 @@ export default function App() {
                 </a>
               </div>
             </div>
-          </div>
-        )}
+          </div>)}
       </header>
 
       {/* 3. HERO SECTION WITH DARK VINTAGE KOREAN RESTAURANT HERITAGE & DYNAMIC FOOD SLIDESHOW */}
@@ -544,21 +524,21 @@ export default function App() {
         {/* Korean Restaurant Interior Background - Bright & Clearly Visible with Subtle Vintage Ambiance */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
           <img
-            src="/images/korean-heritage-hero-bg.jpg"
-            alt="Tofu Chon Authentic Korean Dining Ambiance"
+            src="/images/vegan-hero-bg.jpg"
+            alt="Veggie Castle II Caribbean Vegan Restaurant & Juice Bar Ambiance"
             fetchPriority="high"
             decoding="async"
-            className="w-full h-full object-cover object-left lg:object-center brightness-[0.92] contrast-[1.05] scale-100 transition-all duration-700"
+            className="w-full h-full object-cover object-left lg:object-left brightness-[0.88] contrast-[1.08] transition-all duration-700"
           />
           {/* Reduced vintage effect: Gentle warm tint that lets the Hanok woodwork, lanterns, and brassware shine through */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#120D0B]/75 via-[#120D0B]/40 to-transparent lg:w-[65%] w-full" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#120D0B]/50 via-transparent to-[#120D0B]/75" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#07170B]/85 via-[#07170B]/45 to-transparent lg:w-[60%] w-full" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#07170B]/50 via-transparent to-[#07170B]/80" />
         </div>
 
         {/* Traditional Korean warm paper lantern ambient light glows */}
         <div className="absolute top-10 left-12 w-80 h-80 rounded-full bg-amber-500/20 blur-[100px] pointer-events-none"></div>
         <div className="absolute top-1/3 right-1/4 w-[450px] h-[450px] rounded-full bg-amber-600/15 blur-[120px] pointer-events-none"></div>
-        <div className="absolute bottom-0 left-10 w-96 h-96 rounded-full bg-red-900/15 blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-0 left-10 w-96 h-96 rounded-full bg-emerald-600/15 blur-3xl pointer-events-none"></div>
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
@@ -576,24 +556,24 @@ export default function App() {
                   <Star className="size-3.5 fill-current" />
                 </div>
                 <span className="font-bold text-white">4.8 / 5.0</span>
-                <span className="text-[#EADFD3]/80">• 1,240+ Koreatown Diners</span>
+                <span className="text-[#EADFD3]/80">• 1,240+ South Richmond Hill Diners</span>
                 <span className="hidden sm:inline-block w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                <span className="hidden sm:inline-block text-amber-300 font-bold">3526 W 8th St, LA</span>
+                <span className="hidden sm:inline-block text-amber-300 font-bold">132-09 Liberty Ave, Queens NY</span>
               </div>
 
               {/* Headline with Korean Calligraphic Elegance */}
               <h1 className="section-title text-white tracking-wide mb-3 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] text-3xl sm:text-4xl lg:text-5xl font-black">
-                Authentic <span className="text-amber-400 italic">Silken Soon Tofu</span> &amp; Sizzling LA Galbi
+                Authentic Caribbean <span className="text-amber-400 italic">Plant-Based Living</span> &amp; Cold-Pressed Juices
               </h1>
 
               {/* Korean Sub-Headline */}
               <p className="text-sm sm:text-base font-semibold text-amber-300 tracking-wider mb-4 drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
-                30년 전통 비법 육수와 가마솥 손두부 • 로스앤젤레스 코리아타운 8가 맛집
+                30      •   8 
               </p>
 
               {/* Subtitle */}
               <p className="text-base sm:text-lg text-[#EADFD3] leading-relaxed mb-8 max-w-2xl font-normal drop-shadow-[0_1px_6px_rgba(0,0,0,0.8)]">
-                Served bubbling hot in earthenware ttukbaegi with daily handmade organic silken tofu, 24-hour slow-simmered beef bone broth, flame-kissed prime short ribs, and generous complimentary house banchan.
+                Simmered with love in South Richmond Hill: 100% vegan jerk proteins, slow-cooked Ital greens, seasoned rice & peas, and raw cold-pressed vitality cures.
               </p>
 
               {/* Action Buttons */}
@@ -667,7 +647,7 @@ export default function App() {
                     <Utensils className="size-4" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-white">Free Banchan</p>
+                    <p className="text-xs font-bold text-white">Free Sides</p>
                     <p className="text-[11px] text-[#EADFD3]/70">Full side dishes</p>
                   </div>
                 </div>
@@ -734,7 +714,7 @@ export default function App() {
                             {currentSlide.title}
                           </h3>
                           <p className="text-xs font-bold text-[#8C1D24] mt-0.5 drop-shadow-2xs">
-                            {currentSlide.korean}
+                            {currentSlide.botanical}
                           </p>
                         </div>
 
@@ -751,8 +731,7 @@ export default function App() {
                                   heroSlide === idx ? 'w-4.5 bg-amber-300' : 'w-1.5 bg-white/60 hover:bg-white'
                                 }`}
                                 aria-label={`Go to slide ${idx + 1}`}
-                              />
-                            ))}
+                              />))}
                           </div>
 
                           {/* Direct Order Button */}
@@ -799,10 +778,10 @@ export default function App() {
             <div>
               <p className="eyebrow">Signature Combos &amp; House Favorites</p>
               <h2 className="section-title text-foreground">
-                The Authentic <span className="text-primary italic">K-Town Experience</span>
+                The Authentic <span className="text-primary italic">Caribbean Vegan Feast</span>
               </h2>
               <p className="text-sm sm:text-base text-muted-foreground mt-2 max-w-2xl">
-                Every combo is served with your choice of hot Soon Tofu stew, fresh rice, and an abundant table of seasonal Korean banchan side dishes.
+                Every plate is served with your choice of wholesome plant-based proteins, seasoned rice, and our famous selection of Caribbean Ital sides.
               </p>
             </div>
 
@@ -821,68 +800,61 @@ export default function App() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {featuredItems.map((item) => (
               <div 
                 key={item.id}
-                className="group bg-card rounded-2xl border border-border overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+                className="group bg-card rounded-2xl border border-border overflow-hidden shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col"
               >
-                <div>
-                  <div className="relative h-52 sm:h-56 overflow-hidden bg-muted">
-                    <img 
-                      src={item.image} 
-                      alt={item.name}
-                      className="w-full h-full object-cover group-hover:scale-106 transition-transform duration-500"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent"></div>
-                    
-                    {item.badge && (
-                      <span className="absolute top-3 left-3 bg-primary text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-xs">
-                        {item.badge}
-                      </span>
-                    )}
-
-                    <span className="absolute bottom-3 right-3 bg-white/95 backdrop-blur-xs text-primary font-mono font-bold text-sm px-3 py-1 rounded-full shadow-xs">
-                      ${item.price.toFixed(2)}
+                {/* Image Header with Badge */}
+                <div className="relative h-44 sm:h-48 overflow-hidden bg-muted">
+                  <img 
+                    src={item.image || '/images/vegan-curry-plate.jpg'} 
+                    alt={item.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent"></div>
+                  
+                  {item.badge && (
+                    <span className="absolute top-3 left-3 bg-primary text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-xs">
+                      {item.badge}
                     </span>
-                  </div>
+                  )}
+                </div>
 
-                  <div className="p-5 sm:p-6">
-                    <div className="flex items-baseline justify-between gap-2 mb-1.5">
-                      <h3 className="font-display font-bold text-lg text-foreground group-hover:text-primary transition-colors">
-                        {item.name}
-                      </h3>
-                    </div>
-                    <p className="text-xs font-semibold text-accent mb-2">
-                      {item.koreanName}
-                    </p>
-                    <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
+                {/* Content & Action */}
+                <div className="p-4 sm:p-5 flex flex-col flex-1 justify-between">
+                  <div>
+                    <h3 className="font-display font-bold text-base sm:text-lg text-foreground group-hover:text-primary transition-colors leading-snug">
+                      {item.name}
+                    </h3>
+                    <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed mt-1 mb-3">
                       {item.description}
                     </p>
                   </div>
-                </div>
 
-                <div className="p-5 sm:p-6 pt-0 border-t border-border/50 mt-auto">
-                  <div className="flex items-center justify-between gap-2 pt-4">
-                    {item.hasSpiceLevel && (
-                      <span className="text-[11px] text-muted-foreground flex items-center gap-1 font-medium">
-                        <Flame className="size-3.5 text-primary" /> Customizable spice
+                  {/* Bottom Row: Prominent Price & CTA */}
+                  <div className="pt-3 border-t border-border/60 flex items-center justify-between gap-3">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider leading-none">Price</span>
+                      <span className="font-mono font-extrabold text-xl text-primary mt-1">
+                        ${item.price.toFixed(2)}
                       </span>
-                    )}
+                    </div>
+
                     <Button
                       variant="default"
                       size="sm"
                       onClick={() => openProductModal(item)}
-                      className="rounded-full ml-auto text-xs font-semibold shadow-xs"
+                      className="rounded-full px-4 h-9 text-xs font-semibold shadow-xs"
                     >
                       <Plus className="size-3.5 mr-1" /> Add to Order
                     </Button>
                   </div>
                 </div>
 
-              </div>
-            ))}
+              </div>))}
           </div>
 
         </div>
@@ -898,7 +870,7 @@ export default function App() {
               Order Online for <span className="text-primary italic">Pickup &amp; Delivery</span>
             </h2>
             <p className="text-sm sm:text-base text-muted-foreground mt-2">
-              Direct from our kitchen to your table with zero third-party markups. Select any dish to customize spice levels and side options.
+              Direct from our kitchen to your table with zero third-party markups. Select any dish to customize preparation styles and side options.
             </p>
           </div>
 
@@ -926,8 +898,7 @@ export default function App() {
                     <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-border text-muted-foreground'}`}>
                       {count}
                     </span>
-                  </button>
-                );
+                  </button>);
               })}
             </div>
 
@@ -937,7 +908,7 @@ export default function App() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search Soon Tofu, Galbi..."
+                placeholder="Search Jerk, Oyster Mushroom, Juice, Burger..."
                 className="w-full pl-9 pr-8 py-2 text-xs rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
               />
               {searchQuery && (
@@ -947,8 +918,7 @@ export default function App() {
                   className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
                 >
                   <X className="size-3.5" />
-                </button>
-              )}
+                </button>)}
             </div>
 
           </div>
@@ -963,13 +933,12 @@ export default function App() {
               >
                 Clear search
               </button>
-            </div>
-          )}
+            </div>)}
 
           {filteredMenu.length === 0 ? (
             <div className="text-center py-16 bg-card rounded-2xl border border-border p-8">
               <p className="font-display text-lg font-bold text-foreground">No dishes match your search</p>
-              <p className="text-xs text-muted-foreground mt-1">Try searching for "galbi", "seafood", or "tofu".</p>
+              <p className="text-xs text-muted-foreground mt-1">Try searching for "jerk", "mushroom", "juice", or "burger".</p>
               <Button
                 variant="outline"
                 size="sm"
@@ -978,8 +947,7 @@ export default function App() {
               >
                 Reset Filters
               </Button>
-            </div>
-          ) : (
+            </div>) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredMenu.map((item) => (
                 <div
@@ -990,16 +958,15 @@ export default function App() {
                   <div className="flex gap-4">
                     <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-muted shrink-0 relative border border-border/60">
                       <img
-                        src={item.image}
+                        src={item.image || '/images/vegan-curry-plate.jpg'}
                         alt={item.name}
                         className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-300"
                         loading="lazy"
                       />
-                      {item.hasSpiceLevel && (
+                      {item.hasprepStyle && (
                         <span className="absolute bottom-1 right-1 bg-black/60 text-amber-300 p-1 rounded-md backdrop-blur-xs">
                           <Flame className="size-3" />
-                        </span>
-                      )}
+                        </span>)}
                     </div>
 
                     <div className="flex-1 min-w-0 flex flex-col justify-between">
@@ -1010,7 +977,7 @@ export default function App() {
                           </h4>
                         </div>
                         <p className="text-xs font-semibold text-accent mb-1.5">
-                          {item.koreanName}
+                          <span className="text-emerald-700 font-medium">{item.badge || "100% Plant-Based"}</span>
                         </p>
                         <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
                           {item.description}
@@ -1025,7 +992,7 @@ export default function App() {
                           variant="secondary"
                           size="sm"
                           onClick={(e) => {
-                            e.stopPropagation();
+                            e.stopPropagation;
                             openProductModal(item);
                           }}
                           className="h-7 px-3 text-xs font-bold rounded-lg group-hover:bg-primary group-hover:text-white transition-colors"
@@ -1035,37 +1002,35 @@ export default function App() {
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
+                </div>))}
+            </div>)}
 
         </div>
       </section>
 
-      {/* 6. BANCHAN & SPICE LEVEL CULTURAL GUIDE */}
-      <section id="banchan-guide" className="py-16 sm:py-20 bg-secondary/30 border-b border-border">
+      {/* 6. CARIBBEAN SIDES & SPICE GUIDE */}
+      <section id="sides-guide" className="py-16 sm:py-20 bg-secondary/40 border-b border-border">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             
             <div className="lg:col-span-6">
-              <p className="eyebrow">Custom Heat Customization</p>
+              <p className="eyebrow">Scotch Bonnet &amp; Island Herbs</p>
               <h2 className="section-title text-foreground mb-4">
                 Choose Your <span className="text-primary italic">Spice Harmony</span>
               </h2>
               <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
-                Our Soon Tofu broth is crafted through 24-hour slow simmering with aromatics and roasted Korean red pepper oil (Gochutgaru). Choose your personal heat tier:
+                Our Caribbean vegan entrees are slow-simmered with Scotch Bonnet peppers, Jamaican pimento, fresh thyme, scallions, and coconut milk. Customize your preferred heat tier:
               </p>
 
               <div className="space-y-3">
                 {SPICE_LEVELS.map((spice) => (
                   <div 
                     key={spice.id}
-                    className="flex items-start gap-3.5 p-3.5 rounded-xl bg-card border border-border shadow-2xs"
+                    className="flex items-start gap-3.5 p-4 rounded-xl bg-card border border-border shadow-2xs hover:border-primary/40 transition-colors"
                   >
                     <div 
-                      className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5 text-white font-bold text-xs"
+                      className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 mt-0.5 text-white font-bold text-xs shadow-xs"
                       style={{ backgroundColor: spice.color }}
                     >
                       <Flame className="size-4" />
@@ -1074,56 +1039,67 @@ export default function App() {
                       <h4 className="text-sm font-bold text-foreground">
                         {spice.name}
                       </h4>
-                      <p className="text-xs text-muted-foreground mt-0.5">
+                      <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
                         {spice.desc}
                       </p>
                     </div>
-                  </div>
-                ))}
+                  </div>))}
               </div>
             </div>
 
             <div className="lg:col-span-6 bg-card rounded-2xl border border-border p-6 sm:p-8 shadow-xs">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-xs font-bold text-accent uppercase tracking-wider">Complimentary Hospitality</span>
+              <div className="relative h-48 rounded-xl overflow-hidden mb-6 border border-border">
+                <img 
+                  src="/images/vegan-curry-plate.jpg" 
+                  alt="Veggie Castle II Caribbean Sides Platter" 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent"></div>
+                <span className="absolute bottom-3 left-3 bg-primary text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-xs">
+                  23 Fresh Daily Sides
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-xs font-bold text-accent uppercase tracking-wider">Ital Vitality</span>
               </div>
               <h3 className="font-display font-bold text-2xl text-foreground mb-2">
-                Generous House Banchan (반찬)
+                Nourishing Island Sides
               </h3>
-              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-6">
-                In authentic Korean dining, side dishes are the heart of the meal. At Tofu Chon, every dine-in and takeout order includes our freshly prepared banchan:
+              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-5">
+                In Caribbean Ital cooking, sides are the soul of the plate. At Veggie Castle II, choose from 23 freshly prepared vegan sides made from whole ingredients:
               </p>
 
-              <div className="grid grid-cols-2 gap-3.5 text-xs font-medium">
+              <div className="grid grid-cols-2 gap-3 text-xs font-medium">
                 <div className="flex items-center gap-2 p-2.5 rounded-lg bg-muted/60">
-                  <span className="w-2 h-2 rounded-full bg-primary"></span>
-                  <span>Artisanal Kimchi (김치)</span>
+                  <span className="w-2 h-2 rounded-full bg-primary shrink-0"></span>
+                  <span>Jamaican Rice &amp; Peas</span>
                 </div>
                 <div className="flex items-center gap-2 p-2.5 rounded-lg bg-muted/60">
-                  <span className="w-2 h-2 rounded-full bg-accent"></span>
-                  <span>Seasoned Bean Sprouts (콩나물)</span>
+                  <span className="w-2 h-2 rounded-full bg-accent shrink-0"></span>
+                  <span>Golden Sweet Plantains</span>
                 </div>
                 <div className="flex items-center gap-2 p-2.5 rounded-lg bg-muted/60">
-                  <span className="w-2 h-2 rounded-full bg-primary"></span>
-                  <span>Pickled Radish (단무지)</span>
+                  <span className="w-2 h-2 rounded-full bg-primary shrink-0"></span>
+                  <span>Creamy Vegan Mac &amp; Cheese</span>
                 </div>
                 <div className="flex items-center gap-2 p-2.5 rounded-lg bg-muted/60">
-                  <span className="w-2 h-2 rounded-full bg-accent"></span>
-                  <span>Braised Soy Potatoes (감자조림)</span>
+                  <span className="w-2 h-2 rounded-full bg-accent shrink-0"></span>
+                  <span>Steamed Island Callaloo</span>
                 </div>
                 <div className="flex items-center gap-2 p-2.5 rounded-lg bg-muted/60">
-                  <span className="w-2 h-2 rounded-full bg-primary"></span>
-                  <span>Savory Fish Cakes (어묵볶음)</span>
+                  <span className="w-2 h-2 rounded-full bg-primary shrink-0"></span>
+                  <span>Slow-Cooked Collard Greens</span>
                 </div>
                 <div className="flex items-center gap-2 p-2.5 rounded-lg bg-muted/60">
-                  <span className="w-2 h-2 rounded-full bg-accent"></span>
-                  <span>Raw Farm Egg for Ttukbaegi (달걀)</span>
+                  <span className="w-2 h-2 rounded-full bg-accent shrink-0"></span>
+                  <span>Vegan Rasta Pasta</span>
                 </div>
               </div>
 
-              <div className="mt-6 p-3 rounded-xl bg-accent/10 border border-accent/30 text-xs text-foreground flex items-center gap-2">
-                <Info className="size-4 text-accent shrink-0" />
-                <span>Tip: Crack the fresh raw egg into your boiling stone pot the moment it arrives!</span>
+              <div className="mt-5 p-3 rounded-xl bg-primary/10 border border-primary/20 text-xs text-foreground flex items-center gap-2">
+                <Info className="size-4 text-primary shrink-0" />
+                <span>Every protein plate includes 2 to 3 freshly cooked sides of your choice!</span>
               </div>
             </div>
 
@@ -1132,7 +1108,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 7. OUR HERITAGE & TTUKBAEGI STORY */}
+      {/* 7. OUR HERITAGE & ITAL STORY */}
       <section id="heritage" className="py-16 sm:py-24 border-b border-border relative overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           
@@ -1141,34 +1117,34 @@ export default function App() {
             <div className="lg:col-span-6 order-2 lg:order-1">
               <div className="relative rounded-2xl overflow-hidden border-2 border-border shadow-xl">
                 <img
-                  src="/images/galbi-sizzling.png"
-                  alt="Tofu Chon Koreatown LA Heritage Flame Charred Galbi"
+                  src="/images/vegan-feast-hero.jpg"
+                  alt="Veggie Castle II Authentic Caribbean Vegan Feast"
                   className="w-full h-80 sm:h-96 object-cover"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent"></div>
                 <div className="absolute bottom-6 left-6 right-6 text-white">
-                  <span className="text-xs font-bold text-amber-300 uppercase tracking-wider">Koreatown Tradition</span>
-                  <h4 className="font-display font-bold text-xl sm:text-2xl mt-1">Simmered in Earthenware (뚝배기)</h4>
-                  <p className="text-xs text-white/80 mt-1">Retaining intense heat from the first spoonful to the very last drop.</p>
+                  <span className="text-xs font-bold text-amber-300 uppercase tracking-wider">South Richmond Hill Tradition</span>
+                  <h4 className="font-display font-bold text-xl sm:text-2xl mt-1">100% Plant-Based Ital Living</h4>
+                  <p className="text-xs text-white/80 mt-1">Honest Caribbean comfort food cooked fresh with natural herbs and pure love.</p>
                 </div>
               </div>
             </div>
 
             <div className="lg:col-span-6 order-1 lg:order-2">
-              <p className="eyebrow">The Tofu Chon Heritage</p>
+              <p className="eyebrow">The Veggie Castle II Heritage</p>
               <h2 className="section-title text-foreground mb-6">
-                Soul Food of <span className="text-primary italic">Koreatown, Los Angeles</span>
+                Soul Food of <span className="text-primary italic">South Richmond Hill, Queens</span>
               </h2>
 
               <div className="space-y-4 text-muted-foreground text-sm sm:text-base leading-relaxed">
                 <p>
-                  Located on 8th Street in the vibrant heart of Los Angeles Koreatown, <strong className="text-foreground">Tofu Chon (두부촌)</strong> has spent decades honoring the time-tested craft of Korean comfort cooking.
+                  Located at 132-09 Liberty Ave in the vibrant heart of South Richmond Hill, Queens, <strong className="text-foreground">Veggie Castle II</strong> has been a cherished neighborhood haven celebrating the vitality of authentic Caribbean vegan cooking.
                 </p>
                 <p>
-                  Our soft tofu is made fresh daily to ensure that delicate, custard-like texture that melts on your palate. Paired with our 24-hour slow-cooked beef bone broth and simmered inside genuine Korean earthenware bowls (<em className="text-foreground">ttukbaegi</em>), every serving arrives at your table boiling vigorously.
+                  Our kitchen is rooted in the rich traditions of Ital living ? seasoning every pot with fresh Scotch Bonnet peppers, island thyme, pimento, scallions, garlic, and rich coconut milk. From whole organic jackfruit and savory seitan to slow-braised collards, everything is made 100% plant-based from scratch daily.
                 </p>
                 <p>
-                  Together with our sizzling sweet-savory flame-grilled LA Galbi short ribs, we invite you to experience the warmth, generosity, and authentic flavors of Seoul right here in Southern California.
+                  Paired with our famous raw cold-pressed juice cures, sea moss elixirs, and crispy Oyster Mushroom burgers, we invite you to taste the energy, healing, and deep warmth of real Caribbean comfort right here in Queens.
                 </p>
               </div>
 
@@ -1196,7 +1172,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 8. KOREATOWN REVIEWS & TESTIMONIALS */}
+      {/* 8. South Richmond Hill REVIEWS & TESTIMONIALS */}
       <section id="reviews" className="py-16 sm:py-20 bg-secondary/30 border-b border-border">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           
@@ -1206,7 +1182,7 @@ export default function App() {
               Loved by <span className="text-primary italic">Local Diners</span>
             </h2>
             <p className="text-sm text-muted-foreground mt-2">
-              Read what Los Angeles Koreatown food enthusiasts have to say about our stews and sizzling BBQ.
+              Read what Queens and NYC plant-based enthusiasts have to say about our vegan plates, burgers, and juices.
             </p>
           </div>
 
@@ -1216,11 +1192,10 @@ export default function App() {
               <div>
                 <div className="flex text-amber-500 mb-3">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="size-4 fill-current" />
-                  ))}
+                    <Star key={i} className="size-4 fill-current" />))}
                 </div>
                 <p className="text-xs sm:text-sm text-foreground italic leading-relaxed mb-4">
-                  "Hands down the best Galbi + Soon Tofu combo in Koreatown. The broth is deeply rich and savory without being salty, and the short ribs have that perfect smoky flame-kissed char. The banchan refills are prompt and generous."
+                  "Hands down the best Caribbean vegan food in all of NYC! The Jerk Jackfruit and Vegan Mac & Cheese with sweet plantains is pure perfection. Fresh, deeply seasoned, and massive portions."
                 </p>
               </div>
               <div className="pt-4 border-t border-border flex items-center gap-3">
@@ -1229,7 +1204,7 @@ export default function App() {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-foreground">Jennifer K.</p>
-                  <p className="text-[10px] text-muted-foreground">Koreatown Resident • Yelp Elite</p>
+                  <p className="text-[10px] text-muted-foreground">South Richmond Hill Resident • Yelp Elite</p>
                 </div>
               </div>
             </div>
@@ -1238,11 +1213,10 @@ export default function App() {
               <div>
                 <div className="flex text-amber-500 mb-3">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="size-4 fill-current" />
-                  ))}
+                    <Star key={i} className="size-4 fill-current" />))}
                 </div>
                 <p className="text-xs sm:text-sm text-foreground italic leading-relaxed mb-4">
-                  "I drive 45 minutes from the Valley just for the Spicy Galbi Jjim and the Mix Soon Tofu. The broth stays piping hot the entire time thanks to the earthenware bowls. Ordering direct online was seamless and ready on arrival."
+                  "I take the train out to Liberty Ave just for the Oyster Mushroom Burger and the Cold Buster juice. The crunch on the burger is unreal and the remoulade sauce is incredible. Ordering direct online is so easy!"
                 </p>
               </div>
               <div className="pt-4 border-t border-border flex items-center gap-3">
@@ -1260,11 +1234,10 @@ export default function App() {
               <div>
                 <div className="flex text-amber-500 mb-3">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="size-4 fill-current" />
-                  ))}
+                    <Star key={i} className="size-4 fill-current" />))}
                 </div>
                 <p className="text-xs sm:text-sm text-foreground italic leading-relaxed mb-4">
-                  "The yellow croaker combo is legendary! Super crispy skin, tender moist meat, and the kimchi soon tofu has that authentic Seoul tanginess. You can tell they've been perfecting their recipes for decades."
+                  "The large protein platter with Curry Chickpeas, Callaloo, and Jamaican Rice & Peas is my weekly staple. 100% plant-based comfort food that actually leaves you feeling energized and good."
                 </p>
               </div>
               <div className="pt-4 border-t border-border flex items-center gap-3">
@@ -1293,10 +1266,10 @@ export default function App() {
               <div>
                 <p className="eyebrow">Visit &amp; Dine</p>
                 <h2 className="font-display font-bold text-2xl sm:text-3xl text-foreground mb-4">
-                  Tofu Chon (두부촌)
+                  Veggie Castle II 
                 </h2>
                 <p className="text-xs sm:text-sm text-muted-foreground mb-6 leading-relaxed">
-                  Conveniently situated in Koreatown on 8th Street with <strong className="text-foreground">free dedicated customer parking</strong> in the rear lot.
+                  Conveniently situated at 132-09 Liberty Ave in South Richmond Hill, Queens with <strong className="text-foreground">curbside pickup and delivery</strong> available daily.
                 </p>
 
                 <div className="space-y-4 text-xs sm:text-sm">
@@ -1315,8 +1288,7 @@ export default function App() {
                       {RESTAURANT_INFO.hours.map((h, i) => (
                         <p key={i} className="text-muted-foreground">
                           {h.days}: <span className="text-foreground font-medium">{h.time}</span>
-                        </p>
-                      ))}
+                        </p>))}
                     </div>
                   </div>
 
@@ -1355,8 +1327,8 @@ export default function App() {
             <div className="lg:col-span-7 bg-card rounded-2xl border border-border overflow-hidden shadow-xs flex flex-col">
               <div className="relative w-full h-72 sm:h-96 bg-muted">
                 <iframe
-                  title="Tofu Chon Koreatown Location Map"
-                  src="https://maps.google.com/maps?q=3526+W+8th+St,+Los+Angeles,+CA+90005&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                  title="Veggie Castle II South Richmond Hill Location Map"
+                  src="https://maps.google.com/maps?q=Veggie+Castle+II+132-09+Liberty+Ave,+South+Richmond+Hill,+NY+11419&t=&z=16&ie=UTF8&iwloc=&output=embed"
                   className="w-full h-full border-0"
                   loading="lazy"
                   allowFullScreen
@@ -1368,7 +1340,7 @@ export default function App() {
                 <div className="text-left w-full sm:w-auto">
                   <p className="text-xs font-bold text-foreground flex items-center gap-1.5">
                     <MapPin className="size-3.5 text-primary shrink-0" />
-                    <span>3526 W 8th St, Los Angeles, CA 90005</span>
+                    <span>132-09 Liberty Ave, South Richmond Hill, NY 11419</span>
                   </p>
                   <p className="text-[11px] text-muted-foreground mt-0.5">
                     Free parking in rear lot • Between S Hobart Blvd &amp; S Harvard Blvd
@@ -1414,13 +1386,13 @@ export default function App() {
             <div>
               <div className="flex items-center gap-2.5 mb-3">
                 <div className="w-9 h-9 rounded-xl bg-primary text-amber-200 flex items-center justify-center font-display font-bold text-base">
-                  두
+                  
                 </div>
-                <span className="font-display text-xl font-bold text-white tracking-tight">Tofu Chon</span>
-                <span className="text-xs text-accent">두부촌</span>
+                <span className="font-display text-xl font-bold text-white tracking-tight">Veggie Castle II</span>
+                <span className="text-xs text-accent"></span>
               </div>
               <p className="text-xs text-[#EADFD3]/70 leading-relaxed mb-4">
-                Authentic Korean Soon Tofu Stews, Sizzling LA Galbi, and Handcrafted Banchan in Koreatown, Los Angeles.
+                100% Vegan Caribbean Comfort Food, Plant-Based Platters & Raw Cold-Pressed Juices in South Richmond Hill, Queens, NY.
               </p>
               <p className="text-xs text-emerald-400 font-mono">
                 0% Third-party Commission When You Order Direct
@@ -1432,9 +1404,9 @@ export default function App() {
               <ul className="space-y-2 text-xs text-[#EADFD3]/80">
                 <li><a href="#featured" className="hover:text-white transition-colors">Signature Combos</a></li>
                 <li><a href="#menu" className="hover:text-white transition-colors">Full Online Menu</a></li>
-                <li><a href="#banchan-guide" className="hover:text-white transition-colors">Banchan &amp; Spice Guide</a></li>
+                <li><a href="#sides-guide" className="hover:text-white transition-colors">Sides &amp; Ital Guide</a></li>
                 <li><a href="#heritage" className="hover:text-white transition-colors">Our Heritage</a></li>
-                <li><a href="#location" className="hover:text-white transition-colors">Location &amp; Free Parking</a></li>
+                <li><a href="#location" className="hover:text-white transition-colors">Location &amp; Directions</a></li>
               </ul>
             </div>
 
@@ -1445,8 +1417,7 @@ export default function App() {
                   <li key={i}>
                     <p className="font-semibold text-white">{h.days}</p>
                     <p className="text-muted-foreground">{h.time}</p>
-                  </li>
-                ))}
+                  </li>))}
               </ul>
             </div>
 
@@ -1462,9 +1433,9 @@ export default function App() {
           </div>
 
           <div className="pt-8 border-t border-[#2C2422] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#EADFD3]/60">
-            <p>© {new Date().getFullYear()} Tofu Chon Korean Restaurant. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} Veggie Castle II. All rights reserved.</p>
             <p className="flex items-center gap-1">
-              <span>Crafted with pride for Los Angeles Koreatown</span>
+              <span>Crafted with pride for South Richmond Hill, Queens NY</span>
             </p>
           </div>
         </div>
@@ -1491,8 +1462,7 @@ export default function App() {
             {cartItemCount > 0 && (
               <span className="absolute -top-2.5 -right-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-white text-[10px] font-black ring-2 ring-white shadow-xs">
                 {cartItemCount}
-              </span>
-            )}
+              </span>)}
           </div>
           <div className="flex flex-col text-left">
             <span className="text-[12px] font-black uppercase tracking-wider text-amber-100 leading-tight">
@@ -1523,14 +1493,14 @@ export default function App() {
             {/* Massoni Cinematic Hero Banner with Korean Culinary Typography */}
             <div className="relative h-56 w-full bg-muted shrink-0 overflow-hidden">
               <img 
-                src={selectedProduct.image} 
+                src={selectedProduct?.image || '/images/vegan-feast-hero.jpg'} 
                 alt={selectedProduct.name} 
                 className="w-full h-full object-cover" 
               />
               <div className="hero-shade absolute inset-0" />
               <div className="absolute bottom-4 left-6 right-6 text-white">
                 <p className="text-xs font-display italic text-amber-300 font-semibold tracking-wide">
-                  {selectedProduct.koreanName || '전통 한식 특선'} • Koreatown Heritage
+                  {selectedProduct.koreanName || '  '} • South Richmond Hill Heritage
                 </p>
                 <h3 className="font-display text-2xl font-bold tracking-tight text-white drop-shadow-sm">
                   {selectedProduct.name}
@@ -1543,11 +1513,11 @@ export default function App() {
                 {selectedProduct.description}
               </p>
 
-              {/* Korean Spice Level Selector */}
-              {selectedProduct.hasSpiceLevel && (
+              {/* Korean preparation style Selector */}
+              {selectedProduct.hasprepStyle && (
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2 flex items-center justify-between">
-                    <span>Select Spice Level (매운맛 선택)</span>
+                    <span>Select preparation style </span>
                     <span className="text-primary font-semibold text-[11px]">* Required</span>
                   </label>
                   <div className="grid grid-cols-2 gap-2">
@@ -1572,24 +1542,22 @@ export default function App() {
                             <span className="truncate">{spice.name.split('(')[0]}</span>
                           </div>
                           {isSelected && <Check className="size-4 text-primary shrink-0" />}
-                        </button>
-                      );
+                        </button>);
                     })}
                   </div>
-                </div>
-              )}
+                </div>)}
 
               {/* Rice Selection */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2 flex items-center justify-between">
-                  <span>Choice of Rice (밥 선택)</span>
+                  <span>Choice of Rice </span>
                   <span className="text-accent font-semibold text-[11px]">Included</span>
                 </label>
                 <div className="grid grid-cols-3 gap-2">
                   {[
-                    'Stone Pot Purple Rice (흑미밥)',
-                    'Steamed White Rice (쌀밥)',
-                    'No Rice (밥 제외)'
+                    'Stone Pot Purple Rice ',
+                    'Steamed White Rice ',
+                    'No Rice '
                   ].map((rice) => {
                     const isSelected = modalRice === rice;
                     return (
@@ -1605,8 +1573,7 @@ export default function App() {
                       >
                         <span className="block text-[11px] leading-tight">{rice.split('(')[0]}</span>
                         <span className="text-[10px] text-muted-foreground">({rice.split('(')[1]}</span>
-                      </button>
-                    );
+                      </button>);
                   })}
                 </div>
               </div>
@@ -1614,14 +1581,14 @@ export default function App() {
               {/* Chef Extras & Add-ons */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
-                  Chef Extras &amp; Add-ons (추가 선택)
+                  Chef Extras &amp; Add-ons 
                 </label>
                 <div className="space-y-1.5">
                   {[
-                    { name: 'Fresh Farm Egg for Ttukbaegi (날달걀 추가)', price: 1.50 },
-                    { name: 'Extra Organic Silken Tofu (순두부 추가)', price: 2.50 },
-                    { name: 'Full House Banchan Refill Box (반찬 포장 세트)', price: 3.50 },
-                    { name: 'Extra Sizzling LA Galbi Rib Piece (갈비 1대 추가)', price: 9.99 }
+                    { name: 'Extra Sweet Fried Plantains (4 pcs)', price: 3.50 },
+                    { name: 'Extra Creamy Vegan Mac & Cheese Side', price: 4.00 },
+                    { name: 'Extra House Jerk BBQ Sauce', price: 1.50 },
+                    { name: 'Fresh Avocado Slices', price: 2.50 }
                   ].map((addon, idx) => {
                     const isChecked = modalAddOns.some(a => a.name === addon.name);
                     return (
@@ -1648,8 +1615,7 @@ export default function App() {
                           <span>{addon.name}</span>
                         </div>
                         <span className="font-bold text-accent">+${addon.price.toFixed(2)}</span>
-                      </button>
-                    );
+                      </button>);
                   })}
                 </div>
               </div>
@@ -1702,8 +1668,7 @@ export default function App() {
             </div>
 
           </div>
-        </div>
-      )}
+        </div>)}
 
       {/* =========================================================================
           --- MODAL 2: SLIDE-OVER CART DRAWER (MASSONI TAKEOUT TRAY) ---
@@ -1767,10 +1732,9 @@ export default function App() {
                         <Clock className="size-3.5 text-accent" /> Ready in: <strong className="text-foreground">20–25 mins</strong>
                       </span>
                       <span className="flex items-center gap-1 text-[11px] font-semibold text-primary">
-                        <MapPin className="size-3" /> 3526 W 8th St (Pickup)
+                        <MapPin className="size-3" /> 132-09 Liberty Ave (Pickup)
                       </span>
-                    </>
-                  ) : (
+                    </>) : (
                     <>
                       <span className="flex items-center gap-1 font-medium">
                         <Clock className="size-3.5 text-accent" /> Estimated: <strong className="text-foreground">35–45 mins</strong>
@@ -1778,8 +1742,7 @@ export default function App() {
                       <span className="flex items-center gap-1 text-[11px] text-emerald-700 font-semibold">
                         <Truck className="size-3" /> To Your Door
                       </span>
-                    </>
-                  )}
+                    </>)}
                 </div>
               </div>
 
@@ -1788,7 +1751,7 @@ export default function App() {
                   <div className="text-center py-16">
                     <ShoppingBag className="size-12 text-muted-foreground/40 mx-auto mb-3" />
                     <p className="font-display font-bold text-base text-foreground">Your tray is empty</p>
-                    <p className="text-xs text-muted-foreground mt-1 mb-4">Add your favorite Soon Tofu combo, galbi, or pajeon.</p>
+                    <p className="text-xs text-muted-foreground mt-1 mb-4">Add your favorite Caribbean vegan plates, burgers, or fresh cold-pressed juices.</p>
                     <Button 
                       onClick={() => {
                         setCartOpen(false);
@@ -1801,18 +1764,17 @@ export default function App() {
                     >
                       Explore Menu
                     </Button>
-                  </div>
-                ) : (
+                  </div>) : (
                   cart.map((item, idx) => (
                     <div key={idx} className="p-3.5 rounded-2xl border border-border bg-background flex gap-3 shadow-2xs">
-                      <img src={item.image} alt={item.name} className="w-16 h-16 rounded-xl object-cover shrink-0 border border-border/60" />
+                      <img src={item.image || '/images/vegan-curry-plate.jpg'} alt={item.name} className="w-16 h-16 rounded-xl object-cover shrink-0 border border-border/60" />
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-start gap-1">
                           <h4 className="font-display font-bold text-xs truncate text-foreground">{item.name}</h4>
                           <span className="font-bold font-mono text-xs text-primary shrink-0">${(item.unitPrice * item.quantity).toFixed(2)}</span>
                         </div>
                         <div className="text-[11px] text-muted-foreground mt-0.5 space-y-0.5">
-                          {item.spiceLevel && <p className="text-primary font-semibold">Spice: {item.spiceLevel.toUpperCase()}</p>}
+                          {item.prepStyle && <p className="text-primary font-semibold">Spice: {item.prepStyle.toUpperCase()}</p>}
                           {item.riceOption && <p>Rice: {item.riceOption}</p>}
                           {item.addOns?.length > 0 && <p className="text-accent font-medium">+{item.addOns.map(a => a.name).join(', ')}</p>}
                           {item.specialInstructions && <p className="italic">Note: "{item.specialInstructions}"</p>}
@@ -1833,9 +1795,7 @@ export default function App() {
                           </button>
                         </div>
                       </div>
-                    </div>
-                  ))
-                )}
+                    </div>)))}
               </div>
 
               {cart.length > 0 && (
@@ -1855,8 +1815,7 @@ export default function App() {
                   {promoMsg.text && (
                     <p className={`text-xs font-semibold ${promoMsg.type === 'success' ? 'text-emerald-600' : 'text-red-500'}`}>
                       {promoMsg.text}
-                    </p>
-                  )}
+                    </p>)}
 
                   <div className="space-y-1 text-xs text-muted-foreground pt-2 border-t border-border">
                     <div className="flex justify-between">
@@ -1867,8 +1826,7 @@ export default function App() {
                       <div className="flex justify-between text-emerald-600 font-semibold">
                         <span>Discount ({discountCode} - {discountPercent}%)</span>
                         <span className="font-mono">-${discountAmount.toFixed(2)}</span>
-                      </div>
-                    )}
+                      </div>)}
                     <div className="flex justify-between">
                       <span>LA County Sales Tax (9.5%)</span>
                       <span className="font-semibold text-foreground font-mono">${salesTax.toFixed(2)}</span>
@@ -1876,17 +1834,15 @@ export default function App() {
                     {orderType === 'delivery' && (
                       <>
                         <div className="flex justify-between">
-                          <span>Delivery Fee (Koreatown Area)</span>
+                          <span>Delivery Fee (South Richmond Hill Area)</span>
                           <span className="font-semibold text-foreground font-mono">${deliveryFee.toFixed(2)}</span>
                         </div>
                         {driverTip > 0 && (
                           <div className="flex justify-between">
                             <span>Driver Tip</span>
                             <span className="font-semibold text-foreground font-mono">${driverTip.toFixed(2)}</span>
-                          </div>
-                        )}
-                      </>
-                    )}
+                          </div>)}
+                      </>)}
                     <div className="flex justify-between text-base font-bold text-foreground pt-1.5 border-t border-border">
                       <span>Total Due</span>
                       <span className="font-display text-primary text-lg font-mono">${grandTotal.toFixed(2)}</span>
@@ -1901,13 +1857,11 @@ export default function App() {
                     <span>Proceed to Checkout</span>
                     <ArrowRight className="size-4 ml-2" />
                   </Button>
-                </div>
-              )}
+                </div>)}
 
             </div>
           </div>
-        </div>
-      )}
+        </div>)}
 
       {/* =========================================================================
           --- MODAL 3: CHECKOUT MODAL WITH KOREAN FEAST BANNER & DRIVER TIP CHIPS ---
@@ -1919,8 +1873,8 @@ export default function App() {
             {/* Top Korean Feast Visual Banner Header */}
             <div className="relative h-44 w-full bg-muted overflow-hidden shrink-0">
               <img 
-                src="/images/korean-banchan-feast.jpg" 
-                alt="Korean Feast Table" 
+                src="/images/vegan-feast-hero.jpg" 
+                alt="Caribbean Vegan Feast Table" 
                 className="w-full h-full object-cover"
               />
               <div className="hero-shade absolute inset-0" />
@@ -1931,12 +1885,11 @@ export default function App() {
                   className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/55 text-white hover:bg-black/80 cursor-pointer transition-colors shadow-md"
                 >
                   <X className="size-5" />
-                </button>
-              )}
+                </button>)}
 
               <div className="absolute bottom-3.5 left-5 right-5 text-white">
                 <span className="text-[11px] font-bold text-amber-300 uppercase tracking-widest block">
-                  두부촌 정성 주문 • Koreatown Direct
+                     • South Richmond Hill Direct
                 </span>
                 <h3 className="font-display text-xl sm:text-2xl font-bold">
                   {checkoutStep === 'confirmed' 
@@ -1947,7 +1900,7 @@ export default function App() {
             </div>
 
             {checkoutStep !== 'confirmed' ? (
-              <form onSubmit={checkoutStep === 'details' ? (e) => { e.preventDefault(); setCheckoutStep('payment'); } : handleCompleteOrder}>
+              <form onSubmit={checkoutStep === 'details' ? (e) => { e.preventDefault; setCheckoutStep('payment'); } : handleCompleteOrder}>
                 
                 {/* 2-Step Navigation Tab Bar */}
                 <div className="flex border-b border-border bg-muted/40 text-xs font-bold">
@@ -2072,7 +2025,7 @@ export default function App() {
                             <MapPin className="size-5 text-primary shrink-0 mt-0.5" />
                             <div>
                               <span className="font-bold text-xs text-foreground block">Pickup Counter &amp; Curbside Bay</span>
-                              <p className="text-xs font-semibold text-primary">3526 W 8th St, Los Angeles, CA 90005</p>
+                              <p className="text-xs font-semibold text-primary">132-09 Liberty Ave, South Richmond Hill, NY 11419</p>
                               <p className="text-[11px] text-muted-foreground mt-0.5">
                                 Designated free parking in rear lot. Come right in or text us and we'll bring it to your car!
                               </p>
@@ -2088,21 +2041,20 @@ export default function App() {
                               onChange={(e) => setPickupTime(e.target.value)}
                               className="w-full p-2.5 rounded-xl border border-input text-xs bg-background focus:border-primary focus:outline-none font-medium"
                             >
-                              <option value="ASAP (Ready in 20–25 mins)">ASAP (Ready in 20–25 mins)</option>
+                              <option value="ASAP (Ready in 15-20 mins)">ASAP (Ready in 15-20 mins)</option>
                               <option value="Today in 35 mins">Today in 35 mins</option>
                               <option value="Today in 50 mins">Today in 50 mins</option>
                               <option value="Today in 1 hour 15 mins">Today in 1 hour 15 mins</option>
                             </select>
                           </div>
-                        </div>
-                      )}
+                        </div>)}
 
                       {/* DELIVERY SPECIFIC SECTION WITH INTERACTIVE TIP CHIPS */}
                       {orderType === 'delivery' && (
                         <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/25 space-y-3">
                           <div className="flex items-center gap-2 text-xs font-bold text-amber-900">
                             <Truck className="size-4 text-amber-700" />
-                            <span>Koreatown Doorstep Delivery Information</span>
+                            <span>South Richmond Hill Doorstep Delivery Information</span>
                           </div>
 
                           <div>
@@ -2139,7 +2091,7 @@ export default function App() {
                           <div className="pt-2 border-t border-amber-500/20">
                             <div className="flex items-center justify-between mb-1.5">
                               <label className="block text-xs font-bold uppercase tracking-wider text-amber-900">
-                                Driver Tip (기사님 팁)
+                                Driver Tip 
                               </label>
                               <span className="text-[11px] font-semibold text-amber-700">
                                 100% directly to your local driver
@@ -2167,8 +2119,7 @@ export default function App() {
                                     }`}
                                   >
                                     {tip.label}
-                                  </button>
-                                );
+                                  </button>);
                               })}
 
                               {/* Custom Tip Chip */}
@@ -2205,8 +2156,7 @@ export default function App() {
                                   className="w-full text-xs font-mono font-bold bg-transparent focus:outline-none"
                                 />
                                 <span className="text-[11px] text-muted-foreground whitespace-nowrap">Custom Tip</span>
-                              </div>
-                            )}
+                              </div>)}
                           </div>
 
                           <div>
@@ -2221,8 +2171,7 @@ export default function App() {
                               className="w-full p-2.5 rounded-xl border border-input text-xs bg-background focus:border-primary focus:outline-none"
                             />
                           </div>
-                        </div>
-                      )}
+                        </div>)}
 
                       {/* General Kitchen Notes */}
                       <div>
@@ -2233,13 +2182,12 @@ export default function App() {
                           type="text"
                           value={orderNotes}
                           onChange={(e) => setOrderNotes(e.target.value)}
-                          placeholder="Extra banchan, chopsticks for 3 people, sauce on side..."
+                          placeholder="Extra Sides, chopsticks for 3 people, sauce on side..."
                           className="w-full p-2.5 rounded-xl border border-input text-xs bg-background focus:border-primary focus:outline-none"
                         />
                       </div>
 
-                    </div>
-                  ) : (
+                    </div>) : (
                     /* STEP 2: PAYMENT & SUBMISSION */
                     <div className="space-y-4">
                       
@@ -2253,8 +2201,7 @@ export default function App() {
                           <div className="flex justify-between text-emerald-600 font-semibold">
                             <span>Promo Discount:</span>
                             <span className="font-mono">-${discountAmount.toFixed(2)}</span>
-                          </div>
-                        )}
+                          </div>)}
                         <div className="flex justify-between text-muted-foreground">
                           <span>Sales Tax (9.5%):</span>
                           <span className="font-mono">${salesTax.toFixed(2)}</span>
@@ -2263,8 +2210,7 @@ export default function App() {
                           <div className="flex justify-between text-muted-foreground">
                             <span>Delivery + Tip (${driverTip.toFixed(2)}):</span>
                             <span className="font-mono">${(deliveryFee + driverTip).toFixed(2)}</span>
-                          </div>
-                        )}
+                          </div>)}
                         <div className="flex justify-between text-sm font-bold text-foreground pt-1.5 border-t border-border">
                           <span>Total to Pay:</span>
                           <span className="font-display text-primary text-base font-mono">${grandTotal.toFixed(2)}</span>
@@ -2315,8 +2261,7 @@ export default function App() {
                             >
                               <Banknote className="size-4 mx-auto mb-1 text-accent" />
                               Cash on Delivery
-                            </button>
-                          ) : (
+                            </button>) : (
                             <button
                               type="button"
                               onClick={() => setPaymentMethod('counter')}
@@ -2328,8 +2273,7 @@ export default function App() {
                             >
                               <MapPin className="size-4 mx-auto mb-1 text-accent" />
                               Pay at Pickup
-                            </button>
-                          )}
+                            </button>)}
                         </div>
                       </div>
 
@@ -2368,11 +2312,9 @@ export default function App() {
                           <p className="text-[11px] text-emerald-700 flex items-center gap-1 pt-1 font-semibold">
                             <ShieldCheck className="size-3.5" /> 256-Bit SSL Encrypted Direct Checkout
                           </p>
-                        </div>
-                      )}
+                        </div>)}
 
-                    </div>
-                  )}
+                    </div>)}
                 </div>
 
                 {/* Modal Footer Controls */}
@@ -2386,8 +2328,7 @@ export default function App() {
                       className="rounded-xl text-xs font-bold"
                     >
                       Back
-                    </Button>
-                  ) : (
+                    </Button>) : (
                     <Button 
                       type="button" 
                       variant="outline" 
@@ -2396,8 +2337,7 @@ export default function App() {
                       className="rounded-xl text-xs font-bold"
                     >
                       Cancel
-                    </Button>
-                  )}
+                    </Button>)}
 
                   {checkoutStep === 'details' ? (
                     <Button 
@@ -2407,8 +2347,7 @@ export default function App() {
                       className="flex-1 font-bold rounded-xl text-xs shadow-sm"
                     >
                       Continue to Payment &rarr;
-                    </Button>
-                  ) : (
+                    </Button>) : (
                     <Button 
                       type="submit" 
                       variant="default" 
@@ -2416,12 +2355,10 @@ export default function App() {
                       className="flex-1 font-bold rounded-xl text-xs shadow-md"
                     >
                       Place Order • ${grandTotal.toFixed(2)}
-                    </Button>
-                  )}
+                    </Button>)}
                 </div>
 
-              </form>
-            ) : (
+              </form>) : (
               /* STEP 3: ORDER CONFIRMED */
               <div className="p-6 text-center space-y-5 animate-fadeIn">
                 <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto shadow-sm">
@@ -2432,12 +2369,12 @@ export default function App() {
                     ORDER ID: {confirmedOrder?.orderNumber}
                   </span>
                   <h3 className="font-display text-2xl font-bold text-foreground">
-                    Gamsahamnida (감사합니다), {confirmedOrder?.customerName}!
+                    Gamsahamnida , {confirmedOrder?.customerName}!
                   </h3>
                   <p className="text-xs text-muted-foreground mt-1 max-w-sm mx-auto">
                     {confirmedOrder?.orderType === 'delivery'
-                      ? 'Your order has been transmitted directly to Tofu Chon\'s kitchen and our driver is preparing for dispatch.'
-                      : 'Your piping hot stews and galbi are now being handcrafted by our chefs for curbside pickup.'}
+                      ? 'Your order has been transmitted directly to Veggie Castle II\'s kitchen and our driver is preparing for dispatch.'
+                      : 'Your piping hot Caribbean vegan feast and fresh cold-pressed juices are now being handcrafted with love for curbside pickup.'}
                   </p>
                 </div>
 
@@ -2459,25 +2396,22 @@ export default function App() {
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Driver Note:</span>
                           <span className="italic text-right max-w-[60%]">"{confirmedOrder.deliveryNotes}"</span>
-                        </div>
-                      )}
+                        </div>)}
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Status Updates:</span>
                         <span>Sent via SMS to {confirmedOrder?.customerPhone}</span>
                       </div>
-                    </>
-                  ) : (
+                    </>) : (
                     <>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Pickup Counter:</span>
-                        <span>3526 W 8th St, Los Angeles, CA 90005</span>
+                        <span>132-09 Liberty Ave, South Richmond Hill, NY 11419</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Curbside Bay:</span>
-                        <span className="text-emerald-700 font-bold">Free Rear Customer Lot • Call (213) 505-9577</span>
+                        <span className="text-emerald-700 font-bold">Free Rear Customer Lot • Call (718) 641-8342</span>
                       </div>
-                    </>
-                  )}
+                    </>)}
 
                   <div className="flex justify-between pt-1 border-t border-border">
                     <span className="text-muted-foreground">Payment Method:</span>
@@ -2516,12 +2450,10 @@ export default function App() {
                     Back to Menu
                   </Button>
                 </div>
-              </div>
-            )}
+              </div>)}
 
           </div>
-        </div>
-      )}
+        </div>)}
 
       {/* =========================================================================
           --- MODAL 4: TABLE RESERVATION MODAL WITH KOREAN DINING ROOM PHOTO BANNER ---
@@ -2533,8 +2465,8 @@ export default function App() {
             {/* Cinematic Korean Dining Room Interior Header Banner */}
             <div className="relative h-48 w-full bg-muted overflow-hidden shrink-0">
               <img 
-                src="/images/korean-dining-interior.jpg" 
-                alt="Tofu Chon Authentic Korean Dining Room Interior" 
+                src="/images/vegan-hero-bg.jpg" 
+                alt="Veggie Castle II Caribbean Vegan Dining Room" 
                 className="w-full h-full object-cover"
               />
               <div className="hero-shade absolute inset-0" />
@@ -2551,10 +2483,10 @@ export default function App() {
 
               <div className="absolute bottom-4 left-6 right-6 text-white">
                 <p className="text-xs font-display italic text-amber-300 font-semibold tracking-wide">
-                  전통 한옥 다이닝 룸 • 3526 W 8th St, Koreatown LA
+                      • 132-09 Liberty Ave, South Richmond Hill, Queens
                 </p>
                 <h3 className="font-display text-2xl font-bold tracking-tight text-white drop-shadow-sm">
-                  Table Reservation (테이블 예약)
+                  Table Reservation 
                 </h3>
               </div>
             </div>
@@ -2616,9 +2548,9 @@ export default function App() {
                       onChange={(e) => setReserveSeating(e.target.value)} 
                       className="w-full p-2.5 rounded-xl border border-input text-xs bg-background text-foreground focus:outline-none focus:border-primary font-medium" 
                     >
-                      <option value="Main Dining Room">Main Dining Room</option>
+                      <option value="Indoor Seating">Indoor Seating</option>
                       <option value="Cozy Window Booth">Cozy Window Booth</option>
-                      <option value="Traditional Low Table (Ondol)">Traditional Low Table (Ondol 온돌)</option>
+                      <option value="Traditional Low Table (Ondol)">Traditional Low Table (Ondol)</option>
                     </select>
                   </div>
                   <div>
@@ -2696,8 +2628,7 @@ export default function App() {
                     Confirm Table Reservation
                   </Button>
                 </div>
-              </form>
-            ) : (
+              </form>) : (
               /* RESERVATION CONFIRMED FINALE */
               <div className="p-6 text-center space-y-5 animate-fadeIn">
                 <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto shadow-sm">
@@ -2711,7 +2642,7 @@ export default function App() {
                     Table Reserved, {reserveName}!
                   </h3>
                   <p className="text-xs text-muted-foreground mt-1 max-w-sm mx-auto">
-                    We look forward to serving you an authentic bubbling Soon Tofu &amp; KBBQ experience in our traditional dining room.
+                    We look forward to serving you an authentic bubbling Plant-Based &amp; Vegan experience in our traditional dining room.
                   </p>
                 </div>
 
@@ -2730,7 +2661,7 @@ export default function App() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Location:</span>
-                    <span className="font-medium">3526 W 8th St, Los Angeles, CA 90005</span>
+                    <span className="font-medium">132-09 Liberty Ave, South Richmond Hill, NY 11419</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Parking:</span>
@@ -2748,21 +2679,19 @@ export default function App() {
                 >
                   Done
                 </Button>
-              </div>
-            )}
+              </div>)}
 
           </div>
-        </div>
-      )}
+        </div>)}
 
       {/* 16. TOAST NOTIFICATION */}
       {toastMessage && (
         <div className="fixed bottom-24 lg:bottom-20 right-6 z-50 bg-[#1C1716] text-white px-4 py-3 rounded-2xl shadow-xl border border-accent/40 flex items-center gap-3 animate-fadeIn">
           <div className="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
           <span className="text-xs font-semibold">{toastMessage}</span>
-        </div>
-      )}
+        </div>)}
 
-    </main>
-  );
+    </main>);
 }
+
+

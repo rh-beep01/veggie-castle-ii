@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Phone, ShoppingBag, MapPin, Clock, Menu as MenuIcon, X } from 'lucide-react';
+import { Phone, ShoppingBag, MapPin, Menu as MenuIcon, X } from 'lucide-react';
 import { RESTAURANT_INFO } from '../data/menuData';
 
 export default function Navbar({ cartCount, cartTotal, onOpenCart, onOpenReservation }) {
@@ -20,14 +20,14 @@ export default function Navbar({ cartCount, cartTotal, onOpenCart, onOpenReserva
       <div className="navbar-top-banner">
         <div className="container top-banner-content">
           <div className="banner-left">
-            <span className="banner-pill">0% Commission Direct Ordering</span>
-            <span className="banner-text">Support local — no 30% third-party app markups!</span>
+            <span className="banner-pill">0% Fee Direct Online Ordering</span>
+            <span className="banner-text">100% Plant-Based Caribbean Comfort & Cold-Pressed Juices</span>
           </div>
           <div className="banner-right">
             <a href={`tel:${RESTAURANT_INFO.phoneRaw}`} className="banner-link">
               <Phone size={13} /> {RESTAURANT_INFO.phone}
             </a>
-            <span className="banner-sep">•</span>
+            <span className="banner-sep">?</span>
             <span className="banner-link">
               <MapPin size={13} /> {RESTAURANT_INFO.neighborhood}
             </span>
@@ -41,20 +41,20 @@ export default function Navbar({ cartCount, cartTotal, onOpenCart, onOpenReserva
           {/* Logo */}
           <a href="#" className="brand-logo" id="nav-brand-logo">
             <div className="seal-badge">
-              <span className="seal-korean">{RESTAURANT_INFO.koreanName}</span>
+              <span className="seal-korean">100% VEGAN</span>
             </div>
             <div className="brand-text">
               <span className="brand-title">{RESTAURANT_INFO.name}</span>
-              <span className="brand-sub">Koreatown • Los Angeles</span>
+              <span className="brand-sub">South Richmond Hill ? Queens, NY</span>
             </div>
           </a>
 
           {/* Desktop Nav Links */}
           <nav className="desktop-nav">
-            <a href="#combos" className="nav-link">Combos</a>
-            <a href="#menu" className="nav-link">Soon Tofu</a>
-            <a href="#menu" className="nav-link">Specials</a>
-            <a href="#story" className="nav-link">Our Story</a>
+            <a href="#featured" className="nav-link">Featured Feast</a>
+            <a href="#menu" className="nav-link">Grill & Plates</a>
+            <a href="#menu" className="nav-link">Juice Cures</a>
+            <a href="#heritage" className="nav-link">Our Heritage</a>
             <a href="#location" className="nav-link">Location & Hours</a>
           </nav>
 
@@ -98,10 +98,11 @@ export default function Navbar({ cartCount, cartTotal, onOpenCart, onOpenReserva
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="mobile-nav-drawer">
-          <a href="#combos" onClick={() => setMobileMenuOpen(false)} className="mobile-nav-link">Combos (콤보)</a>
-          <a href="#menu" onClick={() => setMobileMenuOpen(false)} className="mobile-nav-link">Soon Tofu (순두부)</a>
-          <a href="#menu" onClick={() => setMobileMenuOpen(false)} className="mobile-nav-link">House Specials (특선요리)</a>
-          <a href="#story" onClick={() => setMobileMenuOpen(false)} className="mobile-nav-link">Our Story (전통)</a>
+          <a href="#featured" onClick={() => setMobileMenuOpen(false)} className="mobile-nav-link">Featured Feast</a>
+          <a href="#menu" onClick={() => setMobileMenuOpen(false)} className="mobile-nav-link">Grill Menu & Burgers</a>
+          <a href="#menu" onClick={() => setMobileMenuOpen(false)} className="mobile-nav-link">Protein Plates & Sides</a>
+          <a href="#menu" onClick={() => setMobileMenuOpen(false)} className="mobile-nav-link">Fresh Cold-Pressed Juices</a>
+          <a href="#heritage" onClick={() => setMobileMenuOpen(false)} className="mobile-nav-link">Our Ital Heritage</a>
           <a href="#location" onClick={() => setMobileMenuOpen(false)} className="mobile-nav-link">Location & Hours</a>
           <div className="mobile-nav-cta">
             <button 
@@ -116,7 +117,7 @@ export default function Navbar({ cartCount, cartTotal, onOpenCart, onOpenReserva
               className="btn-secondary" 
               style={{ width: '100%', textAlign: 'center' }}
             >
-              Call (213) 505-9577
+              Call {RESTAURANT_INFO.phone}
             </a>
           </div>
         </div>

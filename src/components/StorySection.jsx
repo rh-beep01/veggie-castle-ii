@@ -4,25 +4,25 @@ import { RESTAURANT_INFO } from '../data/menuData';
 
 export default function StorySection() {
   return (
-    <section className="story-section section-padding" id="story">
+    <section className="story-section section-padding" id="heritage">
       <div className="container">
         <div className="story-grid">
           <div className="story-image-column">
             <div className="story-image-main">
               <img 
-                src="/images/galbi-sizzling.png" 
-                alt="Tofu Chon Authentic Sizzling Galbi" 
+                src="/images/vegan-feast-hero.jpg" 
+                alt="Veggie Castle II Caribbean Vegan Feast" 
                 className="story-main-img"
               />
               <div className="story-stamp-badge">
-                <span className="stamp-korean">{RESTAURANT_INFO.koreanName}</span>
-                <span className="stamp-sub">Authentic Recipe</span>
+                <span className="stamp-korean">ITAL VITAL</span>
+                <span className="stamp-sub">100% Plant-Based</span>
               </div>
             </div>
             <div className="story-image-sub">
               <img 
-                src="/images/mix-soon-tofu.png" 
-                alt="Bubbling Soon Tofu in Stone Pot" 
+                src="/images/cold-pressed-juices.jpg" 
+                alt="Fresh Cold Pressed Juices" 
                 className="story-sub-img"
               />
             </div>
@@ -30,16 +30,16 @@ export default function StorySection() {
 
           <div className="story-text-column">
             <span className="badge badge-gold">
-              <Sparkles size={14} /> The Soul of Koreatown
+              <Sparkles size={14} /> The Soul of South Richmond Hill
             </span>
-            <h2 className="story-title">Crafted with Patience, Simmered in Stone</h2>
+            <h2 className="story-title">Cooked with Soul, Rooted in Ital Tradition</h2>
             
             <p className="story-paragraph">
-              At <strong>Tofu Chon (두부촌)</strong> on 8th Street, every meal begins with honor for Korean culinary heritage. Our signature Soon Tofu broth is slow-simmered for over 24 hours using dried anchovy, charred sea kelp, and prime beef bone stock to build an unmistakable, soothing depth of flavor.
+              At <strong>Veggie Castle II</strong> on Liberty Avenue, every meal honors the rich traditions of Caribbean plant-based Ital cooking. Our dishes are seasoned with scotch bonnet peppers, fresh thyme, pimento, garlic, and coconut milk?simmered gently to cultivate unmistakable vitality and island flavor.
             </p>
 
             <p className="story-paragraph">
-              Each stone pot (<em>ttukbaegi</em>) is heated over high flames and arrives at your table violently bubbling, ready for you to crack a fresh country egg directly into the broth. Paired with our flame-charred LA Galbi marinated in fruit-infused soy, freshly fried yellow croaker, and crisp scallion pancakes, dinner here is hearty comfort at its finest.
+              From our famous jerk BBQ jackfruit and crispy fried oyster mushrooms to slow-simmered collard greens and raw cold-pressed juice cures, we believe food is natural medicine. Experience honest, hearty Caribbean comfort that nourishes the body and soul.
             </p>
 
             <div className="story-pillars">
@@ -48,8 +48,8 @@ export default function StorySection() {
                   <Flame size={20} />
                 </div>
                 <div>
-                  <h4>Stone Pot Boil</h4>
-                  <p>Retains blistering heat until the very last grain of rice.</p>
+                  <h4>Simmered from Scratch Daily</h4>
+                  <p>Fresh whole herbs, organic grains, and handcrafted vegan proteins.</p>
                 </div>
               </div>
 
@@ -58,8 +58,8 @@ export default function StorySection() {
                   <Heart size={20} />
                 </div>
                 <div>
-                  <h4>Made From Scratch Daily</h4>
-                  <p>Hand-curated kimchi, seasoned banchan, and fresh silken tofu.</p>
+                  <h4>Raw Cold-Pressed Juices</h4>
+                  <p>100% raw juice cures, wheatgrass shots, and sea moss blends.</p>
                 </div>
               </div>
             </div>

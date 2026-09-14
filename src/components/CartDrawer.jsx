@@ -39,7 +39,7 @@ export default function CartDrawer({ isOpen, onClose, cart, onUpdateQuantity, on
             <div className="empty-cart-state">
               <ShoppingBag size={48} className="empty-icon" />
               <h3>Your cart is empty</h3>
-              <p>Explore our Koreatown Soon Tofu stews and sizzling BBQ combos to add your favorite dishes.</p>
+              <p>Explore our South Richmond Hill Protein Plate stews and sizzling BBQ combos to add your favorite dishes.</p>
               <button className="btn-primary" onClick={onClose} style={{ marginTop: '16px' }}>
                 Browse Full Menu
               </button>

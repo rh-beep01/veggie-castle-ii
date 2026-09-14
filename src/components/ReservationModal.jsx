@@ -33,7 +33,7 @@ export default function ReservationModal({ isOpen, onClose }) {
           <form onSubmit={handleSubmit} className="reservation-form">
             <div className="checkout-header">
               <span className="badge badge-gold">Table Reservation</span>
-              <h2>Book a Table at Tofu Chon</h2>
+              <h2>Book a Table at Veggie Castle II</h2>
               <p>Enjoy piping-hot stone stews & BBQ with friends and family.</p>
             </div>
 

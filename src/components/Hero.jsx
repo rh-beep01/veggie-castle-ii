@@ -8,7 +8,7 @@ export default function Hero({ onExploreMenu, onOpenReservation }) {
       <div className="hero-backdrop">
         <img 
           src="/images/hero-feast.jpg" 
-          alt="Tofu Chon Koreatown Feast" 
+          alt="Veggie Castle II Queens Feast" 
           className="hero-bg-img"
         />
         <div className="hero-overlay"></div>
@@ -18,7 +18,7 @@ export default function Hero({ onExploreMenu, onOpenReservation }) {
         <div className="hero-content">
           <div className="hero-tag-wrapper">
             <span className="badge badge-gold">
-              <Sparkles size={14} /> Koreatown's Premier Soon Tofu House
+              <Sparkles size={14} /> South Richmond Hill's Premier Protein Plate House
             </span>
             <span className="hero-address-badge">
               {RESTAURANT_INFO.address}
@@ -26,11 +26,11 @@ export default function Hero({ onExploreMenu, onOpenReservation }) {
           </div>
 
           <h1 className="hero-title">
-            Bubbling Silken Soon Tofu & <span className="hero-title-highlight">Sizzling LA Galbi</span>
+            Bubbling Silken Protein Plate & <span className="hero-title-highlight">Sizzling LA Jerk Vegan Chicken</span>
           </h1>
 
           <p className="hero-description">
-            Handcrafted Korean comfort food prepared with 24-hour slow-simmered broths, premium soft silken tofu, and flame-charred Korean BBQ short ribs. Served piping hot in authentic earthenware stone pots with generous house banchan.
+            Handcrafted Korean comfort food prepared with 24-hour slow-simmered broths, premium soft silken tofu, and flame-charred Korean BBQ short ribs. Served piping hot in authentic earthenware stone pots with generous house sides.
           </p>
 
           <div className="hero-cta-group">
