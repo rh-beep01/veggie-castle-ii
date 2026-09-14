@@ -1451,11 +1451,18 @@ export default function App() {
             
             <div>
               <div className="flex items-center gap-2.5 mb-3">
-                <div className="w-9 h-9 rounded-xl bg-primary text-amber-200 flex items-center justify-center font-display font-bold text-base">
-                  
+                <div className="w-10 h-10 rounded-xl bg-primary text-primary-foreground flex flex-col items-center justify-center shadow-sm border border-amber-400/30 shrink-0">
+                  <span className="font-display text-xs font-black leading-none text-amber-300">VC</span>
+                  <span className="text-[7px] tracking-tighter uppercase font-bold text-white/90">ITAL</span>
                 </div>
-                <span className="font-display text-xl font-bold text-white tracking-tight">Veggie Castle II</span>
-                <span className="text-xs text-accent"></span>
+                <div className="flex flex-col">
+                  <span className="font-display text-xl font-bold text-white tracking-tight leading-tight">
+                    Veggie Castle II
+                  </span>
+                  <span className="text-[9px] tracking-wider uppercase font-semibold text-amber-400/90">
+                    100% Vegan • Queens, NY
+                  </span>
+                </div>
               </div>
               <p className="text-xs text-[#EADFD3]/70 leading-relaxed mb-4">
                 100% Vegan Caribbean Comfort Food, Plant-Based Platters & Raw Cold-Pressed Juices in South Richmond Hill, Queens, NY.
