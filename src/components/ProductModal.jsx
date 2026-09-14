@@ -16,7 +16,7 @@ export default function ProductModal({ item, onClose, onAddToCart }) {
       ...item,
       customOptions: {
         spiceLevel: item.hasSpiceLevel ? SPICE_LEVELS.find(s => s.id === selectedSpice)?.name : null,
-        egg: item.hasSpiceLevel ? (eggOption === 'with-egg' ? 'Fresh Raw Egg Included' : 'No Egg') : null,
+        egg: null,
         rice: riceOption === 'purple-rice' ? 'Purple Multigrain Rice (+$1.00)' : 'Steamed White Rice',
         instructions: specialInstructions.trim() || null
       },
@@ -100,30 +100,41 @@ export default function ProductModal({ item, onClose, onAddToCart }) {
             </div>
           )}
 
-          {/* Rice Option */}
-          <div className="modal-option-group">
-            <label className="option-group-label">Rice Selection</label>
-            <div className="radio-group">
-              <label className={`radio-pill ${riceOption === 'white-rice' ? 'active' : ''}`}>
-                <input 
-                  type="radio" 
-                  name="riceOption" 
-                  checked={riceOption === 'white-rice'} 
-                  onChange={() => setRiceOption('white-rice')}
-                />
-                <span>Steamed White Rice (Included)</span>
-              </label>
-              <label className={`radio-pill ${riceOption === 'purple-rice' ? 'active' : ''}`}>
-                <input 
-                  type="radio" 
-                  name="riceOption" 
-                  checked={riceOption === 'purple-rice'} 
-                  onChange={() => setRiceOption('purple-rice')}
-                />
-                <span>Healthy Purple Multigrain Rice (+$1.00)</span>
-              </label>
+          {/* Rice Option - only for plates */}
+          {(item.category === 'proteins' || item.hasRice) && (
+            <div className="modal-option-group">
+              <label className="option-group-label">Choice of Rice (Included)</label>
+              <div className="radio-group">
+                <label className={`radio-pill ${riceOption === 'Jamaican Rice & Peas' ? 'active' : ''}`}>
+                  <input 
+                    type="radio" 
+                    name="riceOption" 
+                    checked={riceOption === 'Jamaican Rice & Peas'} 
+                    onChange={() => setRiceOption('Jamaican Rice & Peas')}
+                  />
+                  <span>Jamaican Rice & Peas</span>
+                </label>
+                <label className={`radio-pill ${riceOption === 'Yellow Rice' ? 'active' : ''}`}>
+                  <input 
+                    type="radio" 
+                    name="riceOption" 
+                    checked={riceOption === 'Yellow Rice'} 
+                    onChange={() => setRiceOption('Yellow Rice')}
+                  />
+                  <span>Yellow Rice</span>
+                </label>
+                <label className={`radio-pill ${riceOption === 'No Rice' ? 'active' : ''}`}>
+                  <input 
+                    type="radio" 
+                    name="riceOption" 
+                    checked={riceOption === 'No Rice'} 
+                    onChange={() => setRiceOption('No Rice')}
+                  />
+                  <span>No Rice</span>
+                </label>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Special Requests */}
           <div className="modal-option-group">

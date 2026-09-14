@@ -120,7 +120,7 @@ export default function App() {
 
   // Product Customization Modal State
   const [modalSpice, setModalSpice] = useState('medium');
-  const [modalRice, setModalRice] = useState('Yellow Rice');
+  const [modalRice, setModalRice] = useState('Jamaican Rice & Peas');
   const [modalAddOns, setModalAddOns] = useState([]);
   const [modalInstructions, setModalInstructions] = useState('');
   const [modalQuantity, setModalQuantity] = useState(1);
@@ -220,7 +220,8 @@ export default function App() {
   const openProductModal = (product) => {
     setSelectedProduct(product);
     setModalSpice(product.hasprepStyle ? 'medium' : null);
-    setModalRice('Yellow Rice');
+    const needsRice = product.category === 'proteins' || product.hasRice;
+    setModalRice(needsRice ? 'Jamaican Rice & Peas' : null);
     setModalAddOns([]);
     setModalInstructions('');
     setModalQuantity(1);
@@ -234,7 +235,9 @@ export default function App() {
     const addOnTotal = modalAddOns.reduce((sum, a) => sum + a.price, 0);
     unitPrice += addOnTotal;
 
-    const cartItemId = `${selectedProduct.id}-${modalSpice || 'none'}-${modalRice}-${modalAddOns.map(a => a.name).join('_')}-${Date.now()}`;
+    const needsRice = selectedProduct.category === 'proteins' || selectedProduct.hasRice;
+    const chosenRice = needsRice ? modalRice : null;
+    const cartItemId = `${selectedProduct.id}-${modalSpice || 'none'}-${chosenRice || 'none'}-${modalAddOns.map(a => a.name).join('_')}-${Date.now()}`;
 
     const newItem = {
       cartItemId,
@@ -246,7 +249,7 @@ export default function App() {
       quantity: modalQuantity,
       image: selectedProduct.image,
       prepStyle: modalSpice,
-      riceOption: modalRice,
+      riceOption: chosenRice,
       addOns: modalAddOns,
       specialInstructions: modalInstructions
     };
@@ -1599,36 +1602,36 @@ export default function App() {
                   </div>
                 </div>)}
 
-              {/* Rice Selection */}
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2 flex items-center justify-between">
-                  <span>Choice of Rice </span>
-                  <span className="text-accent font-semibold text-[11px]">Included</span>
-                </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {[
-                    'Stone Pot Purple Rice ',
-                    'Steamed White Rice ',
-                    'No Rice '
-                  ].map((rice) => {
-                    const isSelected = modalRice === rice;
-                    return (
-                      <button
-                        key={rice}
-                        type="button"
-                        onClick={() => setModalRice(rice)}
-                        className={`p-2.5 rounded-xl border text-xs font-semibold transition-all text-center cursor-pointer ${
-                          isSelected
-                            ? 'border-accent bg-accent/15 text-accent-foreground font-bold shadow-2xs'
-                            : 'border-border hover:bg-muted/50 text-foreground'
-                        }`}
-                      >
-                        <span className="block text-[11px] leading-tight">{rice.split('(')[0]}</span>
-                        <span className="text-[10px] text-muted-foreground">({rice.split('(')[1]}</span>
-                      </button>);
-                  })}
-                </div>
-              </div>
+              {/* Rice Selection - Only for Protein Platters & Entrees that include rice */}
+              {(selectedProduct.category === 'proteins' || selectedProduct.hasRice) && (
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2 flex items-center justify-between">
+                    <span>Choice of Rice</span>
+                    <span className="text-accent font-semibold text-[11px]">Included</span>
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      'Jamaican Rice & Peas',
+                      'Yellow Rice',
+                      'No Rice'
+                    ].map((rice) => {
+                      const isSelected = modalRice === rice;
+                      return (
+                        <button
+                          key={rice}
+                          type="button"
+                          onClick={() => setModalRice(rice)}
+                          className={`p-2.5 rounded-xl border text-xs font-semibold transition-all text-center cursor-pointer ${
+                            isSelected
+                              ? 'border-accent bg-accent/15 text-accent-foreground font-bold shadow-2xs ring-1 ring-accent/30'
+                              : 'border-border hover:bg-muted/50 text-foreground'
+                          }`}
+                        >
+                          <span className="block text-[11px] leading-tight font-medium">{rice}</span>
+                        </button>);
+                    })}
+                  </div>
+                </div>)}
 
               {/* Chef Extras & Add-ons */}
               <div>
