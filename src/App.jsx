@@ -366,7 +366,6 @@ export default function App() {
           </a>
 
           <p className="hidden md:block text-center text-xs text-[#EADFD3]/90 truncate mx-2">
-            <span className="text-amber-300 font-bold mr-1.5"> (Veggie Castle II)</span>
             <strong className="text-white">Queens' Iconic 100% Plant-Based Caribbean Comfort &amp; Cold-Pressed Juices</strong>
           </p>
 
@@ -396,8 +395,8 @@ export default function App() {
           
           <a href="#top" className="flex items-center gap-2.5 shrink-0 py-1 group text-decoration-none">
             <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary text-primary-foreground flex flex-col items-center justify-center shadow-xs group-hover:scale-105 transition-transform border border-primary/20">
-              <span className="font-display text-base sm:text-lg font-black leading-none text-amber-200"></span>
-              <span className="text-[8px] tracking-tighter uppercase font-bold text-white/80">CHON</span>
+              <span className="font-display text-sm font-black leading-none text-amber-300">VC</span>
+              <span className="text-[8px] tracking-tighter uppercase font-bold text-white/80">ITAL</span>
             </div>
             <div className="flex flex-col">
               <div className="flex items-baseline gap-1.5">
