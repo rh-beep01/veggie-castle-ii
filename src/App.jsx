@@ -553,10 +553,10 @@ export default function App() {
           </div>)}
       </header>
 
-      {/* 3. HERO SECTION WITH DARK VINTAGE KOREAN RESTAURANT HERITAGE & DYNAMIC FOOD SLIDESHOW */}
+      {/* 3. HERO SECTION WITH AUTHENTIC CARIBBEAN ITAL RESTAURANT HERITAGE & DYNAMIC FOOD SLIDESHOW */}
       <section id="top" className="relative overflow-hidden pt-10 pb-16 lg:pt-16 lg:pb-24 border-b border-[#2C2220] bg-[#120D0B] text-white">
         
-        {/* Korean Restaurant Interior Background - Bright & Clearly Visible with Subtle Vintage Ambiance */}
+        {/* Caribbean Restaurant Interior Background - Bright & Warm Island Ambiance */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
           <img
             src="/images/vegan-hero-bg.jpg"
@@ -570,7 +570,7 @@ export default function App() {
           <div className="absolute inset-0 bg-gradient-to-b from-[#07170B]/50 via-transparent to-[#07170B]/80" />
         </div>
 
-        {/* Traditional Korean warm paper lantern ambient light glows */}
+        {/* Warm Caribbean island sunset ambient light glows */}
         <div className="absolute top-10 left-12 w-80 h-80 rounded-full bg-amber-500/20 blur-[100px] pointer-events-none"></div>
         <div className="absolute top-1/3 right-1/4 w-[450px] h-[450px] rounded-full bg-amber-600/15 blur-[120px] pointer-events-none"></div>
         <div className="absolute bottom-0 left-10 w-96 h-96 rounded-full bg-emerald-600/15 blur-3xl pointer-events-none"></div>
@@ -596,15 +596,21 @@ export default function App() {
                 <span className="hidden sm:inline-block text-amber-300 font-bold">132-09 Liberty Ave, Queens NY</span>
               </div>
 
-              {/* Headline with Korean Calligraphic Elegance */}
+              {/* Headline with Caribbean Elegance */}
               <h1 className="section-title text-white tracking-wide mb-3 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] text-3xl sm:text-4xl lg:text-5xl font-black">
                 Authentic Caribbean <span className="text-amber-400 italic">Plant-Based Living</span> &amp; Cold-Pressed Juices
               </h1>
 
-              {/* Korean Sub-Headline */}
-              <p className="text-sm sm:text-base font-semibold text-amber-300 tracking-wider mb-4 drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
-                30      •   8 
+              {/* Caribbean Ital Heritage Sub-Headline */}
+              <p className="text-sm sm:text-base font-semibold text-emerald-400 tracking-wider mb-3 drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
+                Queens' Iconic 100% Ital Plant-Based Kitchen • South Richmond Hill, NY
               </p>
+
+              {/* Real-time Kitchen Operational Trust Signal */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-xs font-semibold text-emerald-200 mb-4 backdrop-blur-sm shadow-sm">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span><strong>Kitchen Open Daily</strong> • 9:30 AM – 10:00 PM • Pickup ready in ~15m</span>
+              </div>
 
               {/* Subtitle */}
               <p className="text-base sm:text-lg text-[#EADFD3] leading-relaxed mb-8 max-w-2xl font-normal drop-shadow-[0_1px_6px_rgba(0,0,0,0.8)]">
@@ -732,7 +738,7 @@ export default function App() {
                       <ChevronRight className="size-5" />
                     </button>
 
-                    {/* Floating Korean Heritage Tag top-left (Liquid Glass) */}
+                    {/* Floating Caribbean Ital Tag top-left (Liquid Glass) */}
                     <div className="absolute top-3.5 left-3.5 z-10">
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FDFBF7]/90 text-primary backdrop-blur-md border border-white/80 text-[11px] font-bold tracking-wide shadow-md">
                         <Flame className="size-3 text-primary" /> {currentSlide.badge}
@@ -743,7 +749,7 @@ export default function App() {
                     <div className="absolute bottom-3 left-3 right-3 z-10 rounded-2xl bg-white/35 hover:bg-white/45 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.18)] p-3 text-foreground transition-all duration-300">
                       <div className="flex items-center justify-between gap-3">
                         
-                        {/* Food info: Full title and Korean name with total breathing room - NEVER truncated or cut */}
+                        {/* Food info: Full title and botanical description with total breathing room */}
                         <div className="min-w-0 flex-1">
                           <h3 className="font-display text-sm sm:text-base font-black text-stone-950 leading-tight drop-shadow-2xs">
                             {currentSlide.title}
@@ -1536,7 +1542,7 @@ export default function App() {
               <X className="size-5" />
             </button>
 
-            {/* Massoni Cinematic Hero Banner with Korean Culinary Typography */}
+            {/* Cinematic Hero Banner with Caribbean Ital Culinary Typography */}
             <div className="relative h-56 w-full bg-muted shrink-0 overflow-hidden">
               <img 
                 src={selectedProduct?.image || '/images/vegan-feast-hero.jpg'} 
@@ -1559,7 +1565,7 @@ export default function App() {
                 {selectedProduct.description}
               </p>
 
-              {/* Korean preparation style Selector */}
+              {/* Island Spice & Preparation Style Selector */}
               {selectedProduct.hasprepStyle && (
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2 flex items-center justify-between">
@@ -1916,7 +1922,7 @@ export default function App() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-xs animate-fadeIn overflow-y-auto">
           <div className="relative w-full max-w-lg bg-card rounded-3xl shadow-2xl overflow-hidden my-8 animate-fadeIn text-foreground border border-border">
             
-            {/* Top Korean Feast Visual Banner Header */}
+            {/* Top Caribbean Feast Visual Banner Header */}
             <div className="relative h-44 w-full bg-muted overflow-hidden shrink-0">
               <img 
                 src="/images/vegan-feast-hero.jpg" 
@@ -2515,7 +2521,7 @@ export default function App() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-xs animate-fadeIn overflow-y-auto">
           <div className="relative w-full max-w-lg bg-card rounded-3xl shadow-2xl overflow-hidden my-8 animate-fadeIn text-foreground border border-border">
             
-            {/* Cinematic Korean Dining Room Interior Header Banner */}
+            {/* Cinematic Caribbean Dining Room Interior Header Banner */}
             <div className="relative h-48 w-full bg-muted overflow-hidden shrink-0">
               <img 
                 src="/images/vegan-hero-bg.jpg" 
