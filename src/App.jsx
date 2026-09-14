@@ -558,7 +558,7 @@ export default function App() {
             decoding="async"
             className="w-full h-full object-cover object-left lg:object-left brightness-[0.88] contrast-[1.08] transition-all duration-700"
           />
-          {/* Reduced vintage effect: Gentle warm tint that lets the Hanok woodwork, lanterns, and brassware shine through */}
+          {/* Reduced vintage effect: Gentle warm tint that lets the vibrant island colors, fresh juices, and warm Caribbean ambiance shine through */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#07170B]/85 via-[#07170B]/45 to-transparent lg:w-[60%] w-full" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#07170B]/50 via-transparent to-[#07170B]/80" />
         </div>
@@ -807,7 +807,7 @@ export default function App() {
                 <div className="absolute -top-3.5 -right-2 sm:-right-3 bg-white/90 backdrop-blur-md border border-white/80 text-foreground px-3.5 py-1.5 rounded-full shadow-md flex items-center gap-2 z-20">
                   <Award className="size-4 text-accent shrink-0" />
                   <span className="text-[11px] font-bold text-foreground">
-                    <span className="text-primary font-black">#1</span> K-Town Heritage
+                    <span className="text-primary font-black">#1</span> Queens Ital Heritage
                   </span>
                 </div>
 
@@ -1919,7 +1919,7 @@ export default function App() {
         </div>)}
 
       {/* =========================================================================
-          --- MODAL 3: CHECKOUT MODAL WITH KOREAN FEAST BANNER & DRIVER TIP CHIPS ---
+          --- MODAL 3: CHECKOUT MODAL WITH CARIBBEAN VEGAN FEAST BANNER & DRIVER TIP CHIPS ---
           ========================================================================= */}
       {checkoutOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-xs animate-fadeIn overflow-y-auto">
@@ -2518,7 +2518,7 @@ export default function App() {
         </div>)}
 
       {/* =========================================================================
-          --- MODAL 4: TABLE RESERVATION MODAL WITH KOREAN DINING ROOM PHOTO BANNER ---
+          --- MODAL 4: TABLE RESERVATION MODAL WITH CARIBBEAN VEGAN DINING ROOM PHOTO BANNER ---
           ========================================================================= */}
       {reserveOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-xs animate-fadeIn overflow-y-auto">
@@ -2625,7 +2625,7 @@ export default function App() {
                       <option value="Casual Dinner">Casual Dinner</option>
                       <option value="Family Gathering">Family Gathering</option>
                       <option value="Birthday Celebration">Birthday Celebration</option>
-                      <option value="K-Town Business Lunch">K-Town Business Lunch</option>
+                      <option value="Queens Business Lunch">Queens Business Lunch</option>
                     </select>
                   </div>
                 </div>
