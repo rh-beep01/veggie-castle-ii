@@ -1027,7 +1027,7 @@ export default function App() {
                       </div>
 
                       <div className="flex items-center justify-between mt-2 pt-2 border-t border-border/40">
-                        <span className="font-mono tabular-nums font-extrabold text-base text-emerald-900 dark:text-emerald-300">
+                        <span className="font-mono tabular-nums font-extrabold text-base text-primary">
                           ${item.price.toFixed(2)}
                         </span>
                         <Button
@@ -1484,7 +1484,7 @@ export default function App() {
       </footer>
 
       {/* 11. PERSISTENT FLOATING "ORDER NOW / CART" ACTION WIDGET */}
-      <div className="fixed bottom-6 right-6 z-40 flex items-center gap-2">
+      <div className="hidden md:flex fixed bottom-6 right-6 z-40 items-center gap-2">
         <button
           type="button"
           onClick={() => {
@@ -1508,10 +1508,10 @@ export default function App() {
           </div>
           <div className="flex flex-col text-left">
             <span className="text-[12px] font-black uppercase tracking-wider text-amber-100 leading-tight">
-              {cartItemCount > 0 ? "Order Tray" : "Order Online"}
+              {cartItemCount > 0 ? `Cart (${cartItemCount})` : "Order Now"}
             </span>
             <span className="text-[10px] sm:text-[11px] font-medium text-white/90">
-              {cartItemCount > 0 ? `$${subtotal.toFixed(2)} • View Cart` : "0% Direct Fees • Pickup & Delivery"}
+              {cartItemCount > 0 ? `$${subtotal.toFixed(2)} • View Cart` : "Pickup ready in ~15m • 0% Fees"}
             </span>
           </div>
           <ArrowRight className="size-4 text-amber-200 group-hover:translate-x-1 transition-transform ml-0.5 hidden sm:inline" />
@@ -2786,7 +2786,7 @@ export default function App() {
             )}
           </div>
           <span>
-            {cartItemCount > 0 ? `Tray (${subtotal.toFixed(2)})` : 'Order Pickup'}
+            {cartItemCount > 0 ? `Cart (${cartItemCount}) • $${subtotal.toFixed(2)}` : 'Order Now • ~15m'}
           </span>
         </button>
       </nav>
